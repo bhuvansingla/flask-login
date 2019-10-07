@@ -21,7 +21,8 @@ def index():
     if session.get('logged_in'):
         return render_template('home.html')
     else:
-        return render_template('index.html', message = "Hello!")
+        return render_template('index.html', message="Hello!")
+
 
 @app.route('/register/', methods=['GET', 'POST'])
 def register():
@@ -31,9 +32,10 @@ def register():
             db.session.commit()
             return redirect(url_for('login'))
         except:
-            return render_template('index.html', message = "User Already Exists")
+            return render_template('index.html', message="User Already Exists")
     else:
         return render_template('register.html')
+
 
 @app.route('/login/', methods=['GET', 'POST'])
 def login():
@@ -46,14 +48,15 @@ def login():
         if data is not None:
             session['logged_in'] = True
             return redirect(url_for('index'))
-        return render_template('index.html', message = "Incorrect Details")
+        return render_template('index.html', message="Incorrect Details")
+
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     session['logged_in'] = False
     return redirect(url_for('index'))
 
-if(__name__ == '__main__'): 
+if(__name__ == '__main__'):
     app.secret_key = "ThisIsNotASecret:p"
     db.create_all()
     app.run()
