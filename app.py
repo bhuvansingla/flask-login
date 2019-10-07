@@ -5,14 +5,16 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 db = SQLAlchemy(app)
 
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
 
-    def __init__ (self, username, password):
+    def __init__(self, username, password):
         self.username = username
         self.password = password
+
 
 @app.route('/', methods=['GET'])
 def index():
