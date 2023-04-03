@@ -10,16 +10,28 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(100))
+    #add phone number
+    phone = db.Column(db.String(100))
+    #add email
+    email = db.Column(db.String(100))
+    #add address
+    address = db.Column(db.String(100))
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, phone, email, address):
         self.username = username
         self.password = password
+        self.phone = phone
+        self.email = email
+        self.address = address
 
 
 @app.route('/', methods=['GET'])
 def index():
     if session.get('logged_in'):
-        return render_template('home.html')
+            
+        # open the home page and display the user's name
+        return render_template('home.html', name=session.get("username"))
+        #return render_template('home.html')
     else:
         return render_template('index.html', message="Hello!")
 
@@ -28,7 +40,8 @@ def index():
 def register():
     if request.method == 'POST':
         try:
-            db.session.add(User(username=request.form['username'], password=request.form['password']))
+            db.session.add(User(username=request.form['username'], password=request.form['password'],phone=request.form['phone'],email=request.form['email'],address=request.form['address']))
+
             db.session.commit()
             return redirect(url_for('login'))
         except:
@@ -42,11 +55,17 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     else:
-        u = request.form['username']
-        p = request.form['password']
-        data = User.query.filter_by(username=u, password=p).first()
+        username = request.form['username']
+        password = request.form['password']
+        data = User.query.filter_by(username=username, password=password).first()
         if data is not None:
             session['logged_in'] = True
+            session['username'] = username
+            session['email'] = data.email
+            session['phone'] = data.phone
+            session['address'] = data.address
+            
+
             return redirect(url_for('index'))
         return render_template('index.html', message="Incorrect Details")
 

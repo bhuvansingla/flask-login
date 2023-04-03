@@ -6,7 +6,26 @@
 			<span class="login100-form-title p-b-51">
 				Welcome!!<br>
 			</span>
-
+			{% if session.logged_in %}
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Username</th>
+							<th>Email</th>
+							<th>Phone</th>
+							<th>Address</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>{{session.username}}</td>
+							<td>{{session.email}}</td>
+							<td>{{session.phone}}</td>
+							<td>{{session.address}}</td>
+						</tr>
+					</tbody>
+				</table>
+			{% endif %}
 			<div class="container-login100-form-btn m-t-17">
 				<button class="login100-form-btn">
 					<a class="login100-form-btn" href="/logout">Logout</a>
