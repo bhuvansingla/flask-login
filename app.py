@@ -75,6 +75,7 @@ def logout():
     session['logged_in'] = False
     return redirect(url_for('index'))
 
+
 if(__name__ == '__main__'):
     app.secret_key = "ThisIsNotASecret:p"
     with app.app_context():
