@@ -75,6 +75,36 @@ def logout():
     session['logged_in'] = False
     return redirect(url_for('index'))
 
+@app.route('/modify', methods=['GET', 'POST'])
+def modify():
+    session['logged_in'] = False
+    print(request.form['phone'])
+    data = User.query.filter_by(username=session['username']).first()
+    """
+    if request.form['phone'] != "":
+        data.phone = request.form['phone']
+    if request.form['email'] != "":
+        data.email = request.form['email']
+    if request.form['address'] != "":
+        data.address = request.form['address']
+    #display success message 
+
+    db.session.commit()
+    """
+    return redirect(url_for('index'))
+
+@app.route('/delete', methods=['GET', 'POST'])
+def delete():
+    session['logged_in'] = False
+    data = User.query.filter_by(username=session['username']).first()
+    db.session.delete(data)
+    db.session.commit()
+
+
+    return redirect(url_for('index'))
+
+
+
 
 if(__name__ == '__main__'):
     app.secret_key = "ThisIsNotASecret:p"

@@ -458,7 +458,8 @@ iframe {
 
 
 /*//////////////////////////////////////////////////////////////////*/
-tr td:last-child {
-  width: 1%;
+/* make  the th and td adaptable to text width*/
+table th,
+table td {
   white-space: nowrap;
 }

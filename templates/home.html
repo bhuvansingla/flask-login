@@ -17,11 +17,12 @@
 					</tr>
 				</thead>
 				<tbody>
+
 					<tr>
 						<td>{{session.username}}</td>
-						<td>{{session.email}}</td>
-						<td>{{session.phone}}</td>
-						<td>{{session.address}}</td>
+						<td contenteditable="true">{{session.email}}</td>
+						<td contenteditable="true">{{session.phone}}</td>
+						<td contenteditable="true">{{session.address}}</td>
 					</tr>
 				</tbody>
 			</table>
@@ -30,7 +31,16 @@
 				<button class="login100-form-btn">
 					<a class="login100-form-btn" href="/logout">Logout</a>
 				</button>
-				<button class="button" href="/
+			</div>
+			<div class="container-login100-form-btn m-t-17">
+				<button class="login100-form-btn">
+					<a class="login100-form-btn" href="/modify">Modify</a>
+				</button>
+				<div class="container-login100-form-btn m-t-17">
+					<button class="login100-form-btn">
+						<a class="login100-form-btn" href="/delete"
+							onclick="return confirm('Are you sure you want to delete your account?')">Delete</a>
+				</div>
 			</div>
 		</div>
 	</div>
