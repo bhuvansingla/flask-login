@@ -24,6 +24,8 @@ body,
 html {
   height: 100%;
   font-family: Ubuntu-Regular, sans-serif;
+  background-image: url("../images/background/background.jpg");
+  background-size: cover;
 }
 
 /*---------------------------------------------*/
@@ -177,13 +179,11 @@ iframe {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  ;
 }
 
 
 .wrap-login100 {
   width: 390px;
-  background: #fff;
   border-radius: 10px;
   position: relative;
 }
@@ -203,7 +203,7 @@ iframe {
   line-height: 1.2;
   text-transform: uppercase;
   text-align: center;
-
+  text-shadow: black;
   width: 100%;
   display: block;
 }
@@ -358,6 +358,7 @@ iframe {
   color: #fff;
   line-height: 1.2;
   text-transform: uppercase;
+  border: 1px #fff solid;
 
   display: -webkit-box;
   display: -webkit-flex;
@@ -366,10 +367,9 @@ iframe {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 20px;
   width: 100%;
   height: 62px;
-  background-color: #827ffe;
+  background-color: transparent;
   border-radius: 3px;
 
   -webkit-transition: all 0.4s;
@@ -380,6 +380,7 @@ iframe {
 
 .login100-form-btn:hover {
   background-color: #403866;
+  color: #fff;
 }
 
 
