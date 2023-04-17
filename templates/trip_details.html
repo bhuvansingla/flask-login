@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}<center>
+    <h1 style="color:red">Detail for trip: {{trip.tripname}}</h1>
+
+    <p>
+        Speed:<br>
+        {{ trip.speed }} km/h<br>
+
+    </p>
+
+    <p>
+        Distance:<br>
+        {{ trip.distance }} km<br>
+
+    </p>
+    <p>
+        Elevation:<br>
+        {{ trip.elevation }}<br>
+
+    </p>
+    <p>
+        Prestige:<br>
+        {{trip.prestige}} <br>
+
+    </p>
+    <p>Description:</p><br>
+    {{trip.description}}
+    </p>
+
+</center>
+
+{% endblock %}

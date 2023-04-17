@@ -53,6 +53,25 @@
 
 <center>
     <h1 style="color:red">Welcome back {{current_user.username}}!</h1>
+    <h2>List of trips you have done:</h2>
 </center>
+
+<div class="post-container">
+    {% for trip in trips %}
+    <div class="post-container">
+        <div class="post-info">
+            <div class="row">
+                <ul>&#128205;<a href="{{url_for('trip_details',trip_id=trip.id)}}">{{trip.tripname}}</a>
+
+                </ul>
+                <div class="delete-button-container">
+                    <a class="delete-button" href="/delete/{{ trip.id }}">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
 
 {% endblock %}
