@@ -1,8 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, RadioField,TextAreaField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from models import User
 
+CHOICES = [('d1)', """Il giro che stai registrando è una gara ufficiale o un evento ufficiale di Team (con locandina)?"""),
+           ('d2)', """Il giro che stai registrando è un'uscita non ufficiale di team nel weekend o festivi?"""),
+           ('d3)', """Il giro che stai registrando è un'uscita infrasettimanale?""")]
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -17,4 +20,13 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
+
+class NewTripForm(FlaskForm):
+    tripname = StringField('Trip name',validators=[DataRequired()])
+    speed = StringField('Average speed [km/h]',validators=[DataRequired()])
+    distance = StringField('Distance [km]',validators=[DataRequired()])
+    elevation = StringField('Elevation [m]',validators=[DataRequired()])
+    prestige = RadioField('Choose an option', choices=CHOICES, validators=[DataRequired()])
+    description = TextAreaField('Description')
+    submit = SubmitField('Add trip')
 
