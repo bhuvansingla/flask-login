@@ -1,2 +1,1 @@
-venv
-users.db
+*.db

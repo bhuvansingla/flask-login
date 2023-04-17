@@ -43,7 +43,6 @@
 <body>
     <div>
         <center class="glow">&#128690;</center>
-
         <a class="blue pull-left" href="{{ url_for('index') }}">Home</a>
         {% if current_user.is_anonymous %}
         <a class="blue pull-right" href="{{ url_for('login') }}">Login</a>
