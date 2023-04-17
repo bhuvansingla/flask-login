@@ -3,7 +3,7 @@ from flask import request, render_template, flash, redirect,url_for
 from flask_login import current_user, login_user, logout_user,login_required
 
 from models import User
-from forms import RegistrationForm,LoginForm
+from forms import RegistrationForm,LoginForm, NewTripForm
 
 from werkzeug.urls import url_parse
 import urllib
@@ -43,6 +43,14 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
+@app.route('/new_trip',methods=['GET', 'POST'])
+@login_required
+def new_trip():
+    
+    
+    form = NewTripForm()
+    return render_template('new_trip.html',title="Add new trip", form = form )
+
 @app.route('/user/<username>',methods=['GET', 'POST'])
 @login_required
 def user(username):
@@ -50,6 +58,7 @@ def user(username):
     user = User.query.filter_by(username=user.username).first()
    
     return render_template('user.html', user=user)
+
 
 @app.route('/')
 def index():
