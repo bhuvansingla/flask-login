@@ -20,6 +20,8 @@ def login():
         if user is None or not user.check_password(form.password.data):
             flash("Invalid username or password")
             return redirect(url_for('login'))
+
+
         login_user(user,remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
@@ -94,3 +96,12 @@ def delete(trip_id):
 def trip_details(trip_id):
     trip = Trip.query.get(trip_id)
     return render_template("trip_details.html",trip=trip)
+
+
+@app.route('/admin_page',methods=['GET', 'POST'])
+@login_required
+def admin_page():
+    
+    if not current_user.is_admin:
+        return 'Unauthorized'
+    return render_template('admin_page.html',title="Admin page")
