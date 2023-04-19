@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Table,Integer,Column,String,DateTime,Float,ForeignKey
+from sqlalchemy import Table,Integer,Column,String,DateTime,Float,ForeignKey,func
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -48,9 +48,26 @@ class Trip(db.Model):
     placement = Column(Integer)
     user_id = Column(Integer, ForeignKey('user.id'))
     score = Column(Float(precision=2),default=0.0)
+    
     def __repr__(self):
         return '<Trip {}>'.format(self.description)
 
+    @staticmethod
+    def calculate_score(v,dx,dz,pr,np,piazzamenti):
+        """dx: distance in km,
+        dz: the height in m,
+        ps: the prestige, 
+        np: the number of players, 
+        v: the velocity in km/h
+        piazzamenti: the list of top placements"""
+        l=5e-3                              
+        d=2.5e-4
+        punteggio_finale_o = lambda v,dx,dz,pr: dx*l*(dz*d+0.25)*(0.7+0.15*(pr-3)) if v<=25.0 else dx*l*(dz*d+0.25)*(0.7+0.15*(pr-3))*(1+0.05*(v-25.0))
+        punteggio_finale_f = lambda punteggio_finale_o,np,piazzamenti: int(round((punteggio_finale_o + (np-1)/10)*100,0))+11*len(piazzamenti)-sum(piazzamenti)
+
+        p_f_o = punteggio_finale_o(v,dx,dz,pr)
+        return punteggio_finale_f(p_f_o,np,piazzamenti)
+        
 class Team(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(140))

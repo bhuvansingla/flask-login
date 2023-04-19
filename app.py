@@ -2,7 +2,10 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 import os
+
 app = Flask(__name__,template_folder="templates")
+
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///my_database.db'
 app.secret_key = os.urandom(24)
 
@@ -30,4 +33,4 @@ if __name__=="__main__":
 
             db.session.add(admin)
             db.session.commit()
-        app.run()
+        app.run(debug=True)
