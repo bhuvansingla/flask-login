@@ -2,8 +2,8 @@ from app import app, db
 from flask import request, render_template, flash, redirect,url_for
 from flask_login import current_user, login_user, logout_user,login_required
 
-from models import User,Trip
-from forms import RegistrationForm,LoginForm, NewTripForm
+from models import *
+from forms import *
 
 from werkzeug.urls import url_parse
 import urllib
@@ -20,6 +20,8 @@ def login():
         if user is None or not user.check_password(form.password.data):
             flash("Invalid username or password")
             return redirect(url_for('login'))
+
+
         login_user(user,remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
@@ -66,10 +68,13 @@ def user(username):
     
     user = User.query.filter_by(username=current_user.username).first()
     trips = Trip.query.filter_by(user_id=current_user.id)
+    teams = Team.query.all()
     if trips is None:
         trips = []
+    if teams is None:
+        teams = []
 
-    return render_template('user.html', user=user,trips=trips)
+    return render_template('user.html', user=user,trips=trips,teams=teams)
 
 
 @app.route('/')
@@ -83,14 +88,77 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route("/delete/<int:trip_id>")
-def delete(trip_id):
+@app.route("/delete_trip/<int:trip_id>")
+def delete_trip(trip_id):
     trip = Trip.query.filter_by(id=trip_id).first()
     db.session.delete(trip)
     db.session.commit()
     return redirect(url_for("user",username=current_user.username))
 
+@app.route("/delete_team/<int:team_id>")
+def delete_team(team_id):
+    team = Team.query.filter_by(id=team_id).first()
+    db.session.delete(team)
+    db.session.commit()
+    return redirect(url_for("user",username=current_user.username))
+
+
 @app.route("/trip_details/<int:trip_id>")
 def trip_details(trip_id):
     trip = Trip.query.get(trip_id)
     return render_template("trip_details.html",trip=trip)
+
+
+@app.route("/team_details/<int:team_id>")
+def team_details(team_id):
+    team = Team.query.get(team_id)
+    return render_template("team_details.html",team=team)
+
+@app.route('/new_team',methods=['GET', 'POST'])
+@login_required
+def new_team():
+    if not current_user.is_admin:
+        return 'Unauthorized'
+
+    form = NewTeamForm()
+    if form.validate_on_submit():
+        team = Team(name=form.name.data,description=form.description.data)
+       
+        db.session.add(team)
+        db.session.commit()
+        flash('New team registered!')
+        return redirect(url_for('user',username = current_user.username))
+
+    return render_template('new_team.html',title="Add new team", form = form )
+
+
+
+@app.route('/admin_page',methods=['GET', 'POST'])
+@login_required
+def admin_page():
+    
+    if not current_user.is_admin:
+        return 'Unauthorized'
+    return render_template('admin_page.html',title="Admin page")
+
+@app.route('/enroll_to_team/<int:team_id>',methods=['GET', 'POST'])
+@login_required
+def enroll_to_team(team_id):
+    
+    team = Team.query.get(team_id)
+    if current_user not in team.users:
+        team.users.append(current_user)
+        db.session.commit()
+
+    return redirect(url_for("user",username=current_user.username))
+
+@app.route('/unenroll_from_team/<int:team_id>',methods=['GET', 'POST'])
+@login_required
+def unenroll_from_team(team_id):
+    
+    team = Team.query.get(team_id)
+
+    if current_user in team.users:
+        team.users.remove(current_user)
+        db.session.commit()
+    return redirect(url_for("user",username=current_user.username))
