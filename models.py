@@ -1,7 +1,16 @@
 from datetime import datetime
+from sqlalchemy import Table,Integer,Column,String,DateTime,Float,ForeignKey
+from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import db
+
+
+team_user_association = Table('team_user_association', db.Model.metadata,
+    Column('team_id', Integer, ForeignKey('team.id')),
+    Column('user_id', Integer, ForeignKey('user.id'))
+)
+
 
 class AdminMixin:
     @property
@@ -15,6 +24,7 @@ class User(db.Model,UserMixin,AdminMixin):
     password = db.Column(db.String(140))
     password_hash = db.Column(db.String(140))
     trips = db.relationship('Trip',backref='user',lazy='dynamic')
+    teams = relationship('Team', secondary=team_user_association, back_populates='users')
     role = db.Column(db.String(20), nullable=False, default='user')
 
     def set_password(self,password):
@@ -27,15 +37,28 @@ class User(db.Model,UserMixin,AdminMixin):
         return '<User {}>'.format(self.username)
 
 class Trip(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    tripname = db.Column(db.String(140))
-    speed = db.Column(db.Float(precision=2),nullable=False)
-    distance = db.Column(db.Float(precision=2),nullable=False)
-    elevation = db.Column(db.Float(precision=2),nullable=False)
-    prestige = db.Column(db.Integer,nullable=False)
-    description = db.Column(db.String(140))
-    recorded_on = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    score = db.Column(db.Float(precision=2),default=0.0)
+    id = Column(Integer, primary_key=True)
+    tripname = Column(String(140))
+    speed = Column(Float(precision=2),nullable=False)
+    distance = Column(Float(precision=2),nullable=False)
+    elevation = Column(Float(precision=2),nullable=False)
+    prestige = Column(Integer,nullable=False)
+    description = Column(String(140))
+    recorded_on = Column(DateTime, index=True, default=datetime.utcnow)
+    placement = Column(Integer)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    score = Column(Float(precision=2),default=0.0)
     def __repr__(self):
         return '<Trip {}>'.format(self.description)
+
+class Team(db.Model):
+    id = Column(Integer, primary_key=True)
+    name = Column(String(140))
+    users = relationship('User', secondary=team_user_association, back_populates='teams')
+    description = Column(String(140))
+    
+    def __repr__(self):
+        return '<Team {}>'.format(self.description)
+
+    def add_member(self, member):
+        self.users.append(member)

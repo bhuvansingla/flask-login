@@ -49,6 +49,8 @@
         {% else %}
         {%if current_user.role == 'admin' %}
         <a class="blue pull-right" href="{{ url_for('admin_page') }}">Admin page</a>
+        <a class="blue pull-left" href="{{ url_for('new_team') }}">Add a new team</a>
+
         {% endif %}
         <a class="blue pull-right" href="{{ url_for('user', username=current_user.username) }}">Profile</a>
         <a class="blue pull-left" href="{{ url_for('new_trip') }}">Add a new trip</a>

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<center>
+    <h1 style="color:red">Participants in team: {{team.name}}</h1>
+    <div class="post-container">
+
+        {% for user in team.users %}
+        <div class="post-container">
+            <div class="post-info">
+                <div class="row">
+                    <ul>&#128205;{{user.username}}
+
+                    </ul>
+                    0
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</center>
+
+{% endblock %}

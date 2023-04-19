@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}<center>
+    <h1 style="color:red">Register a new team</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name(size=32) }}<br>
+            {% for error in form.name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+
+
+        <br>
+
+        <p>{{ form.description.label }}<br>
+            {{form.description(size=20, rows=5)}}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+</center>
+
+{% endblock %}

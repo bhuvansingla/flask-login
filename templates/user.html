@@ -47,6 +47,44 @@
             margin: 4px 2px;
             cursor: pointer;
         }
+
+        .enroll-button-container {
+            margin-top: 10px;
+            margin-left: 10px;
+            /* add left margin to the delete button container */
+        }
+
+        .enroll-button {
+            background-color: #53b179cb;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .unenroll-button-container {
+            margin-top: 10px;
+            margin-left: 10px;
+            /* add left margin to the delete button container */
+        }
+
+        .unenroll-button {
+            background-color: red;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
     </style>
 
 </head>
@@ -65,8 +103,36 @@
 
                 </ul>
                 <div class="delete-button-container">
-                    <a class="delete-button" href="/delete/{{ trip.id }}">Delete</a>
+                    <a class="delete-button" href="/delete_trip/{{ trip.id }}">Delete</a>
                 </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<br>
+<center>
+    <h2>List of available teams</h2>
+</center>
+<div class="post-container">
+    {% for team in teams %}
+    <div class="post-container">
+        <div class="post-info">
+            <div class="row">
+                <ul>&#128205;
+                    <a href="{{url_for('team_details',team_id=team.id)}}">{{team.name}}</a>
+                </ul>
+                {% if current_user not in team.users %}
+                <div class="enroll-button-container">
+                    <a class="enroll-button" href="/enroll_to_team/{{team.id}}">Enroll</a>
+                </div>
+                {% endif %}
+                {% if current_user in team.users %}
+                <div class="unenroll-button-container">
+                    <a class="unenroll-button" href="/unenroll_from_team/{{team.id}}">Unenroll</a>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>

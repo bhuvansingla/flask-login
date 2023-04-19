@@ -31,6 +31,88 @@
                 text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
             }
         }
+
+        .post-container {
+            margin-bottom: 10px;
+        }
+
+        .post-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            /* set smaller gap value */
+        }
+
+
+        ul {
+            margin: 0;
+            padding: 0;
+            margin-right: 10px;
+            /* add right margin to the ul */
+        }
+
+        .delete-button-container {
+            margin-top: 10px;
+            margin-left: 10px;
+            /* add left margin to the delete button container */
+        }
+
+        .delete-button {
+            background-color: #f44336;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .enroll-button-container {
+            margin-top: 10px;
+            margin-left: 10px;
+            /* add left margin to the delete button container */
+        }
+
+        .enroll-button {
+            background-color: #53b179cb;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .unenroll-button-container {
+            margin-top: 10px;
+            margin-left: 10px;
+            /* add left margin to the delete button container */
+        }
+
+        .unenroll-button {
+            background-color: red;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
     </style>
 
     {% if title %}
@@ -50,6 +132,8 @@
         {% else %}
         {%if current_user.role == 'admin' %}
         <a class="blue pull-right" href="{{ url_for('admin_page') }}">Admin page</a>
+        <a class="blue pull-left" href="{{ url_for('new_team') }}">Add a new team</a>
+
         {% endif %}
 
         <a class="blue pull-right" href="{{ url_for('user', username=current_user.username) }}">Profile</a>
