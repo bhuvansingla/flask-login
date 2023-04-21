@@ -35,3 +35,10 @@ class NewTeamForm(FlaskForm):
     name = StringField('Team name',validators=[DataRequired()])
     description = TextAreaField('Description')
     submit = SubmitField('Add Team')
+
+class ProfileForm(FlaskForm):
+    username = StringField('Name', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    strava_account = StringField('Strava account')
+    phone_number = StringField("Phone number")
+    submit = SubmitField('Save')

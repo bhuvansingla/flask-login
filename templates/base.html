@@ -63,6 +63,11 @@
             /* add left margin to the delete button container */
         }
 
+        .right-link {
+            position: absolute;
+            right: 0;
+        }
+
         .delete-button {
             background-color: #f44336;
             border: none;
@@ -126,22 +131,25 @@
     <div>
         <center class="glow">&#128690;</center>
 
-        <a class="blue pull-left" href="{{ url_for('index') }}">Home</a>
         {% if current_user.is_anonymous %}
+        <a class="blue pull-left" href="{{ url_for('index') }}">Home</a>
         <a class="blue pull-right" href="{{ url_for('login') }}">Login</a>
         {% else %}
+        <a class="blue pull-right" href="{{ url_for('user_home', username=current_user.username) }}">Home</a>
+        <a class="blue pull-right" href="{{ url_for('user_profile') }}">Profile</a>
+        <a class="blue pull-left" href="{{ url_for('new_trip') }}">Add a new trip</a>
+        <a class="right-link" href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
         {%if current_user.role == 'admin' %}
         <a class="blue pull-right" href="{{ url_for('admin_page') }}">Admin page</a>
         <a class="blue pull-left" href="{{ url_for('new_team') }}">Add a new team</a>
 
         {% endif %}
 
-        <a class="blue pull-right" href="{{ url_for('user', username=current_user.username) }}">Profile</a>
-        <a class="blue pull-left" href="{{ url_for('new_trip') }}">Add a new trip</a>
-        <a class="blue pull-left" href="{{ url_for('logout') }}">Logout</a>
-        {% endif %}
     </div>
+
     <hr>
+
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <ul>

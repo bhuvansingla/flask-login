@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<head>
+    <style>
+        .post-container {
+            margin-bottom: 10px;
+        }
+
+        .post-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            /* set smaller gap value */
+        }
+
+
+        ul {
+            margin: 0;
+            padding: 0;
+            margin-right: 10px;
+            /* add right margin to the ul */
+        }
+
+        .delete-button-container {
+            margin-top: 10px;
+            margin-left: 10px;
+            /* add left margin to the delete button container */
+        }
+
+        .delete-button {
+            background-color: red;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .enroll-button-container {
+            margin-top: 10px;
+            margin-left: 10px;
+            /* add left margin to the delete button container */
+        }
+
+        .enroll-button {
+            background-color: #53b179cb;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .unenroll-button-container {
+            margin-top: 10px;
+            margin-left: 10px;
+            /* add left margin to the delete button container */
+        }
+
+        .unenroll-button {
+            background-color: red;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<center>
+    <h1 style="color:red">Your profile settings</h1>
+    <h1>Profile</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.username.label }} {{ form.username() }}
+        </p>
+        <p>
+            {{ form.email.label }} {{ form.email() }}
+        </p>
+        <p>
+            {{ form.strava_account.label }} {{ form.strava_account() }}
+        </p>
+        <p>
+            {{form.phone_number.label}}{{form.phone_number()}}
+        </p>
+        <p>
+            {{ form.submit }}
+        </p>
+
+    </form>
+</center>
+
+{% endblock %}
