@@ -25,7 +25,7 @@ def login():
         login_user(user,remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('user',username = user.username)
+            next_page = url_for('user_home',username = user.username)
             return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
@@ -58,13 +58,13 @@ def new_trip():
         db.session.add(trip)
         db.session.commit()
         flash('New trip registered!')
-        return redirect(url_for('user',username = current_user.username))
+        return redirect(url_for('user_home',username = current_user.username))
 
     return render_template('new_trip.html',title="Add new trip", form = form )
 
-@app.route('/user/<username>',methods=['GET', 'POST'])
+@app.route('/user_home/<username>',methods=['GET', 'POST'])
 @login_required
-def user(username):
+def user_home(username):
     
     user = User.query.filter_by(username=current_user.username).first()
     trips = Trip.query.filter_by(user_id=current_user.id)
@@ -74,12 +74,25 @@ def user(username):
     if teams is None:
         teams = []
 
-    return render_template('user.html', user=user,trips=trips,teams=teams)
+    return render_template('user_home.html', user=user,trips=trips,teams=teams)
 
+
+
+@app.route('/user_profile', methods=['GET', 'POST'])
+@login_required
+def user_profile():
+    user = User.query.get(current_user.id)
+    form = ProfileForm(obj=user)
+    if form.validate_on_submit():
+        form.populate_obj(user)
+        db.session.commit()
+        flash('Your profile has been updated!', 'success')
+        return redirect(url_for('user_profile'))
+    return render_template('user_profile.html', form=form)
 
 @app.route('/')
 def index():
-  
+
     return render_template('landing_page.html')
 
 @app.route('/logout')
@@ -93,14 +106,14 @@ def delete_trip(trip_id):
     trip = Trip.query.filter_by(id=trip_id).first()
     db.session.delete(trip)
     db.session.commit()
-    return redirect(url_for("user",username=current_user.username))
+    return redirect(url_for("user_home",username=current_user.username))
 
 @app.route("/delete_team/<int:team_id>")
 def delete_team(team_id):
     team = Team.query.filter_by(id=team_id).first()
     db.session.delete(team)
     db.session.commit()
-    return redirect(url_for("user",username=current_user.username))
+    return redirect(url_for("user_home",username=current_user.username))
 
 
 @app.route("/trip_details/<int:trip_id>")
@@ -127,7 +140,7 @@ def new_team():
         db.session.add(team)
         db.session.commit()
         flash('New team registered!')
-        return redirect(url_for('user',username = current_user.username))
+        return redirect(url_for('user_home',username = current_user.username))
 
     return render_template('new_team.html',title="Add new team", form = form )
 
@@ -150,7 +163,7 @@ def enroll_to_team(team_id):
         team.users.append(current_user)
         db.session.commit()
 
-    return redirect(url_for("user",username=current_user.username))
+    return redirect(url_for("user_home",username=current_user.username))
 
 @app.route('/unenroll_from_team/<int:team_id>',methods=['GET', 'POST'])
 @login_required
@@ -161,4 +174,4 @@ def unenroll_from_team(team_id):
     if current_user in team.users:
         team.users.remove(current_user)
         db.session.commit()
-    return redirect(url_for("user",username=current_user.username))
+    return redirect(url_for("user_home",username=current_user.username))
