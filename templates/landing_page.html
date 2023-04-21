@@ -61,7 +61,7 @@
 
         <a class="blue pull-right" href="{{ url_for('user_profile') }}">Profile</a>
         <a class="blue pull-left" href="{{ url_for('new_trip') }}">Add a new trip</a>
-        <a class="right-link" href="{{ url_for('logout') }}">Logout</a>
+        <a class="right-link" href="{{ url_for('register') }}">Logout</a>
         {% endif %}
     </div>
     <hr>
@@ -69,7 +69,11 @@
     <center>
         <div class="container mt-5" style="margin-top: 200px;">
             <h1 style="color:red">Welcome to the Team App!</h1>
-            <h2 style="color:red"> Login or Register to start your journey! </h2>
+            <h2 style="color:red">
+                <a href="{{ url_for('login') }}">Login</a> or
+                <a href="{{ url_for('register') }}">Register</a> to
+                start your journey!
+            </h2>
         </div>
     </center>
     {% with messages = get_flashed_messages() %}
