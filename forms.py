@@ -4,9 +4,9 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Radio
 from wtforms.validators import DataRequired, Email, EqualTo
 from models import User
 
-CHOICES = [('5', """Il giro che stai registrando è una gara ufficiale o un evento ufficiale di Team (con locandina)?"""),
-           ('4', """Il giro che stai registrando è un'uscita non ufficiale di team nel weekend o festivi?"""),
-           ('3', """Il giro che stai registrando è un'uscita infrasettimanale?""")]
+CHOICES = [(5, """Il giro che stai registrando è una gara ufficiale o un evento ufficiale di Team (con locandina)?"""),
+           (4, """Il giro che stai registrando è un'uscita non ufficiale di team nel weekend o festivi?"""),
+           (3, """Il giro che stai registrando è un'uscita infrasettimanale?""")]
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])

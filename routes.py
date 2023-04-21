@@ -53,8 +53,8 @@ def new_trip():
     if form.validate_on_submit():
         trip = Trip(tripname=form.tripname.data,speed=form.speed.data,
                     distance=form.distance.data,elevation=form.elevation.data,
-                    prestige = form.prestige.data,description=form.description.data,user_id=current_user.id)
-        trip.score = 0.0
+                    prestige = int(form.prestige.data),description=form.description.data,user_id=current_user.id)
+        trip.score = Trip.calculate_score(trip.speed,trip.distance,trip.elevation,trip.prestige,10,[])
         db.session.add(trip)
         db.session.commit()
         flash('New trip registered!')
@@ -125,7 +125,15 @@ def trip_details(trip_id):
 @app.route("/team_details/<int:team_id>")
 def team_details(team_id):
     team = Team.query.get(team_id)
-    return render_template("team_details.html",team=team)
+    users_by_team = team.users
+    ranking_list = []
+    for user_by_team in users_by_team:
+        all_scores_by_user = Trip.query.filter_by(user_id=user_by_team.id).all()
+        tot_score_by_user =sum([score_by_user.score for score_by_user in all_scores_by_user])
+        ranking_list.append({"user":user_by_team.username,"total score":tot_score_by_user})
+    ranking_list = list(enumerate(sorted(ranking_list, key=lambda x: x['total score'],reverse=True)))
+        
+    return render_template("team_details.html",ranking_list=ranking_list,team=team)
 
 @app.route('/new_team',methods=['GET', 'POST'])
 @login_required
@@ -160,7 +168,7 @@ def enroll_to_team(team_id):
     
     team = Team.query.get(team_id)
     if current_user not in team.users:
-        team.users.append(current_user)
+        team.add_member(current_user)
         db.session.commit()
 
     return redirect(url_for("user_home",username=current_user.username))

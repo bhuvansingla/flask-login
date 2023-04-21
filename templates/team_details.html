@@ -4,19 +4,29 @@
 <center>
     <h1 style="color:red">Participants in team: {{team.name}}</h1>
     <div class="post-container">
+        <ul class="list-unstyled text-justify" style="text-align: justify;">
+            {% for place,ranking in ranking_list %}
+            <div class="post-container">
+                <div class="post-info">
+                    <div class="row">
+                        <li>{{place+1}}
+                            {%if place+1 == 1%}
+                            &#129351;
+                            {%endif%}
+                            {%if place+1 == 2%}
+                            &#129352;
+                            {%endif%}
+                            {%if place+1 == 3%}
+                            &#129353;
+                            {%endif%}
+                            {{ranking["user"]}} {{ranking["total score"]}}
+                        </li>
 
-        {% for user in team.users %}
-        <div class="post-container">
-            <div class="post-info">
-                <div class="row">
-                    <ul>&#128205;{{user.username}}
-
-                    </ul>
-                    0
+                    </div>
                 </div>
             </div>
-        </div>
-        {% endfor %}
+            {% endfor %}
+        </ul>
     </div>
 </center>
 
