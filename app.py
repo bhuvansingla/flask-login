@@ -30,7 +30,6 @@ if __name__=="__main__":
         if not admin:
             admin = User(username="admin",role="admin")
             admin.set_password("admin")
-
             db.session.add(admin)
             db.session.commit()
         app.run(debug=True)

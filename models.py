@@ -58,7 +58,7 @@ class Trip(db.Model):
     def calculate_score(v,dx,dz,pr,np,piazzamenti):
         """dx: distance in km,
         dz: the height in m,
-        ps: the prestige, 
+        pr: the prestige, 
         np: the number of players, 
         v: the velocity in km/h
         piazzamenti: the list of top placements"""
