@@ -32,13 +32,25 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
+
+        <p>
+            {{form.n_of_partecipants.label}} <br>
+            {{ form.n_of_partecipants }}<br>
+            {% for error in form.n_of_partecipants.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
         <br>
         <p>
             {{ form.prestige.label }}<br>
             {% for subfield in form.prestige %}
             {{ subfield }} {{ subfield.label }}<br>
             {% endfor %}
+            {% for error in form.prestige.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
         </p>
+
         <p>{{ form.description.label }}<br>
             {{form.description(size=20, rows=5)}}
         </p>
