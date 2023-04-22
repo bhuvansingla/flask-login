@@ -47,6 +47,7 @@ class Trip(db.Model):
     prestige = Column(Integer,nullable=False)
     description = Column(String(140))
     recorded_on = Column(DateTime, index=True, default=datetime.utcnow)
+    n_of_partecipants = Column(Integer, nullable=False, default=1)
     placement = Column(Integer)
     user_id = Column(Integer, ForeignKey('user.id'))
     score = Column(Float(precision=2),default=0.0)

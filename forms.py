@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, RadioField,TextAreaField,FloatField
-from wtforms.validators import DataRequired, Email, EqualTo
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, RadioField,TextAreaField,FloatField,IntegerField
+from wtforms.validators import DataRequired, Email, EqualTo, NumberRange
 from models import User
 
 CHOICES = [(5, """Il giro che stai registrando è una gara ufficiale o un evento ufficiale di Team (con locandina)?"""),
@@ -28,6 +28,7 @@ class NewTripForm(FlaskForm):
     distance = FloatField('Distance [km]',validators=[DataRequired()])
     elevation = FloatField('Elevation [m]',validators=[DataRequired()])
     prestige = RadioField('Choose an option', choices=CHOICES, validators=[DataRequired()])
+    n_of_partecipants = IntegerField('Number of partecipants', validators=[DataRequired(),NumberRange(min=1)])
     description = TextAreaField('Description')
     submit = SubmitField('Add trip')
 

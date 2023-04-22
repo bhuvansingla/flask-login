@@ -53,8 +53,9 @@ def new_trip():
     if form.validate_on_submit():
         trip = Trip(tripname=form.tripname.data,speed=form.speed.data,
                     distance=form.distance.data,elevation=form.elevation.data,
-                    prestige = int(form.prestige.data),description=form.description.data,user_id=current_user.id)
-        trip.score = Trip.calculate_score(trip.speed,trip.distance,trip.elevation,trip.prestige,10,[])
+                    prestige = int(form.prestige.data),description=form.description.data,user_id=current_user.id,n_of_partecipants=form.n_of_partecipants.data)
+       
+        trip.score = Trip.calculate_score(trip.speed,trip.distance,trip.elevation,trip.prestige,trip.n_of_partecipants,[])
         db.session.add(trip)
         db.session.commit()
         flash('New trip registered!')
