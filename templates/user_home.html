@@ -6,6 +6,7 @@
     <style>
         .post-container {
             margin-bottom: 10px;
+            align-content: center;
         }
 
         .post-info {
@@ -85,33 +86,85 @@
             margin: 4px 2px;
             cursor: pointer;
         }
+
+        .styled-table {
+            border-collapse: collapse;
+            margin: 0 auto;
+            font-size: 0.9em;
+            font-family: sans-serif;
+            min-width: 400px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .styled-table thead tr {
+            background-color: #d40d09;
+            color: #ffffff;
+            text-align: left;
+        }
+
+        .styled-table th,
+        .styled-table td {
+            padding: 12px 15px;
+        }
+
+        .styled-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        .styled-table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        .styled-table tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+
+        .styled-table tbody tr.active-row {
+            font-weight: bold;
+            color: #009879;
+        }
     </style>
 
 </head>
 
 
-<center>
+<div style="text-align:center">
     <h1 style="color:red">Welcome back {{current_user.username}}!</h1>
     <h2>List of trips you have done:</h2>
-</center>
-
-<div class="post-container">
-    {% for trip in trips %}
-    <div class="post-container">
-        <div class="post-info">
-            <div class="row">
-                <ul>&#128205;<a href="{{url_for('trip_details',trip_id=trip.id)}}">{{trip.tripname}}</a>
-
-                </ul>
-                <div class="delete-button-container">
-                    <a class="delete-button" href="/delete_trip/{{ trip.id }}">Delete</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
 </div>
 
+<div style="text-align:center">
+    <div class="post-container" style="margin:0 auto;">
+
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th><b>Trip Name</b></th>
+                    <th>Speed [km/h]</th>
+                    <th>Distance [km]</th>
+                    <th>Elevation [m]</th>
+                    <th>Prestige</th>
+                    <th>Score</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trip in trips %}
+                <tr>
+                    <td>{{trip.tripname}}</td>
+                    <td>{{ trip.speed }} </td>
+                    <td>{{ trip.distance }} </td>
+                    <td>{{trip.elevation}}</td>
+                    <td>{{trip.prestige}}</td>
+                    <td>{{trip.score}}</td>
+                    <td>{{trip.description}}</td>
+                    <td><a class="delete-button" href="/delete_trip/{{ trip.id }}">Delete</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 <br>
 <center>
     <h2>List of available teams:</h2>
@@ -173,7 +226,7 @@
 {% endfor %}
 </div>
 
-{% if current_user.role =="team_leader" %}
+{% if current_user.role =="team_leader" or current_user.role=="admin"%}
 
 <center>
     <h2>List of requests to join the teams:</h2>

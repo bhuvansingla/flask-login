@@ -58,7 +58,7 @@ class Trip(db.Model):
     n_of_partecipants = Column(Integer, nullable=False, default=1)
     placement = Column(Integer)
     user_id = Column(Integer, ForeignKey('user.id'))
-    score = Column(Float(precision=2),default=0.0)
+    score = Column(Integer,default=0)
     
     def __repr__(self):
         return '<Trip {}>'.format(self.description)
