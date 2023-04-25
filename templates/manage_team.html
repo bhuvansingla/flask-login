@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<head>
+    <style>
+        .post-container {
+            margin-bottom: 10px;
+        }
+
+        .post-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            /* set smaller gap value */
+        }
+
+
+        ul {
+            margin: 0;
+            padding: 0;
+            margin-right: 10px;
+            /* add right margin to the ul */
+        }
+
+        .delete-button-container {
+            margin-top: 10px;
+            margin-left: 10px;
+            /* add left margin to the delete button container */
+        }
+
+        .delete-button {
+            background-color: #f44336;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<center>
+    <h1 style="color:red">Manage your team:</h1>
+</center>
+
+<center>
+    <h1 style="color:red">Users list: </h1>
+    <div class="post-container">
+        <ul class="list-unstyled text-justify" style="text-align: justify;">
+            {% for user in users %}
+            <div class="post-container">
+                <div class="post-info">
+                    <div class="row">
+                        <li>
+                            <div class="form-link-container" style="display: flex; align-items: center;">
+                                <!-- change_role.html -->
+                                <form method="POST" action="{{ url_for('change_role') }}">
+                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                    <label for="role" style="vertical-align: middle;">{{user.username}}:</label>
+                                    <select name="role" id="role">
+                                        {%if user.role =="user"%}
+                                        <option value="user" selected>User</option>
+                                        {%else%}
+                                        <option value="user">User</option>
+                                        {%endif%}
+                                        {% if user.role=='team_leader' %}
+                                        <option value="team_leader" selected>Team Leader</option>
+                                        {% else %}
+                                        <option value="team_leader">Team Leader</option>
+                                        {%endif%}
+                                    </select>
+                                    <input type="submit" value="Change Role">
+                                </form>
+                                <div class="unenroll-button-container" style="display: inline;">
+                                    <span style="margin-right: 10px;">&nbsp;</span>
+                                    <a class="unenroll-button"
+                                        href="{{url_for('unenroll_from_team',team_id=team.id,user_id=user.id)}}"
+                                        style="vertical-align: middle;">Unenroll</a>
+                                </div>
+                            </div>
+                        </li>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </ul>
+
+    </div>
+</center>
+
+
+{% endblock %}

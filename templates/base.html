@@ -141,10 +141,11 @@
         <a class="right-link" href="{{ url_for('logout') }}">Logout</a>
         {% endif %}
         {%if current_user.role == 'admin' %}
-        <a class="blue pull-right" href="{{ url_for('admin_page') }}">Admin page</a>
         <a class="blue pull-left" href="{{ url_for('new_team') }}">Add a new team</a>
-
         {% endif %}
+        {%if current_user.role == 'team_leader'%}
+        <a class="blue pull-right" href="{{ url_for('manage_team') }}">Manage team</a>
+        {%endif%}
 
     </div>
 

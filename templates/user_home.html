@@ -124,27 +124,80 @@
                 <ul>&#128205;
                     <a href="{{url_for('team_details',team_id=team.id)}}">{{team.name}}</a>
                 </ul>
-                {% if current_user not in team.users %}
-                <div class="enroll-button-container">
-                    <a class="enroll-button" href="/enroll_to_team/{{team.id}}">Enroll</a>
-                </div>
-                {% endif %}
-                {% if current_user in team.users %}
-                <div class="unenroll-button-container">
-                    <a class="unenroll-button" href="/unenroll_from_team/{{team.id}}">Unenroll</a>
-                </div>
-                {% endif %}
+
+
                 {%if current_user.role == 'admin'%}
                 <div class="delete-button-container">
                     <a class="delete-button" href="/delete_team/{{team.id}}">Delete</a>
                 </div>
+                {%endif%}
+                {% if current_user not in team.users %}
+                {% if not requests %}
+                <div class="enroll-button-container" style="display: inline">
+                    <a id="enroll-button" class="enroll-button" href="/request_enrollment_to_team/{{team.id}}">Request
+                        Enrollment</a>
+                </div>
+                {%else%}
+                {% for request in requests %}
+
+                {%if current_user.id == request.user_id %}
+                <div class="enroll-button-container" style="display: inline">
+
+                    <a id="enroll-button" class="enroll-button" href="#" disabled>Request sent</a>
+                </div>
+                {%else%}
+                <div class="enroll-button-container" style="display: inline">
+
+                    <a id="enroll-button" class="enroll-button"
+                        href="/request_enrollment_to_team/{{team.id}}"></a>Request
+                    Enrollment</a>
+                </div>
                 {% endif %}
+
+                {% endfor %}
+                {%endif%}
+            </div>
+
+            {%endif%}
+
+            {% if current_user in team.users %}
+            <div class="unenroll-button-container">
+                <a class="unenroll-button"
+                    href="{{url_for('unenroll_from_team',team_id=team.id,user_id=current_user.id)}}">Unenroll</a>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+{% endfor %}
+</div>
+
+{% if current_user.role =="team_leader" %}
+
+<center>
+    <h2>List of requests to join the teams:</h2>
+</center>
+<div class="post-container">
+    {% for request in requests %}
+    <div class="post-container">
+        <div class="post-info">
+            <div class="row">
+                user: {{request["username"]}}; team: {{request["team"]}}
+                <div class="enroll-button-container" style="display: inline">
+                    <a class="enroll-button"
+                        href="{{url_for('decide_on_enrollment',request_id=request['id'],accept='Yes')}}">Approve</a>
+                </div>
+
+                <div class="unenroll-button-container" style="display: inline">
+                    <a class="unenroll-button"
+                        href="{{url_for('decide_on_enrollment',request_id=request['id'],accept='No')}}">Decline</a>
+                </div>
+
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
-
-
-
+{%endif%}
 {% endblock %}

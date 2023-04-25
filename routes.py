@@ -68,14 +68,23 @@ def new_trip():
 def user_home(username):
     
     user = User.query.filter_by(username=current_user.username).first()
-    trips = Trip.query.filter_by(user_id=current_user.id)
+    trips = Trip.query.filter_by(user_id=current_user.id).all()
     teams = Team.query.all()
+    user_teams_ids = [team.id for team in user.teams]
+
+    reqs_user_team = []
+    
+    if user.role=="team_leader":
+        requests_to_join = RequestsToJoinTeam.query.filter(RequestsToJoinTeam.team_id.in_(user_teams_ids)).all()
+        reqs_user_team = [{"id":request_to_join.id,"username":User.query.get(request_to_join.user_id).username,"team":Team.query.get(request_to_join.team_id).name} for request_to_join in requests_to_join] 
+    if reqs_user_team is None:
+        reqs_user_team = []
     if trips is None:
         trips = []
     if teams is None:
         teams = []
 
-    return render_template('user_home.html', user=user,trips=trips,teams=teams)
+    return render_template('user_home.html', user=user,trips=trips,teams=teams,requests=reqs_user_team)
 
 
 
@@ -131,10 +140,10 @@ def team_details(team_id):
     for user_by_team in users_by_team:
         all_scores_by_user = Trip.query.filter_by(user_id=user_by_team.id).all()
         tot_score_by_user =sum([score_by_user.score for score_by_user in all_scores_by_user])
-        ranking_list.append({"user":user_by_team.username,"total score":tot_score_by_user})
+        ranking_list.append({"user_id":user_by_team.id,"user":user_by_team.username,"total score":tot_score_by_user})
     ranking_list = list(enumerate(sorted(ranking_list, key=lambda x: x['total score'],reverse=True)))
         
-    return render_template("team_details.html",ranking_list=ranking_list,team=team)
+    return render_template("team_details.html",ranking_list=ranking_list,team=team,user=current_user)
 
 @app.route('/new_team',methods=['GET', 'POST'])
 @login_required
@@ -155,32 +164,76 @@ def new_team():
 
 
 
-@app.route('/admin_page',methods=['GET', 'POST'])
+@app.route('/manage_team',methods=['GET', 'POST'])
 @login_required
-def admin_page():
-    
-    if not current_user.is_admin:
-        return 'Unauthorized'
-    return render_template('admin_page.html',title="Admin page")
+def manage_team():
+    try:
+        team = User.query.filter_by(id=current_user.id).first().teams[0]
+        team_members = team.users
+        return render_template('manage_team.html',title="Manage team",team = team,users=team_members)
+    except:
+        return redirect(url_for('user_home',username = current_user.username))
 
-@app.route('/enroll_to_team/<int:team_id>',methods=['GET', 'POST'])
+@app.route('/request_enrollment_to_team/<int:team_id>',methods=['GET', 'POST'])
 @login_required
-def enroll_to_team(team_id):
+def request_enrollment_to_team(team_id):
     
     team = Team.query.get(team_id)
+    user_req= RequestsToJoinTeam.query.filter_by(team_id = team_id, user_id = current_user.id).first()
+    if user_req:
+        return redirect(url_for("user_home",username=current_user.username))
+
+    req = RequestsToJoinTeam(team_id = team_id,user_id = current_user.id)
     if current_user not in team.users:
-        team.add_member(current_user)
+        db.session.add(req)
         db.session.commit()
 
-    return redirect(url_for("user_home",username=current_user.username))
+    return redirect(url_for("user_home",username=current_user.username,requests = [req] ))
 
-@app.route('/unenroll_from_team/<int:team_id>',methods=['GET', 'POST'])
+@app.route('/decide_on_enrollment/<int:request_id>/<accept>',methods=['GET', 'POST'])
 @login_required
-def unenroll_from_team(team_id):
+def decide_on_enrollment(request_id,accept):
     
-    team = Team.query.get(team_id)
-
-    if current_user in team.users:
-        team.users.remove(current_user)
+    request_to_join = RequestsToJoinTeam.query.get(request_id)
+    if accept=="Yes":
+        user = User.query.get(request_to_join.user_id)
+        team = Team.query.get(request_to_join.team_id)
+        team.add_member(user)
+        db.session.delete(request_to_join)
         db.session.commit()
+    else:
+        db.session.delete(request_to_join)
+        db.session.commit()
+
+
+        
     return redirect(url_for("user_home",username=current_user.username))
+
+
+
+@app.route('/')
+@app.route('/unenroll_from_team/<int:team_id>/<int:user_id>',methods=['GET', 'POST'])
+@login_required
+def unenroll_from_team(team_id,user_id):
+    
+    team =  Team.query.get(team_id)
+    user = User.query.get(user_id)
+    if current_user in team.users:
+        user.set_role("user")
+        team.users.remove(user)
+        db.session.commit()
+    
+    return redirect(url_for("manage_team",username=current_user.username))
+
+
+@app.route("/change_role",methods=['GET', 'POST'])
+@login_required
+def change_role():
+    user_id = request.form.get('user_id')
+    role = request.form.get('role')
+    user = User.query.get(user_id)
+    if role != user.role:
+        user.set_role(role)
+        db.session.commit()
+
+    return redirect(url_for("manage_team", users = User.query.all()))

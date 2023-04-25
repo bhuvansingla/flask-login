@@ -34,9 +34,17 @@ class User(db.Model,UserMixin,AdminMixin):
 
     def check_password(self,password):
         return check_password_hash(self.password_hash, password)
+    
+    def set_role(self,role):
+        self.role = role
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
+class RequestsToJoinTeam(db.Model):
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer)
+    team_id = Column(Integer)
 
 class Trip(db.Model):
     id = Column(Integer, primary_key=True)

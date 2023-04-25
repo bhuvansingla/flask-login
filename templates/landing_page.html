@@ -53,10 +53,11 @@
         <a class="blue pull-right" href="{{ url_for('login') }}">Login</a>
         {% else %}
         {%if current_user.role == 'admin' %}
-        <a class="blue pull-right" href="{{ url_for('admin_page') }}">Admin page</a>
         <a class="blue pull-left" href="{{ url_for('new_team') }}">Add a new team</a>
-
         {% endif %}
+        {%if current_user.role == 'team_leader'%}
+        <a class="blue pull-right" href="{{ url_for('manage_team') }}">Manage team</a>
+        {%endif%}
         <a class="blue pull-right" href="{{ url_for('user_home', username=current_user.username) }}">Home</a>
 
         <a class="blue pull-right" href="{{ url_for('user_profile') }}">Profile</a>
