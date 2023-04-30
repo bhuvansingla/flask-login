@@ -15,44 +15,50 @@
 <center>
     <h1 style="color:red">Users list: </h1>
     <div class="post-container">
-        <ul class="list-unstyled text-justify" style="text-align: justify;">
-            {% for user in users %}
-            <div class="post-container">
-                <div class="post-info">
-                    <div class="row">
-                        <li>
-                            <div class="form-link-container" style="display: flex; align-items: center;">
-                                <!-- change_role.html -->
-                                <form method="POST" action="{{ url_for('change_role') }}">
-                                    <input type="hidden" name="user_id" value="{{ user.id }}">
-                                    <label for="role" style="vertical-align: middle;">{{user.username}}:</label>
-                                    <select name="role" id="role">
-                                        {%if user.role =="user"%}
-                                        <option value="user" selected>User</option>
-                                        {%else%}
-                                        <option value="user">User</option>
-                                        {%endif%}
-                                        {% if user.role=='team_leader' %}
-                                        <option value="team_leader" selected>Team Leader</option>
-                                        {% else %}
-                                        <option value="team_leader">Team Leader</option>
-                                        {%endif%}
-                                    </select>
-                                    <input type="submit" value="Change Role">
-                                </form>
-                                <div class="unenroll-button-container" style="display: inline;">
-                                    <span style="margin-right: 10px;">&nbsp;</span>
-                                    <a class="unenroll-button"
-                                        href="{{url_for('unenroll_from_team',team_id=team.id,user_id=user.id)}}"
-                                        style="vertical-align: middle;">Unenroll</a>
-                                </div>
-                            </div>
-                        </li>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
-        </ul>
+        <div class="post-container">
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Role</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.username }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('change_role') }}">
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <select name="role">
+                                    {% if user.role == "user" %}
+                                    <option value="user" selected>User</option>
+                                    {% else %}
+                                    <option value="user">User</option>
+                                    {% endif %}
+                                    {% if user.role == "team_leader" %}
+                                    <option value="team_leader" selected>Team Leader</option>
+                                    {% else %}
+                                    <option value="team_leader">Team Leader</option>
+                                    {% endif %}
+                                </select>
+                                <input type="submit" value="Change Role">
+                            </form>
+                        </td>
+                        <td>
+                            <form method="POST"
+                                action="{{ url_for('unenroll_from_team', team_id=team.id, user_id=user.id) }}">
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <input type="submit" value="Unenroll">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
 
     </div>
 </center>

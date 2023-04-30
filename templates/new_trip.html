@@ -2,7 +2,7 @@
 
 {% block content %}<center>
     <h1 style="color:red">Register a new trip</h1>
-    <form action="" method="post">
+    <form action="" method="post" class="form-container">
         {{ form.hidden_tag() }}
         <p>
             {{ form.tripname.label }}<br>
@@ -45,7 +45,9 @@
         <p>
             {{ form.prestige.label }}<br>
             {% for subfield in form.prestige %}
-            {{ subfield }} {{ subfield.label }}<br>
+            <label>
+                {{ subfield }} <span>{{ subfield.label }}</span>
+            </label><br>
             {% endfor %}
             {% for error in form.prestige.errors %}
             <span style="color: red;">[{{ error }}]</span>
@@ -57,6 +59,7 @@
         </p>
         <p>{{ form.submit() }}</p>
     </form>
+
 </center>
 
 {% endblock %}

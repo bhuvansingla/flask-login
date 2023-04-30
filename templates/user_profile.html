@@ -8,7 +8,7 @@
 
 <center>
     <h1 style="color:red">Your profile settings</h1>
-    <form method="POST">
+    <form class="form-container" method="POST">
         {{ form.hidden_tag() }}
         <p>
             {{ form.username.label }} {{ form.username() }}
@@ -25,7 +25,6 @@
         <p>
             {{ form.submit }}
         </p>
-
     </form>
 </center>
 
