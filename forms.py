@@ -31,6 +31,7 @@ class NewTripForm(FlaskForm):
     n_of_partecipants = IntegerField('Number of partecipants', validators=[DataRequired(),NumberRange(min=1)])
     description = TextAreaField('Description')
     submit = SubmitField('Add trip')
+    submit_save = SubmitField('Save')
 
 class NewTeamForm(FlaskForm):
     name = StringField('Team name',validators=[DataRequired()])

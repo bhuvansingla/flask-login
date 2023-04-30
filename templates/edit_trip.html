@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_base.css') }}">
+</head>
+
+<center>
+    <h1 style="color:red">Trip settings</h1>
+
+    <h1 style="color:red">Edit trip</h1>
+    <form action="" method="post" class="form-container">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.tripname.label }}<br>
+            {{ form.tripname() }}<br>
+            {% for error in form.tripname.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.speed.label }}<br>
+            {{ form.speed() }}<br>
+            {% for error in form.speed.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.distance.label }}<br>
+            {{ form.distance() }}<br>
+            {% for error in form.distance.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.elevation.label }}<br>
+            {{ form.elevation() }}<br>
+            {% for error in form.elevation.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <p>
+            {{form.n_of_partecipants.label}} <br>
+            {{ form.n_of_partecipants() }}<br>
+            {% for error in form.n_of_partecipants.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <br>
+
+        <p>
+            {{ form.prestige.label }}<br>
+            {% for subfield in form.prestige %}
+            <label>
+                {{ subfield }} <span>{{ subfield.label() }}</span>
+            </label><br>
+            {% endfor %}
+            {% for error in form.prestige.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+
+        <p>{{ form.description.label }}<br>
+            {{form.description(size=20, rows=5)}}
+        </p>
+        <p>{{ form.submit_save()}}</p>
+        <p><a class="delete-button" href="/delete_trip/{{ trip_id }}/{{user_id}}">Delete</a></p>
+    </form>
+</center>
+
+{% endblock %}

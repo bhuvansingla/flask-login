@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_user_profile.css') }}">
+</head>
+
+<center>
+    <div style="text-align:center">
+        <h1 style="color:red">User details for {{user.username}}</h1>
+    </div>
+    <div style="text-align:center">
+        <div class="post-container" style="margin:0 auto;">
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td>Name</td>
+                        <td>{{ user.username}}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                    <tr>
+                        <td>Strava account</td>
+                        <td>{{ user.strava_account }}</td>
+                    </tr>
+                    <tr>
+                        <td>Phone number</td>
+                        <td>{{ user.phone_number }}</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <div style="text-align:center">
+        <h2>List of {{user.username}} trips:</h2>
+    </div>
+
+    <div style="text-align:center">
+        <div class="post-container" style="margin:0 auto;">
+
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th><b>Trip Name</b></th>
+                        <th>Speed [km/h]</th>
+                        <th>Distance [km]</th>
+                        <th>Elevation [m]</th>
+                        <th>Number of partecipants</th>
+                        <th>Prestige</th>
+                        <th>Description</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trip in trips %}
+                    <tr>
+                        <td>{{trip.tripname}}</td>
+                        <td>{{ trip.speed }} </td>
+                        <td>{{ trip.distance }} </td>
+                        <td>{{trip.elevation}}</td>
+                        <td>{{trip.n_of_partecipants}}</td>
+                        <td>{{trip.prestige}}</td>
+                        <td>{{trip.description}}</td>
+                        <td>{{trip.score}}</td>
+                        <td><a class="delete-button" href="/edit_trip/{{ trip.id }}/{{user.id}}">Edit</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</center>
+<center>
+    <div class="enroll-button-container"></div>
+    <a class="enroll-button" href="/new_trip/{{user.id}}">Add new trip</a>
+</center>
+{% endblock %}

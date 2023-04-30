@@ -45,22 +45,23 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
-@app.route('/new_trip',methods=['GET', 'POST'])
+@app.route('/new_trip/<int:user_id>',methods=['GET', 'POST'])
 @login_required
-def new_trip():
-    
+def new_trip(user_id):
     form = NewTripForm()
     if form.validate_on_submit():
         trip = Trip(tripname=form.tripname.data,speed=form.speed.data,
                     distance=form.distance.data,elevation=form.elevation.data,
-                    prestige = int(form.prestige.data),description=form.description.data,user_id=current_user.id,n_of_partecipants=form.n_of_partecipants.data)
+                    prestige = int(form.prestige.data),description=form.description.data,user_id=user_id,n_of_partecipants=form.n_of_partecipants.data)
        
         trip.score = Trip.calculate_score(trip.speed,trip.distance,trip.elevation,trip.prestige,trip.n_of_partecipants,[])
         db.session.add(trip)
         db.session.commit()
         flash('New trip registered!')
-        return redirect(url_for('user_home',username = current_user.username))
-
+        if user_id == current_user.id:
+            return redirect(url_for('user_home',username = current_user.username))
+        else:
+            return redirect(url_for('view_user_profile_by_TL',user_id=user_id))
     return render_template('new_trip.html',title="Add new trip", form = form )
 
 @app.route('/user_home/<username>',methods=['GET', 'POST'])
@@ -100,6 +101,22 @@ def user_profile():
         return redirect(url_for('user_profile'))
     return render_template('user_profile.html', form=form)
 
+@app.route("/edit_trip/<int:trip_id>/<int:user_id>", methods=['GET', 'POST'])
+@login_required
+def edit_trip(trip_id,user_id):
+    trip = Trip.query.get(trip_id)
+    form = NewTripForm(obj=trip)
+    if form.validate_on_submit():
+        form.populate_obj(trip)
+        trip.score = Trip.calculate_score(trip.speed,trip.distance,trip.elevation,int(trip.prestige),trip.n_of_partecipants,[])
+        db.session.commit()
+        flash('Your trip has been updated!', 'success')
+        if user_id == current_user.id:
+            return redirect(url_for('user_home',username=current_user.username))
+        else:
+            return redirect(url_for("view_user_profile_by_TL",user_id=user_id))
+    return render_template('edit_trip.html', form=form,trip_id=trip.id,user_id=user_id)
+
 @app.route('/')
 def index():
 
@@ -111,12 +128,22 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route("/delete_trip/<int:trip_id>")
-def delete_trip(trip_id):
+@app.route("/view_user_profile_by_TL/<int:user_id>")
+def view_user_profile_by_TL(user_id):
+    user = User.query.get(user_id)
+    trips = Trip.query.filter_by(user_id=user_id).all()
+    return render_template("view_user_profile_by_TL.html",user=user,trips=trips)
+
+
+@app.route("/delete_trip/<int:trip_id>/<int:user_id>")
+def delete_trip(trip_id,user_id):
     trip = Trip.query.filter_by(id=trip_id).first()
     db.session.delete(trip)
     db.session.commit()
-    return redirect(url_for("user_home",username=current_user.username))
+    if user_id == current_user.id:
+        return redirect(url_for('user_home',username=current_user.username))
+    else:
+        return redirect(url_for("view_user_profile_by_TL",user_id=user_id))
 
 @app.route("/delete_team/<int:team_id>")
 def delete_team(team_id):
@@ -169,7 +196,7 @@ def new_team():
 def manage_team():
     try:
         team = User.query.filter_by(id=current_user.id).first().teams[0]
-        team_members = team.users
+        team_members = [member for member in team.users if member.id != current_user.id]
         return render_template('manage_team.html',title="Manage team",team = team,users=team_members)
     except:
         return redirect(url_for('user_home',username = current_user.username))

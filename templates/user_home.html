@@ -22,9 +22,10 @@
                     <th>Speed [km/h]</th>
                     <th>Distance [km]</th>
                     <th>Elevation [m]</th>
+                    <th>Number of partecipants</th>
                     <th>Prestige</th>
-                    <th>Score</th>
                     <th>Description</th>
+                    <th>Score</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,10 +35,11 @@
                     <td>{{ trip.speed }} </td>
                     <td>{{ trip.distance }} </td>
                     <td>{{trip.elevation}}</td>
+                    <td>{{trip.n_of_partecipants}}</td>
                     <td>{{trip.prestige}}</td>
-                    <td>{{trip.score}}</td>
                     <td>{{trip.description}}</td>
-                    <td><a class="delete-button" href="/delete_trip/{{ trip.id }}">Delete</a></td>
+                    <td>{{trip.score}}</td>
+                    <td><a class="delete-button" href="/edit_trip/{{ trip.id }}/{{current_user.id}}">Edit</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

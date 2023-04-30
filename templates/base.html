@@ -23,7 +23,7 @@
         {% else %}
         <a class="blue pull-right" href="{{ url_for('user_home', username=current_user.username) }}">Home</a>
         <a class="blue pull-right" href="{{ url_for('user_profile') }}">Profile</a>
-        <a class="blue pull-left" href="{{ url_for('new_trip') }}">Add a new trip</a>
+        <a class="blue pull-left" href="{{ url_for('new_trip', user_id = current_user.id) }}">Add a new trip</a>
         <a class="right-link" href="{{ url_for('logout') }}">Logout</a>
         {% endif %}
         {%if current_user.role == 'admin' %}

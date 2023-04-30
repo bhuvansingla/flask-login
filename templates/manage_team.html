@@ -27,7 +27,7 @@
                 <tbody>
                     {% for user in users %}
                     <tr>
-                        <td>{{ user.username }}</td>
+                        <td><a href="/view_user_profile_by_TL/{{user.id}}">{{ user.username }}</a></td>
                         <td>
                             <form method="POST" action="{{ url_for('change_role') }}">
                                 <input type="hidden" name="user_id" value="{{ user.id }}">
