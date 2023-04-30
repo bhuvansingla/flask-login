@@ -3,40 +3,8 @@
 <head>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style>
-        body {
-            background-color: #E8DCD9;
-            font-family: cursive;
-        }
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_landing_page.css')}}">
 
-        .blue {
-            color: #187bcd
-        }
-
-        .right-link {
-            position: absolute;
-            right: 0;
-        }
-
-        .glow {
-            font-size: 30px;
-            color: blue;
-            text-align: center;
-            -webkit-animation: glow 1s ease-in-out infinite alternate;
-            -moz-animation: glow 1s ease-in-out infinite alternate;
-            animation: glow 1s ease-in-out infinite alternate;
-        }
-
-        @-webkit-keyframes glow {
-            from {
-                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
-            }
-
-            to {
-                text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
-            }
-        }
-    </style>
 
     {% if title %}
     <title>{{ title }} - Team App</title>
