@@ -8,6 +8,16 @@ from forms import *
 from werkzeug.urls import url_parse
 import urllib
 
+with app.app_context():
+
+    db.create_all()
+    admin = User.query.filter_by(username="admin").first()
+    if not admin:
+        admin = User(username="admin",role="admin")
+        admin.set_password("admin")
+        db.session.add(admin)
+        db.session.commit()
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
   #check if current_user logged in, if so redirect to a page that makes sense
