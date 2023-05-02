@@ -50,7 +50,10 @@
                             <form method="POST"
                                 action="{{ url_for('unenroll_from_team', team_id=team.id, user_id=user.id) }}">
                                 <input type="hidden" name="user_id" value="{{ user.id }}">
-                                <input type="submit" value="Unenroll">
+                                <div class="unenroll-button-container">
+                                    <input type="submit" class="unenroll-button" value="Unenroll">
+                                </div>
+
                             </form>
                         </td>
                     </tr>

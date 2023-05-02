@@ -89,10 +89,11 @@
     </div>
 </center>
 <center>
+
+    {%if current_user.role =="admin"%}
     <div style="text-align:center">
         <h1 style="color:red">List of available teams</h1>
     </div>
-    {%if current_user.role =="admin"%}
     <div class="post-container">
         {% for team in teams %}
         <div class="post-container">

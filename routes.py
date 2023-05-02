@@ -186,7 +186,8 @@ def view_user_profile_by_TL(user_id):
         teams= Team.query.all()
         return render_template("view_user_profile_by_TL.html",user=user,trips=trips,teams=teams)
     else:
-        return render_template("view_user_profile_by_TL.html",user=user,trips=trips,teams=teams)
+       
+        return render_template("view_user_profile_by_TL.html",user=user,trips=trips)
 
 
 @app.route("/delete_trip/<int:trip_id>/<int:user_id>")
