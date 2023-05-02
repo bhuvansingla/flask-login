@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_user_home.css') }}">
+</head>
+
+<!-- admin section-->
+<center>
+    <h1 style="color:red">List of teams</h1>
+</center>
+<div class="post-container">
+    {% for team in teams %}
+    <div class="post-container">
+        <div class="post-info">
+            <div class="row">
+                <ul>&#128205;
+                    <a href="{{url_for('team_details',team_id=team.id)}}">{{team.name}}</a>
+                </ul>
+
+                <div class="delete-button-container">
+                    <a class="delete-button" href="/delete_team/{{team.id}}">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {%endfor%}
+</div>
+
+
+
+<center>
+    <h1 style="color:red">List of users</h1>
+    <div class="post-container">
+        <div class="post-container">
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Role</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td><a href="/view_user_profile_by_TL/{{user.id}}">{{ user.username }}</a></td>
+                        <td>
+                            <form method="POST" action="{{ url_for('change_role') }}">
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <select name="role">
+                                    {% if user.role == "user" %}
+                                    <option value="user" selected>User</option>
+                                    {% else %}
+                                    <option value="user">User</option>
+                                    {% endif %}
+                                    {% if user.role == "team_leader" %}
+                                    <option value="team_leader" selected>Team Leader</option>
+                                    {% else %}
+                                    <option value="team_leader">Team Leader</option>
+                                    {% endif %}
+                                </select>
+                                <input type="submit" value="Change Role">
+                            </form>
+                        </td>
+                        <td>
+                            <div class="delete-button-container">
+                                <a class="delete-button" href="/delete_user/{{user.id}}">Delete</a>
+                            </div>
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+    </div>
+</center>
+
+
+{% endblock %}

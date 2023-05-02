@@ -45,7 +45,7 @@
     </div>
 
     <div style="text-align:center">
-        <h2>List of {{user.username}} trips:</h2>
+        <h1 style="color:red">List of {{user.username}} trips</h1>
     </div>
 
     <div style="text-align:center">
@@ -84,7 +84,42 @@
     </div>
 </center>
 <center>
-    <div class="enroll-button-container"></div>
-    <a class="enroll-button" href="/new_trip/{{user.id}}">Add new trip</a>
+    <div class="enroll-button-container">
+        <a class="enroll-button" href="/new_trip/{{user.id}}">Add new trip</a>
+    </div>
+</center>
+<center>
+    <div style="text-align:center">
+        <h1 style="color:red">List of available teams</h1>
+    </div>
+    {%if current_user.role =="admin"%}
+    <div class="post-container">
+        {% for team in teams %}
+        <div class="post-container">
+            <div class="post-info">
+                <div class="row">
+                    <ul>&#128205;
+                        <a href="{{url_for('team_details',team_id=team.id)}}">{{team.name}}</a>
+                    </ul>
+
+                    {% if user not in team.users %}
+                    <div class="enroll-button-container">
+                        <a class="enroll-button"
+                            href="{{url_for('enroll_directly',team_id=team.id,user_id=user.id)}}">Enroll</a>
+                    </div>
+                    {% else %}
+                    <div class="unenroll-button-container">
+                        <a class="unenroll-button"
+                            href="{{url_for('unenroll_from_team',team_id=team.id,user_id=user.id)}}">Unenroll</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {%endif%}
+
 </center>
 {% endblock %}

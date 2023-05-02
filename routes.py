@@ -35,7 +35,11 @@ def login():
         login_user(user,remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('user_home',username = user.username)
+            if user.role !="admin":
+                next_page = url_for('user_home',username = user.username)
+            else:
+                next_page = url_for('admin_home',username = user.username)
+
             return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
@@ -53,7 +57,23 @@ def register():
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
+
     return render_template('register.html', title='Register', form=form)
+
+
+@app.route('/new_user', methods=['GET', 'POST'])
+def new_user():
+
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('admin_home',username = user.username))
+
+    return render_template('new_user.html', title='Register new user', form=form)
 
 @app.route('/new_trip/<int:user_id>',methods=['GET', 'POST'])
 @login_required
@@ -82,7 +102,6 @@ def user_home(username):
     trips = Trip.query.filter_by(user_id=current_user.id).all()
     teams = Team.query.all()
     user_teams_ids = [team.id for team in user.teams]
-
     reqs_user_team = []
     
     if user.role=="team_leader":
@@ -95,7 +114,28 @@ def user_home(username):
     if teams is None:
         teams = []
 
+
     return render_template('user_home.html', user=user,trips=trips,teams=teams,requests=reqs_user_team)
+
+
+@app.route('/admin_home/<username>',methods=['GET', 'POST'])
+@login_required
+def admin_home(username):
+    
+    users = User.query.filter(User.username!="admin")
+    trips = Trip.query.all()
+    teams = Team.query.all()
+
+
+    if trips is None:
+        trips = []
+    if teams is None:
+        teams = []
+    if users is None:
+        users = []
+
+    return render_template('admin_home.html', users=users,trips=trips,teams=teams)
+
 
 
 
@@ -142,7 +182,11 @@ def logout():
 def view_user_profile_by_TL(user_id):
     user = User.query.get(user_id)
     trips = Trip.query.filter_by(user_id=user_id).all()
-    return render_template("view_user_profile_by_TL.html",user=user,trips=trips)
+    if current_user.role=="admin":
+        teams= Team.query.all()
+        return render_template("view_user_profile_by_TL.html",user=user,trips=trips,teams=teams)
+    else:
+        return render_template("view_user_profile_by_TL.html",user=user,trips=trips,teams=teams)
 
 
 @app.route("/delete_trip/<int:trip_id>/<int:user_id>")
@@ -160,9 +204,19 @@ def delete_team(team_id):
     team = Team.query.filter_by(id=team_id).first()
     db.session.delete(team)
     db.session.commit()
-    return redirect(url_for("user_home",username=current_user.username))
+    return redirect(url_for("admin_home",username=current_user.username))
 
-
+@app.route("/delete_user/<int:user_id>")
+@login_required
+def delete_user(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    db.session.delete(user)
+    db.session.commit()
+    if current_user.role =="admin":
+        return redirect(url_for("admin_home",username=current_user.username))
+    else:
+        return redirect(url_for("index"))
+    
 @app.route("/trip_details/<int:trip_id>")
 def trip_details(trip_id):
     trip = Trip.query.get(trip_id)
@@ -195,7 +249,7 @@ def new_team():
         db.session.add(team)
         db.session.commit()
         flash('New team registered!')
-        return redirect(url_for('user_home',username = current_user.username))
+        return redirect(url_for('admin_home',username = current_user.username))
 
     return render_template('new_team.html',title="Add new team", form = form )
 
@@ -209,7 +263,11 @@ def manage_team():
         team_members = [member for member in team.users if member.id != current_user.id]
         return render_template('manage_team.html',title="Manage team",team = team,users=team_members)
     except:
-        return redirect(url_for('user_home',username = current_user.username))
+        if current_user.role !='admin':
+            return redirect(url_for('user_home',username = current_user.username))
+        else:
+            return redirect(url_for('admin_home',username = current_user.username))
+
 
 @app.route('/request_enrollment_to_team/<int:team_id>',methods=['GET', 'POST'])
 @login_required
@@ -241,21 +299,29 @@ def decide_on_enrollment(request_id,accept):
     else:
         db.session.delete(request_to_join)
         db.session.commit()
-
-
-        
+    
     return redirect(url_for("user_home",username=current_user.username))
 
 
+@app.route('/enroll_directly/<int:team_id>/<int:user_id>',methods=['GET', 'POST'])
+@login_required
+def enroll_directly(team_id,user_id):
+    
+    user = User.query.get(user_id)
+    team = Team.query.get(team_id)
+    team.add_member(user)
+    db.session.commit()
 
-@app.route('/')
+    
+    return redirect(url_for("admin_home",username=current_user.username))
+
 @app.route('/unenroll_from_team/<int:team_id>/<int:user_id>',methods=['GET', 'POST'])
 @login_required
 def unenroll_from_team(team_id,user_id):
     
     team =  Team.query.get(team_id)
     user = User.query.get(user_id)
-    if current_user in team.users:
+    if current_user in team.users or user in team.users:
         user.set_role("user")
         team.users.remove(user)
         db.session.commit()

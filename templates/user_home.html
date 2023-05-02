@@ -9,7 +9,7 @@
 
 <div style="text-align:center">
     <h1 style="color:red">Welcome back {{current_user.username}}!</h1>
-    <h2>List of trips you have done:</h2>
+    <h2>List of trips you have done</h2>
 </div>
 
 <div style="text-align:center">
@@ -48,7 +48,7 @@
 </div>
 <br>
 <center>
-    <h2>List of available teams:</h2>
+    <h2>List of available teams</h2>
 </center>
 <div class="post-container">
     {% for team in teams %}
@@ -59,12 +59,6 @@
                     <a href="{{url_for('team_details',team_id=team.id)}}">{{team.name}}</a>
                 </ul>
 
-
-                {%if current_user.role == 'admin'%}
-                <div class="delete-button-container">
-                    <a class="delete-button" href="/delete_team/{{team.id}}">Delete</a>
-                </div>
-                {%endif%}
                 {% if current_user not in team.users %}
                 {% if not requests %}
                 <div class="enroll-button-container" style="display: inline">
@@ -82,9 +76,8 @@
                 {%else%}
                 <div class="enroll-button-container" style="display: inline">
 
-                    <a id="enroll-button" class="enroll-button"
-                        href="/request_enrollment_to_team/{{team.id}}"></a>Request
-                    Enrollment</a>
+                    <a id="enroll-button" class="enroll-button" href="/request_enrollment_to_team/{{team.id}}">Request
+                        Enrollment</a>
                 </div>
                 {% endif %}
 
@@ -103,14 +96,15 @@
 
         </div>
     </div>
-</div>
-{% endfor %}
+    {% endfor %}
 </div>
 
-{% if current_user.role =="team_leader" or current_user.role=="admin"%}
+
+
+{% if current_user.role =="team_leader" %}
 
 <center>
-    <h2>List of requests to join the teams:</h2>
+    <h2>List of requests to join the teams</h2>
 </center>
 <div class="post-container">
     {% for request in requests %}
@@ -133,5 +127,9 @@
     </div>
     {% endfor %}
 </div>
+
 {%endif%}
+
+
+
 {% endblock %}
