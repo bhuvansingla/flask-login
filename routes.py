@@ -1,13 +1,12 @@
 from app import app, db
 from flask import request, render_template, flash, redirect,url_for
 from flask_login import current_user, login_user, logout_user,login_required
-
+from sqlalchemy import or_
 from models import *
 from forms import *
-
 from werkzeug.urls import url_parse
-import urllib
 
+    
 with app.app_context():
 
     db.create_all()
@@ -48,9 +47,18 @@ def register():
   #check if current_user logged in, if so redirect to a page that makes sense
     if current_user.is_authenticated:
         return redirect(url_for('index'))
-
+    
     form = RegistrationForm()
     if form.validate_on_submit():
+        user_check = User.query.filter(or_(User.email==form.email.data, User.username==form.username.data)).first()
+        if user_check:
+            if user_check.email == form.email.data:
+                flash('The email already exist, please register under different email!')
+            if user_check.username == form.username.data:
+                flash('The username already exist, please register under different username!')
+
+            return redirect(url_for('register'))
+
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
@@ -66,6 +74,11 @@ def new_user():
 
     form = RegistrationForm()
     if form.validate_on_submit():
+        user_check = User.query.filter(or_(User.email==form.email.data, User.username==form.username.data)).first()
+        if user_check:
+            flash('The user already exists, please register under different email and/or username!')
+            return redirect(url_for('new_user'))
+        
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
