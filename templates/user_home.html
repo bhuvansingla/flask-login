@@ -48,66 +48,36 @@
 </div>
 <br>
 <center>
-    <h2>List of available teams</h2>
+    <h2>Your team:</h2>
 </center>
 <div class="post-container">
-    {% for team in teams %}
     <div class="post-container">
         <div class="post-info">
             <div class="row">
                 <ul>&#128205;
-                    <a href="{{url_for('team_details',team_id=team.id)}}">{{team.name}}</a>
+                    <a href="{{url_for('team_details',team_id=teams.id)}}">{{teams.name}}</a>
                 </ul>
-
-                {% if current_user not in team.users %}
-                {% if not requests %}
-                <div class="enroll-button-container" style="display: inline">
-                    <a id="enroll-button" class="enroll-button" href="/request_enrollment_to_team/{{team.id}}">Request
-                        Enrollment</a>
-                </div>
-                {%else%}
-                {% for request in requests %}
-
-                {%if current_user.id == request.user_id %}
-                <div class="enroll-button-container" style="display: inline">
-
-                    <a id="enroll-button" class="enroll-button" href="#" disabled>Request sent</a>
-                </div>
-                {%else%}
-                <div class="enroll-button-container" style="display: inline">
-
-                    <a id="enroll-button" class="enroll-button" href="/request_enrollment_to_team/{{team.id}}">Request
-                        Enrollment</a>
-                </div>
-                {% endif %}
-
-                {% endfor %}
-                {%endif%}
             </div>
-
-            {%endif%}
-
-            {% if current_user in team.users %}
-            <div class="unenroll-button-container">
-                <a class="unenroll-button"
-                    href="{{url_for('unenroll_from_team',team_id=team.id,user_id=current_user.id)}}">Unenroll</a>
-            </div>
-            {% endif %}
-
         </div>
     </div>
-    {% endfor %}
 </div>
 
-
-
+{%if current_user.role =="team_leader"%}
+<br>
+<center>
+    {%if new_enrollments%}
+    {{new_enrollments}}
+    {%endif%}
+</center>
+{%endif%}
+<!--
 {% if current_user.role =="team_leader" %}
 
 <center>
     <h2>List of requests to join the teams</h2>
 </center>
 <div class="post-container">
-    {% for request in requests %}
+    {% for request in requests_to_join %}
     <div class="post-container">
         <div class="post-info">
             <div class="row">
@@ -129,7 +99,7 @@
 </div>
 
 {%endif%}
-
+-->
 
 
 {% endblock %}
