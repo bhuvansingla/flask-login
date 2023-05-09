@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Table,Integer,Column,String,DateTime,Float,ForeignKey,func
+from sqlalchemy import Table,Integer,Column,String,DateTime,Float,ForeignKey,func, UniqueConstraint
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -12,22 +12,24 @@ team_user_association = Table('team_user_association', db.Model.metadata,
 )
 
 
+
 class AdminMixin:
     @property
     def is_admin(self):
         return self.role == 'admin'
 
 class User(db.Model,UserMixin,AdminMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(140))
-    email = db.Column(db.String(140))
-    strava_account = db.Column(db.String(140))
-    password = db.Column(db.String(140))
-    password_hash = db.Column(db.String(140))
-    phone_number = db.Column(db.String(140))
-    trips = db.relationship('Trip',backref='user',lazy='dynamic')
+    id = Column(Integer, primary_key=True)
+    username = Column(String(140))
+    email = Column(String(140))
+    strava_account = Column(String(140))
+    password = Column(String(140))
+    password_hash = Column(String(140))
+    phone_number = Column(String(140))
+    role = Column(String(20), nullable=False, default='user')
+    trips = relationship('Trip',backref='user',lazy='dynamic',cascade="all, delete-orphan")
     teams = relationship('Team', secondary=team_user_association, back_populates='users')
-    role = db.Column(db.String(20), nullable=False, default='user')
+    join_requests = relationship("RequestsToJoinTeam", back_populates="user", cascade="all, delete-orphan")
 
     def set_password(self,password):
         self.password_hash = generate_password_hash(password)
@@ -40,11 +42,7 @@ class User(db.Model,UserMixin,AdminMixin):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
-
-class RequestsToJoinTeam(db.Model):
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer)
-    team_id = Column(Integer)
+  
 
 class Trip(db.Model):
     id = Column(Integer, primary_key=True)
@@ -57,7 +55,7 @@ class Trip(db.Model):
     recorded_on = Column(DateTime, index=True, default=datetime.utcnow)
     n_of_partecipants = Column(Integer, nullable=False, default=1)
     placement = Column(Integer)
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.id', ondelete="CASCADE"))
     score = Column(Integer,default=0)
     
     def __repr__(self):
@@ -83,6 +81,7 @@ class Team(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(140))
     users = relationship('User', secondary=team_user_association, back_populates='teams')
+    join_requests = relationship("RequestsToJoinTeam", back_populates="team", cascade="all, delete-orphan")
     description = Column(String(140))
     
     def __repr__(self):
@@ -90,3 +89,17 @@ class Team(db.Model):
 
     def add_member(self, member):
         self.users.append(member)
+
+
+
+class RequestsToJoinTeam(db.Model):
+    __tablename__ = 'requests_to_join_team'
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
+    team_id = Column(Integer, ForeignKey('team.id', ondelete='CASCADE'))
+    status = Column(String)
+    request_date = Column(DateTime)
+
+    user = relationship("User", back_populates="join_requests")
+    team = relationship("Team", back_populates="join_requests")
