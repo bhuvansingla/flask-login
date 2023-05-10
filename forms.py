@@ -26,6 +26,18 @@ class LoginForm(FlaskForm):
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
 
+class ForgotPasswordForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Send email')
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8), Regexp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$', \
+                                                                                            message='Password must be at least 8 characters long and contain at least \
+                                                                                            one lowercase letter, one uppercase letter, one digit, and one special character (@$!%*?&)')])
+    password2 = PasswordField(
+        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset password')
+
 class NewTripForm(FlaskForm):
     tripname = StringField('Trip name',validators=[DataRequired()])
     speed = FloatField('Average speed [km/h]',validators=[DataRequired()])
