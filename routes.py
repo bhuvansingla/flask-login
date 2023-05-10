@@ -1,11 +1,33 @@
 from app import app, db
-from flask import request, render_template, flash, redirect,url_for
+from flask import request, render_template, flash, redirect,url_for, make_response
 from flask_login import current_user, login_user, logout_user,login_required
 from sqlalchemy import or_, and_
 from models import *
 from forms import *
 from werkzeug.urls import url_parse
+import secrets
+from datetime import datetime, timedelta
+import smtplib
 
+AUTO_MAIL = 'noreply.teamlabomba@gmail.com'
+
+def send_email_utility(subject,message,sender_email,recipient_email):
+    # connect to SMTP server
+    with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+        smtp.ehlo()
+        smtp.starttls()
+        smtp.ehlo()
+        
+        # log in to SMTP server
+        smtp.login('noreply.teamlabomba@gmail.com', 'kwwgipbddkuuutjy')
+
+        
+        # create email message
+        email_message = f'Subject: {subject}\n\n{message}'
+        
+        # send email
+        smtp.sendmail(sender_email, recipient_email, email_message)
+   
     
 with app.app_context():
 
@@ -22,25 +44,91 @@ def login():
   #check if current_user logged in, if so redirect to a page that makes sense
     if current_user.is_authenticated:
         return redirect(url_for('index'))   
+    
     form = LoginForm()
+
+
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
 
         if user is None or not user.check_password(form.password.data):
             flash("Invalid username or password")
             return redirect(url_for('login'))
-
-
+        
+  
+        
         login_user(user,remember=form.remember_me.data)
         next_page = request.args.get('next')
+    
         if not next_page or url_parse(next_page).netloc != '':
             if user.role !="admin":
                 next_page = url_for('user_home',username = user.username)
             else:
                 next_page = url_for('admin_home',username = user.username)
+            
+        return redirect(next_page)
 
-            return redirect(next_page)
+                 
     return render_template('login.html', title='Sign In', form=form)
+
+
+# Temporary storage for password reset requests
+password_reset_requests = {}
+
+# Form for password reset request
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    form = ForgotPasswordForm()
+    if form.validate_on_submit():
+        email = form.email.data
+        if email not in [u.email for u in User.query.all()]:
+            flash(f'There is no user registered with {email}!')
+            return redirect(url_for('login'))
+
+
+        # Generate a unique token
+        token = secrets.token_hex(16)
+        # Store the token in the temporary database
+        password_reset_requests[token] = {'email': email, 'timestamp': datetime.now()}
+        # Send an email to the user with the password reset link
+        # You'll need to replace the placeholders with your own values
+        send_email_utility('Password reset', f'Click the following link to reset your password: {url_for("reset_password", token=token, _external=True)}',AUTO_MAIL,email)
+              
+        flash('An email has been sent to your account with further instructions.')
+        return redirect(url_for('login'))
+    
+    return render_template('forgot_password.html',form=form)
+
+
+# Form for resetting the password
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    # Check if the token is valid and hasn't expired
+    if token not in password_reset_requests:
+        flash(f'The token is invalid!')
+        return redirect(url_for('login'))
+
+    request_data = password_reset_requests[token]
+    print(request_data)
+    if datetime.now() - request_data['timestamp'] > timedelta(minutes=5):
+        # Expired token
+        del password_reset_requests[token]
+        flash(f'Token has expired. Retry a new password reset request!')
+        return redirect(url_for('login'))
+   
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        # Update the user's password in the database 
+        user_changing_pwd =User.query.filter_by(email=request_data['email']).first()
+        # You'll need to replace this with your own code to update the user's password
+        user_changing_pwd.set_password(form.password.data)
+        db.session.commit()
+        # Delete the token from the temporary database
+        del password_reset_requests[token]
+        flash(f'Password reset succesful!')
+        return redirect(url_for('login'))
+
+    return render_template('reset_password.html',form=form)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -70,6 +158,7 @@ def register():
 
 
 @app.route('/new_user', methods=['GET', 'POST'])
+@login_required
 def new_user():
 
     form = RegistrationForm()
@@ -179,6 +268,8 @@ def edit_trip(trip_id,user_id):
 
 @app.route('/')
 def index():
+    if not current_user.is_anonymous:
+        return redirect(url_for('user_home',username=current_user.username))
 
     return render_template('landing_page.html')
 
@@ -189,6 +280,7 @@ def logout():
 
 
 @app.route("/view_user_profile_by_TL/<int:user_id>")
+@login_required
 def view_user_profile_by_TL(user_id):
     user = User.query.get(user_id)
     trips = Trip.query.filter_by(user_id=user_id).all()
@@ -197,6 +289,7 @@ def view_user_profile_by_TL(user_id):
  
 
 @app.route("/delete_trip/<int:trip_id>/<int:user_id>")
+@login_required
 def delete_trip(trip_id,user_id):
     trip = Trip.query.filter_by(id=trip_id).first()
     db.session.delete(trip)
@@ -207,6 +300,7 @@ def delete_trip(trip_id,user_id):
         return redirect(url_for("view_user_profile_by_TL",user_id=user_id))
 
 @app.route("/delete_team/<int:team_id>")
+@login_required
 def delete_team(team_id):
     team = Team.query.filter_by(id=team_id).first()
     db.session.delete(team)
@@ -225,12 +319,14 @@ def delete_user(user_id):
         return redirect(url_for("index"))
     
 @app.route("/trip_details/<int:trip_id>")
+@login_required
 def trip_details(trip_id):
     trip = Trip.query.get(trip_id)
     return render_template("trip_details.html",trip=trip)
 
 
 @app.route("/team_details/<int:team_id>")
+@login_required
 def team_details(team_id):
     team = Team.query.get(team_id)
     users_by_team = team.users
@@ -286,7 +382,7 @@ def manage_team():
         else:
             return redirect(url_for('admin_home',username = current_user.username))
 
-
+ 
 @app.route('/request_enrollment_to_team/<int:team_id>',methods=['GET', 'POST'])
 @login_required
 def request_enrollment_to_team(team_id):

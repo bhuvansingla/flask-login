@@ -20,8 +20,13 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <div class="form-check">
+            {{ form.remember_me(class="form-check-input") }}
+            <label class="form-check-label">{{ form.remember_me.label }}</label>
+        </div>
+        <p><a href="{{url_for('forgot_password')}}">Forgot Password?</a></p>
         <p>{{ form.submit() }}</p>
+
     </form>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
