@@ -93,6 +93,7 @@ ul {
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
+
 }
 
 .unenroll-button-container {
@@ -223,4 +224,43 @@ ul {
     font-weight: bold;
     color: #009879;
 
+}
+
+.box-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.box {
+    background-color: #F2F2F2;
+    border: 1px solid red;
+    border-radius: 5px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+    margin: 10px;
+    padding: 10px;
+    width: 80%;
+    flex: 1;
+}
+
+.box h2 {
+    margin-top: 0;
+}
+
+.box ul {
+    margin-bottom: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+}
+
+.button-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }

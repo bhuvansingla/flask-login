@@ -23,7 +23,7 @@
         {% else %}
 
         <!--home management-->
-        {%if current_user.role =='admin'%}
+        {%if current_user._is_admin%}
         <a class="blue pull-right" href="{{ url_for('admin_home', username=current_user.username) }}">Home</a>
         {%else%}
         <a class="blue pull-right" href="{{ url_for('user_home', username=current_user.username) }}">Home</a>
@@ -33,25 +33,25 @@
         <a class="blue pull-right" href="{{ url_for('user_profile') }}">Profile</a>
 
         <!--add new trip-->
-        {%if current_user.role !='admin'%}
+        {%if not current_user._is_admin%}
         <a class="blue pull-left" href="{{ url_for('new_trip', user_id = current_user.id) }}">Add a new trip</a>
         {%endif%}
 
         <!--add new team-->
-        {%if current_user.role == 'admin' %}
+        {%if current_user._is_admin%}
         <a class="blue pull-left" href="{{ url_for('new_team') }}">Add a new team</a>
         {% endif %}
 
         <!--add new user-->
-        {%if current_user.role == 'admin' %}
+        {%if current_user._is_admin%}
         <a class="blue pull-left" href="{{ url_for('new_user') }}">Add a new user</a>
         {% endif %}
 
-        <!--team management-->
+        <!--team management
         {%if current_user.role == 'team_leader'%}
         <a class="blue pull-right" href="{{ url_for('manage_team') }}">Manage team</a>
         {%endif%}
-
+        -->
         <a class="right-link" href="{{ url_for('logout') }}">Logout</a>
         {% endif %}
 

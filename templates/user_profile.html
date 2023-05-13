@@ -14,6 +14,12 @@
             {{ form.username.label }} {{ form.username() }}
         </p>
         <p>
+            {{ form.name.label }} {{ form.name() }}
+        </p>
+        <p>
+            {{ form.surname.label }} {{ form.surname() }}
+        </p>
+        <p>
             {{ form.email.label }} {{ form.email() }}
         </p>
         <p>
@@ -26,7 +32,7 @@
             {{ form.submit }}
         </p>
     </form>
-    {%if current_user.role!="admin"%}
+    {%if not current_user._is_admin%}
     <p>
     <div class="delete-button-container">
         <a class="delete-button" href="{{url_for('delete_user',user_id=current_user.id)}}">Delete account</a>

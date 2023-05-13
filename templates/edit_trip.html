@@ -10,7 +10,7 @@
     <h1 style="color:red">Trip settings</h1>
 
     <h1 style="color:red">Edit trip</h1>
-    <form action="" method="post" class="form-container">
+    <form action="{{url_for('edit_trip',trip_id=trip_id,user_id=user_id)}}" method="post" class="form-container">
         {{ form.hidden_tag() }}
         <p>
             {{ form.tripname.label }}<br>
@@ -40,7 +40,13 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-
+        <p>
+            {{ form.team.label }}
+            {{ form.team(class_="form-control") }}
+            {% for error in form.team.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
         <p>
             {{form.n_of_partecipants.label}} <br>
             {{ form.n_of_partecipants() }}<br>
@@ -65,8 +71,13 @@
         <p>{{ form.description.label }}<br>
             {{form.description(size=20, rows=5)}}
         </p>
+        {%if my_role_in_team == "team_leader" and current_user.id != user_id%}
+        <p>{{ form.is_approved.label }}<br>
+            {{form.is_approved()}}
+        </p>
+        {%endif%}
         <p>{{ form.submit_save()}}</p>
-        <p><a class="delete-button" href="/delete_trip/{{ trip_id }}/{{user_id}}">Delete</a></p>
+        <p><a class="delete-button" href="{{url_for('delete_trip',trip_id=trip_id,user_id=user_id)}}">Delete</a></p>
     </form>
 </center>
 

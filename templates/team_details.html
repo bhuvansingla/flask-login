@@ -26,15 +26,78 @@
                         {{ place+1 }}
                         {% endif %}
                     </td>
-                    <td>{{ ranking["user"] }}</td>
+                    <td><a href="{{url_for('member_view', user_id=ranking['user_id'],team_id=team.id)}}">
+                            {%if ranking["role"]=="team_leader"%}
+                            &#128081;
+                            {%endif%}
+                            {{ranking["user"]}}
+                            {%if ranking["user"] == current_user.username%}
+                            (you)
+                            {%endif%}
+                        </a>
+                    </td>
                     <td>{{ ranking["total score"] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+    {%if not current_user._is_admin%}
+    <br>
+    {%if current_user not in team.users%}
+    <div class="post-container">
 
-    {%if current_user.role != "admin"%}
+        {%if not requests_to_join%}
+        <form action="{{url_for('request_enrollment_to_team', team_id=team.id)}}" method="POST" class="form-container">
+            <input type="submit" class="enroll-button" value="Request Enrollment">
+
+        </form>
+        {%else%}
+        <form action="{{url_for('withdraw_request_enrollment', request_id = requests_to_join.id, team_id=team.id)}}"
+            method="POST" class="form-container">
+
+            <input type="submit" class="enroll-button" value="Withdraw request">
+        </form>
+        {%endif%}
+
+    </div>
+    {%endif%}
+    {%endif%}
+    {%if requests_to_join_tl%}
+
+    <center>
+
+        <h1 style="color:red">List of requests to join the team</h1>
+    </center>
+    <div class="post-container">
+        {% for request in requests_to_join_tl %}
+        <div class="post-container">
+            <div class="post-info">
+                <div class="row">
+                    user: <a
+                        href="{{url_for('view_user_profile_by_TL',user_id=request['user_id'])}}">{{request['username']}}</a>
+                    <div class="enroll-button-container" style="display: inline">
+                        <a class="enroll-button"
+                            href="{{url_for('decide_on_enrollment',request_id=request['id'],accept='Yes')}}">Approve</a>
+                    </div>
+
+                    <div class="unenroll-button-container" style="display: inline">
+                        <a class="unenroll-button"
+                            href="{{url_for('decide_on_enrollment',request_id=request['id'],accept='No')}}">Decline</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {%endif%}
+
+
+
+    <!--
+    {%if not current_user._is_admin%}
     <div class="post-container">
         <h1 style="color:red">Enrollment status in {{team.name}}</h1>
         <table class="styled-table">
@@ -70,7 +133,7 @@
 
     </div>
     {%endif%}
-
+   
     {%if current_user.role =="team_leader"%}
 
     <center>
@@ -101,7 +164,7 @@
     </div>
 
     {%endif%}
-
+    -->
 </center>
 
 {% endblock %}
