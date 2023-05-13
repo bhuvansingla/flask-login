@@ -1,5 +1,5 @@
 from app import app, db
-from flask import request, render_template, flash, redirect,url_for, make_response
+from flask import request, render_template, flash, redirect,url_for
 from flask_login import current_user, login_user, logout_user,login_required
 from sqlalchemy import or_, and_
 from models import *
@@ -78,14 +78,14 @@ password_reset_requests = {}
 # Form for password reset request
 @app.route('/forgot_password', methods=['GET', 'POST'])
 def forgot_password():
-    form = ForgotPasswordForm()
-    if form.validate_on_submit():
-        email = form.email.data
-        if email not in [u.email for u in User.query.all()]:
-            flash(f'There is no user registered with {email}!')
+    if request.method == 'POST':
+        username = request.form.get('username')
+        user_recover = User.query.filter_by(username=username).first()
+        if not user_recover:
+            flash(f"There is no \'{username}\' registered in the system!")
             return redirect(url_for('login'))
 
-
+        email = user_recover.email
         # Generate a unique token
         token = secrets.token_hex(16)
         # Store the token in the temporary database
@@ -97,7 +97,6 @@ def forgot_password():
         flash('An email has been sent to your account with further instructions.')
         return redirect(url_for('login'))
     
-    return render_template('forgot_password.html',form=form)
 
 
 # Form for resetting the password
