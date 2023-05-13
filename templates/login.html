@@ -8,14 +8,14 @@
         {{ form.hidden_tag() }}
         <p>
             {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
+            {{ form.username(size=32)}}<br>
             {% for error in form.username.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
             {{ form.password.label }}<br>
-            {{ form.password(size=32) }}<br>
+            {{ form.password(size=32)}}<br>
             {% for error in form.password.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
@@ -24,9 +24,10 @@
             {{ form.remember_me(class="form-check-input") }}
             <label class="form-check-label">{{ form.remember_me.label }}</label>
         </div>
-        <p><a href="{{url_for('forgot_password')}}">Forgot Password?</a></p>
+        <p>
+            <a href="#" onclick="sendUsername()">Forgot Password?</a>
+        </p>
         <p>{{ form.submit() }}</p>
-
     </form>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -39,4 +40,19 @@
     {% endwith %}
 </center>
 
+<script>
+    function sendUsername() {
+        var username = document.getElementsByName('username')[0].value;
+        var form = document.createElement('form');
+        form.setAttribute('method', 'post');
+        form.setAttribute('action', "{{ url_for('forgot_password') }}");
+        var input = document.createElement('input');
+        input.setAttribute('type', 'hidden');
+        input.setAttribute('name', 'username');
+        input.setAttribute('value', username);
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>
 {% endblock %}
