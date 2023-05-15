@@ -1,41 +1,62 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+<link rel="stylesheet" href="{{ url_for('static', filename='styles_profile.css') }}">
 
 <center>
     <h1 style="color:red">Your profile settings</h1>
-    <form class="form-container" method="POST">
+    <form class="form-container" method="POST" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }} {{ form.username() }}
-        </p>
-        <p>
-            {{ form.name.label }} {{ form.name() }}
-        </p>
-        <p>
-            {{ form.surname.label }} {{ form.surname() }}
-        </p>
-        <p>
-            {{ form.email.label }} {{ form.email() }}
-        </p>
-        <p>
-            {{ form.strava_account.label }} {{ form.strava_account() }}
-        </p>
-        <p>
-            {{form.phone_number.label}}{{form.phone_number()}}
-        </p>
-        <p>
-            {{ form.submit }}
-        </p>
+        <table class="profile-table">
+            <tr>
+                <td>{{ form.username.label }}</td>
+                <td>{{ form.username() }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.name.label }}</td>
+                <td>{{ form.name() }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.surname.label }}</td>
+                <td>{{ form.surname() }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.email.label }}</td>
+                <td>{{ form.email() }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.strava_account.label }}</td>
+                <td>{{ form.strava_account() }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.phone_number.label }}</td>
+                <td>{{ form.phone_number() }}</td>
+            </tr>
+            <tr>
+                <td>
+                    Profile Picture:
+                    {% if form.profile_picture.data %}
+                    <span>{{ form.profile_picture.data.filename }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ form.profile_picture() }}</td>
+            </tr>
+
+            <tr>
+
+                <td colspan="2" style="text-align: center;">{{ form.submit }}</td>
+
+            </tr>
+        </table>
     </form>
-    {%if not current_user._is_admin%}
+    {% if not current_user._is_admin %}
     <p>
     <div class="delete-button-container">
         <a class="delete-button" href="{{url_for('delete_user',user_id=current_user.id)}}">Delete account</a>
     </div>
     </p>
-    {%endif%}
+    {% endif %}
 </center>
+
 
 {% endblock %}

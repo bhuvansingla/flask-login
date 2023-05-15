@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Integer,Column,String,DateTime,Float,Boolean,ForeignKey
+from sqlalchemy import Integer,Column,String,DateTime,Float,Boolean,ForeignKey, BLOB
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -33,9 +33,8 @@ class User(db.Model,UserMixin,AdminMixin):
     trips = relationship('Trip',backref='user',lazy='dynamic',cascade="all, delete-orphan")
     teams = relationship('Team', secondary="team_user_association", back_populates='users')
     join_requests = relationship("RequestsToJoinTeam", back_populates="user", cascade="all, delete-orphan")
+    profile_picture = Column(BLOB)
     _is_admin = Column(Boolean,nullable=True)
-  
-
 
     def set_password(self,password):
         self.password_hash = generate_password_hash(password)

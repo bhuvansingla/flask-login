@@ -1,0 +1,48 @@
+.center {
+    text-align: center;
+}
+
+.form-container {
+    margin: 20px;
+}
+
+.profile-table {
+    width: 40%;
+    border-collapse: collapse;
+}
+
+.profile-table td {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+.profile-table td:first-child {
+    font-weight: bold;
+    width: 50%;
+}
+
+.profile-table td:last-child {
+    width: 50%;
+}
+
+.delete-button-container {
+    text-align: center;
+}
+
+.delete-button {
+    color: red;
+}
+
+/* Style the profile picture field */
+.profile-picture-label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.profile-picture-input {
+    display: block;
+}
+
+.submit-button {
+    margin-top: 10px;
+}

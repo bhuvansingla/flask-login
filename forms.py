@@ -1,8 +1,7 @@
 from flask_wtf import FlaskForm
 
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, RadioField,TextAreaField,FloatField,IntegerField,SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FileField,RadioField,TextAreaField,FloatField,IntegerField,SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, NumberRange,Length, Regexp
-from models import User
 
 CHOICES = [(5, """Il giro che stai registrando è una gara ufficiale o un evento ufficiale di Team (con locandina)?"""),
            (4, """Il giro che stai registrando è un'uscita non ufficiale di team nel weekend o festivi?"""),
@@ -57,6 +56,14 @@ class NewTeamForm(FlaskForm):
     description = TextAreaField('Description')
     submit = SubmitField('Add Team')
 
+from wtforms.widgets import FileInput
+
+class CustomFileInput(FileInput):
+    def __call__(self, field, **kwargs):
+        if field.data:
+            kwargs['value'] = field.filename
+        return super().__call__(field, **kwargs)
+    
 class ProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     name =  StringField('First Name', validators=[DataRequired()])
@@ -64,4 +71,5 @@ class ProfileForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     strava_account = StringField('Strava account')
     phone_number = StringField("Phone number")
+    profile_picture = FileField('')
     submit = SubmitField('Save')

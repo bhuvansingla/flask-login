@@ -2,7 +2,7 @@ from app import app, db
 from flask import request, render_template, flash, redirect,url_for
 from flask_login import current_user, login_user, logout_user,login_required
 from sqlalchemy import or_, and_, desc, func
-from models import *
+from models import User, Trip, Team, TeamUserAssociation, RequestsToJoinTeam
 from forms import *
 from werkzeug.urls import url_parse
 import secrets
@@ -286,7 +286,20 @@ def user_profile():
     user = User.query.get(current_user.id)
     form = ProfileForm(obj=user)
     if form.validate_on_submit():
-        form.populate_obj(user)
+        # Handle profile picture upload
+        user.username = form.username.data
+        user.name = form.name.data
+        user.surname = form.surname.data
+        user.email = form.email.data
+        user.strava_account = form.strava_account.data
+        user.phone_number = form.phone_number.data
+        user.profile_picture = form.profile_picture.data
+
+        if user.profile_picture.filename:
+            user.profile_picture = user.profile_picture.read()
+        else:
+            user.profile_picture = None
+
         db.session.commit()
         flash('Your profile has been updated!', 'success')
         return redirect(url_for('user_profile'))
