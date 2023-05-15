@@ -1,44 +1,66 @@
 {% extends "base.html" %}
 
 {% block content %}
-<center>
-    <h1 style="color:red">Sign In</h1>
-    <p>New User? <a href="{{ url_for('register') }}">Click to Register!</a></p>
-    <form action="" method="post" novalidate class="form-container">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32)}}<br>
-            {% for error in form.username.errors %}
-            <span style="color: red;">[{{ error }}]</span>
+<div class="login-table">
+    <center>
+        <h1 style="color: red">Sign In</h1>
+        <p>New User? <a href="{{ url_for('register') }}">Click to Register!</a></p>
+        <form action="" method="post" novalidate class="form-container">
+            {{ form.hidden_tag() }}
+            <table>
+                <tr>
+                    <td>{{ form.username.label }}</td>
+                    <td>{{ form.username(size=32) }}</td>
+                    <td>
+                        {% for error in form.username.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ form.password.label }}</td>
+                    <td>{{ form.password(size=32) }}</td>
+                    <td>
+                        {% for error in form.password.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <div class="form-check">
+                            {{ form.remember_me(class="form-check-input") }}
+                            <label class="form-check-label">{{ form.remember_me.label }}</label>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+
+                    <td colspan="3" style="text-align: center">{{ form.submit() }}</td>
+
+                </tr>
+                <tr>
+
+                    <td colspan="3" style="text-align: center"><a href="#" onclick="sendUsername()">Forgot Password?</a>
+                    </td>
+
+                </tr>
+            </table>
+        </form>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class="flashes">
+            {% for message in messages %}
+            <li>{{ message }}</li>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=32)}}<br>
-            {% for error in form.password.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <div class="form-check">
-            {{ form.remember_me(class="form-check-input") }}
-            <label class="form-check-label">{{ form.remember_me.label }}</label>
-        </div>
-        <p>
-            <a href="#" onclick="sendUsername()">Forgot Password?</a>
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul class=flashes>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-</center>
+        </ul>
+        {% endif %}
+        {% endwith %}
+    </center>
+</div>
+
 
 <script>
     function sendUsername() {

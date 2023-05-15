@@ -1,85 +1,23 @@
-<html>
+{% extends "base.html" %}
 
-<head>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles_landing_page.css')}}">
-
-
-    {% if title %}
-    <title>{{ title }} - Team App</title>
-    {% else %}
-    <title>Welcome to Team App</title>
-    {% endif %}
-</head>
-
-<body>
-    <div>
-        <center class="glow">&#128690;</center>
-
-        {% if current_user.is_anonymous %}
-        <a class="blue pull-left" href="{{ url_for('index') }}">Home</a>
-        <a class="blue pull-right" href="{{ url_for('login') }}">Login</a>
-        {% else %}
-
-        <!--home management-->
-        {%if current_user._is_admin%}
-        <a class="blue pull-right" href="{{ url_for('admin_home', username=current_user.username) }}">Home</a>
-        {%else%}
-        <a class="blue pull-right" href="{{ url_for('user_home', username=current_user.username) }}">Home</a>
-        {%endif%}
-
-        <!--profile-->
-        <a class="blue pull-right" href="{{ url_for('user_profile') }}">Profile</a>
-
-        <!--add new trip-->
-        {%if not current_user._is_admin%}
-        <a class="blue pull-left" href="{{ url_for('new_trip', user_id = current_user.id) }}">Add a new trip</a>
-        {%endif%}
-
-        <!--add new team-->
-        {%if current_user._is_admin %}
-        <a class="blue pull-left" href="{{ url_for('new_team') }}">Add a new team</a>
-        {% endif %}
-
-        <!--add new user-->
-        {%if current_user._is_admin %}
-        <a class="blue pull-left" href="{{ url_for('new_user') }}">Add a new user</a>
-        {% endif %}
-
-        <!--team management-->
-        {%if current_user.role == 'team_leader'%}
-        <a class="blue pull-right" href="{{ url_for('manage_team') }}">Manage team</a>
-        {%endif%}
-
-        <a class="right-link" href="{{ url_for('logout') }}">Logout</a>
-        {% endif %}
-
+{% block content %}
+<center>
+    <div class="container mt-5" style="margin-top: 200px;">
+        <h1 style="color:red">Welcome to the Team App!</h1>
+        <h2 style="color:red">
+            <a href="{{ url_for('login') }}">Login</a> or
+            <a href="{{ url_for('register') }}">Register</a> to
+            start your journey!
+        </h2>
     </div>
+</center>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul>
+    {% for message in messages %}
 
-    <hr>
-
-    <center>
-        <div class="container mt-5" style="margin-top: 200px;">
-            <h1 style="color:red">Welcome to the Team App!</h1>
-            <h2 style="color:red">
-                <a href="{{ url_for('login') }}">Login</a> or
-                <a href="{{ url_for('register') }}">Register</a> to
-                start your journey!
-            </h2>
-        </div>
-    </center>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-        {% for message in messages %}
-
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-    {% block content %}{% endblock %}
-
-</body>
-
-</html>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}

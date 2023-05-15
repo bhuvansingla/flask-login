@@ -1,27 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
-
 
 
 
 <div class="main">
     <h1 style="color:red; text-align: center;">Welcome back {{current_user.username}}!</h1>
-    {% for trip in last_trips %}
+    {% for trips_group in trips_groups %}
     <div class="box">
         <table>
+            <caption>
+                <h2>{{trips_group['team_name']}}</h2>
+            </caption>
             <thead>
                 <th><strong>Trip Name</strong></th>
-                <th><strong>Speed (m/s)</strong></th>
+                <th><strong>Speed (km/h)</strong></th>
                 <th><strong>Distance (km)</strong></th>
                 <th><strong>Elevation (m)</strong></th>
                 <th><strong>Date</strong></th>
             </thead>
 
             <tbody>
-
+                {%for trip in trips_group['trips_by_team']%}
                 <tr>
                     <td>{{ trip.tripname }}</td>
                     <td>{{ trip.speed }}</td>
@@ -29,6 +29,7 @@
                     <td>{{ trip.elevation }}</td>
                     <td>{{ trip.recorded_on.strftime("%d/%m/%Y") }}</td>
                 </tr>
+                {%endfor%}
             </tbody>
         </table>
     </div>
@@ -37,10 +38,8 @@
 </div>
 <div class="left-sidebar">
 
-    <div class="popup-btn-container">
-        <img src="{{ url_for('static', filename='images/app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
-        <i class="fas fa-bars menu-symbol"></i>
-    </div>
+    <img src="{{ url_for('static', filename='images/app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
+
     <div class="popup" id="popup">
         <ul>
             <li><a href="{{url_for('user_profile')}}">User Profile<a></li>
@@ -70,28 +69,6 @@
 </div>
 
 <div class="right-sidebar">
-    <table class="stats-table">
-
-        <tbody>
-
-            <tr>
-                <td><strong>Activities</strong></td>
-                <td>{{stat["activities"]}}</td>
-            </tr>
-            <tr>
-                <td><strong>Total Distance (km)</strong></td>
-                <td>{{stat["total_distance"]}}</td>
-            </tr>
-            <tr>
-                <td><strong>Maximum Elevation (m)</strong></td>
-                <td>{{stat["maximum_elevation"]}}</td>
-            </tr>
-            <tr>
-                <td><strong>Average speed (km/h)</strong></td>
-                <td>{{stat["average_speed"]}}</td>
-            </tr>
-        </tbody>
-    </table>
 </div>
 
 

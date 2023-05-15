@@ -1,7 +1,7 @@
 from app import app, db
 from flask import request, render_template, flash, redirect,url_for
 from flask_login import current_user, login_user, logout_user,login_required
-from sqlalchemy import or_, and_
+from sqlalchemy import or_, and_, desc, func
 from models import *
 from forms import *
 from werkzeug.urls import url_parse
@@ -219,13 +219,44 @@ def user_home(username):
         if user in team.users and RequestsToJoinTeam.query.filter_by(team_id = team.id).all():
             message = "You have some pending enrollment requests, check out the team page!"
     """
-    #if trips is None:
-    #    trips = []
+    last_trips = Trip.query.order_by(desc(Trip.recorded_on)).filter_by(user_id = user.id).limit(3).all()
+    
+    if last_trips is None:
+        last_trips = []
     if teams is None:
         teams = []
+    stat={}
+    stat["average_speed"] = db.session.query(Trip, func.avg(Trip.speed)).group_by(Trip.user_id).filter_by(user_id=user.id).all()[0][1]
+    stat["maximum_elevation"] = db.session.query(Trip, func.max(Trip.elevation)).group_by(Trip.user_id).filter_by(user_id=user.id).all()[0][1]
+    stat["total_distance"] = db.session.query(Trip, func.sum(Trip.distance)).group_by(Trip.user_id).filter_by(user_id=user.id).all()[0][1]
+    stat["activities"] = len(Trip.query.filter_by(user_id=user.id).all())
 
+    return render_template('user_home.html', user=user,teams=teams,new_enrollments=message, last_trips=last_trips,stat=stat)
 
-    return render_template('user_home.html', user=user,teams=teams,new_enrollments=message)
+@app.route('/trips_overview/<int:user_id>',methods=['GET', 'POST'])
+def trips_overview(user_id):
+
+    trips_groups = (
+    db.session.query(Team.name, Trip)
+    .join(Trip, Team.id == Trip.team_id)
+    .filter(Trip.user_id == user_id)
+    .all()
+    )
+
+    # Create a list of dictionaries with team.name as key and list of trips as value
+    trips_dict ={}
+    for team_name, trip in trips_groups:
+        if team_name not in trips_dict:
+            trips_dict[team_name] = [trip]
+        else:
+            trips_dict[team_name].append(trip)
+
+    result = []
+    for team_name, trips in trips_dict.items():
+        result.append({"team_name": team_name, "trips_by_team": trips})
+    return render_template('trips_overview.html', trips_groups=result)
+ 
+
 
 
 @app.route('/admin_home/<username>',methods=['GET', 'POST'])

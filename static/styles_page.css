@@ -1,0 +1,319 @@
+.popup-btn-container {
+    position: absolute;
+    top: calc(50% + 10px);
+    left: 40%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.menu-symbol {
+    position: absolute;
+    color: rgb(15, 15, 15);
+    font-size: 20px;
+    right: -45px;
+    bottom: -50px;
+}
+
+.popup {
+    position: absolute;
+    display: none;
+    top: calc(70% + 10px);
+    left: 40%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+.popup-btn {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.popup-btn img {
+    width: 50px;
+    height: 50px;
+}
+
+
+.popup ul {
+    list-style: none;
+    background-color: black;
+    margin: 0;
+    padding: 0;
+}
+
+.popup li {
+    padding: 5px 10px;
+    cursor: pointer;
+    position: relative;
+}
+
+.popup li:hover {
+    background-color: grey;
+}
+
+.popup ul.sublist {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    display: none;
+    background-color: black;
+    margin: 0;
+    padding: 0;
+}
+
+.popup li:hover>ul.sublist {
+    display: block;
+}
+
+.popup li.subitem {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.popup li.subitem:hover {
+    background-color: grey;
+}
+
+.popup li.subitem>ul {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    display: none;
+    background-color: black;
+    margin: 0;
+    padding: 0;
+}
+
+.popup li.subitem:hover>ul {
+    display: block;
+}
+
+
+/* Set up the right sidebar */
+.right-sidebar {
+    width: 20%;
+    height: calc(100% - 100px);
+    top: 50px;
+    bottom: 0px;
+    right: 0px;
+    overflow-y: auto;
+    position: fixed;
+    background-color: #CCCCCC;
+}
+
+/* Set up the main content area */
+.main {
+    width: 60%;
+    height: calc(100% - 100px);
+    background-color: #E8DCD9;
+    left: 20%;
+    right: 20%;
+    top: 0px;
+    position: relative;
+    bottom: 0px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    align-items: center;
+    align-content: center;
+    overflow-y: auto;
+    justify-content: center;
+}
+
+.box {
+    max-width: 90%;
+    max-height: 90%;
+    background-color: orange;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    padding: 20px;
+    text-align: center;
+    margin: 50px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.box table {
+    width: 90%;
+    height: 100%;
+}
+
+.box td,
+.box th {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+
+
+/* Set up the left sidebar */
+.left-sidebar {
+    width: 20%;
+    height: calc(100% - 100px);
+    top: 50px;
+    bottom: 0px;
+    left: 0px;
+    overflow-y: auto;
+    position: fixed;
+    background-color: #CCCCCC;
+}
+
+.logout-button {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    background-color: grey;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.home-button {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    background-color: grey;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    height: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+/* Set up the header */
+.header {
+    height: 50px;
+    width: 100%;
+    background-color: #333333;
+    position: fixed;
+    color: #FFFFFF;
+    text-align: center;
+    line-height: 50px;
+    z-index: 999;
+}
+
+/* Set up the footer */
+.footer {
+    height: 50px;
+    width: 100%;
+    background-color: #333333;
+    position: fixed;
+    bottom: 0px;
+    color: #FFFFFF;
+    text-align: center;
+    line-height: 50px;
+    z-index: 999;
+}
+
+.imprint-links {
+    float: left;
+    margin-left: 20px;
+}
+
+#date-time {
+    float: right;
+    margin-right: 20px;
+}
+
+a {
+    color: white;
+    text-decoration: azure;
+}
+
+body {
+    display: block;
+    margin: 0px;
+    height: calc(100% - 100px);
+
+    color: #000;
+    font-family: MaisonNeue, Segoe UI, Helvetica Neue, -apple-system, system-ui, BlinkMacSystemFont, Roboto, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.content-container {
+    min-height: calc(100vh - 100px);
+    /* subtract the header and footer height from the viewport height */
+    padding-top: 50px;
+    background-color: #E8DCD9;
+    /* set the padding-top to the height of the header */
+}
+
+.login-table {
+    background-color: #eb8500;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    width: 400px;
+    margin: 30 auto;
+}
+
+.login-table table {
+    width: 100%;
+}
+
+.login-table td {
+    padding: 10px;
+}
+
+.login-table input[type="text"],
+.login-table input[type="password"] {
+    width: 100%;
+}
+
+.login-table .form-check {
+    margin-top: 10px;
+}
+
+.login-table .flashes {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.stats-table {
+    position: absolute;
+    top: calc(43% + 5px);
+    right: calc(20% + 10px);
+    width: 40%;
+    margin: auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);
+}
+
+.stats-table td,
+.stats-table th {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+.stats-table th {
+    background-color: #f2f2f2;
+}
+
+.stats-table td {
+    text-align: center;
+}
