@@ -38,8 +38,14 @@
 </div>
 <div class="left-sidebar">
 
-    <img src="{{ url_for('static', filename='images/app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
-
+    <div class="popup-btn-container">
+        {%if not current_user.profile_picture%}
+        <img src="{{ url_for('static', filename='images/app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
+        {%else%}
+        <img src="data:image/png;base64,{{ user.profile_picture|b64encode }}" class="popup-btn" alt="Popup Image">
+        {%endif%}
+        <i class="fas fa-bars menu-symbol"></i>
+    </div>
     <div class="popup" id="popup">
         <ul>
             <li><a href="{{url_for('user_profile')}}">User Profile<a></li>
@@ -67,6 +73,7 @@
     </script>
 
 </div>
+
 
 <div class="right-sidebar">
 </div>

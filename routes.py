@@ -226,16 +226,23 @@ def user_home(username):
     if teams is None:
         teams = []
     stat={}
-    stat["average_speed"] = db.session.query(Trip, func.avg(Trip.speed)).group_by(Trip.user_id).filter_by(user_id=user.id).all()[0][1]
-    stat["maximum_elevation"] = db.session.query(Trip, func.max(Trip.elevation)).group_by(Trip.user_id).filter_by(user_id=user.id).all()[0][1]
-    stat["total_distance"] = db.session.query(Trip, func.sum(Trip.distance)).group_by(Trip.user_id).filter_by(user_id=user.id).all()[0][1]
+    stat["average_speed"] = db.session.query(Trip, func.avg(Trip.speed)).group_by(Trip.user_id).filter_by(user_id=user.id).all()
+    if stat["average_speed"]:
+        stat["average_speed"] = stat["average_speed"][0][1]
+    stat["maximum_elevation"] = db.session.query(Trip, func.max(Trip.elevation)).group_by(Trip.user_id).filter_by(user_id=user.id).all()
+    if stat["maximum_elevation"]:
+        stat["maximum_elevation"]= stat["maximum_elevation"][0][1]
+    stat["total_distance"] = db.session.query(Trip, func.sum(Trip.distance)).group_by(Trip.user_id).filter_by(user_id=user.id).all()
+    if stat["total_distance"]:
+        stat["total_distance"]= stat["total_distance"][0][1]
     stat["activities"] = len(Trip.query.filter_by(user_id=user.id).all())
 
     return render_template('user_home.html', user=user,teams=teams,new_enrollments=message, last_trips=last_trips,stat=stat)
 
 @app.route('/trips_overview/<int:user_id>',methods=['GET', 'POST'])
 def trips_overview(user_id):
-
+    
+    user = User.query.filter_by(id=user_id).first()
     trips_groups = (
     db.session.query(Team.name, Trip)
     .join(Trip, Team.id == Trip.team_id)
@@ -254,7 +261,7 @@ def trips_overview(user_id):
     result = []
     for team_name, trips in trips_dict.items():
         result.append({"team_name": team_name, "trips_by_team": trips})
-    return render_template('trips_overview.html', trips_groups=result)
+    return render_template('trips_overview.html', user=user, trips_groups=result)
  
 
 
