@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles_profile.css') }}">
+
+<div class="left-sidebar">
+    <div class="popup-btn-container">
+        {%if not team.team_picture%}
+        <img src="{{ url_for('static', filename='images/app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
+        {%else%}
+        <img src="data:image/png;base64,{{ team.team_picture|b64encode }}" class="popup-btn" alt="Popup Image">
+        {%endif%}
+        <i class="fas fa-bars menu-symbol"></i>
+    </div>
+    <div class="popup" id="popup">
+        <ul>
+            {%if role=="team_leader"%}
+            <li><a href="{{url_for('manage_team',team_id=team.id)}}">Manage team</a></li>
+            {%endif%}
+            <li><a href="{{url_for('team_profile',team_id=team.id)}}">Team profile</a></li>
+            <li><a href="{{url_for('team_home',team_id=team.id)}}">Ranking</a></li>
+            <li><a href="#">Trips overview</a></li>
+        </ul>
+    </div>
+    <script>
+        var popup = document.querySelector(".popup");
+        var popupBtn = document.querySelector(".popup-btn");
+        popupBtn.addEventListener("click", function () {
+            if (popup.style.display === "block") {
+                popup.style.display = "none";
+            } else {
+                popup.style.display = "block";
+            }
+        });
+    </script>
+
+</div>
+
+<div class="main">
+    <center>
+
+        <div class="box">
+            <form class="form-container" method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+
+                <table class="profile-table">
+                    <caption>
+                        <h1 style="color:red">Your team</h1>
+                    </caption>
+                    <tr>
+                        <td>{{ form.name.label }}</td>
+                        <td>{{ form.name() }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.description.label }}</td>
+                        <td>{{ form.description() }}</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Team Picture:
+
+                        </td>
+                        <td>{{ form.team_picture() }}</td>
+                    </tr>
+
+                    <tr>
+
+                        <td colspan="2" style="text-align: center;">{{ form.submit }}</td>
+
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </center>
+
+</div>
+<div class="right-sidebar">
+
+</div>
+{% endblock %}

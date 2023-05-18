@@ -74,8 +74,7 @@
                 {% for team_role in team_roles %}
                 <tr>
                     <td style="vertical-align: middle;">&#128205;
-                        <a
-                            href="{{url_for('team_details',team_id=team_role['team'].id)}}">{{team_role["team"].name}}</a>
+                        <a href="{{url_for('team_home',team_id=team_role['team'].id)}}">{{team_role["team"].name}}</a>
                     </td>
                     {% if user not in team_role["team"].users %}
                     <td>

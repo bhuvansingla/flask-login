@@ -53,7 +53,7 @@
                 <ul class="sublist">
                     {%for team in teams%}
 
-                    <li> <a href="{{url_for('team_details',team_id=team.id)}}">{{team.name}}</a></li>
+                    <li> <a href="{{url_for('team_home',team_id=team.id)}}">{{team.name}}</a></li>
                     {%endfor%}
                 </ul>
             </li>

@@ -1,55 +1,73 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="left-sidebar">
+    <div class="popup-btn-container">
+        {%if not team.team_picture%}
+        <img src="{{ url_for('static', filename='images/app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
+        {%else%}
+        <img src="data:image/png;base64,{{ team.team_picture|b64encode }}" class="popup-btn" alt="Popup Image">
+        {%endif%}
+        <i class="fas fa-bars menu-symbol"></i>
+    </div>
+    <div class="popup" id="popup">
+        <ul>
+            <li><a href="{{url_for('manage_team',team_id=team.id)}}">Manage team</a></li>
+            <li><a href="{{url_for('team_profile',team_id=team.id)}}">Team profile</a></li>
+            <li><a href="{{url_for('team_home',team_id=team.id)}}">Ranking</a></li>
 
-<head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles_manage_team.css') }}">
+            <li><a href="#">Trips overview</a></li>
+        </ul>
+    </div>
+    <script>
+        var popup = document.querySelector(".popup");
+        var popupBtn = document.querySelector(".popup-btn");
+        popupBtn.addEventListener("click", function () {
+            if (popup.style.display === "block") {
+                popup.style.display = "none";
+            } else {
+                popup.style.display = "block";
+            }
+        });
+    </script>
+</div>
+<div class="main">
 
-
-</head>
-
-<center>
-    <h1 style="color:red">Manage your team:</h1>
-</center>
-
-<center>
-    <h1 style="color:red">Users list: </h1>
-    <div class="post-container">
-        <div class="post-container">
+    <center>
+        <h1 style="color:red">Users list: </h1>
+        <div class="box">
             <table class="styled-table">
                 <thead>
                     <tr>
                         <th>User</th>
                         <th>Role</th>
-                        <th></th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for user in members %}
+                    {% for team_member in team_members %}
                     <tr>
-                        <td><a href="/view_user_profile_by_TL/{{user.id}}">{{ user.username }}</a></td>
+                        <td><a href="/view_user_profile_by_TL/{{team_member['user'].id }}">{{
+                                team_member['user'].username }}</a></td>
                         <td>
-                            <form method="POST" action="{{ url_for('change_role') }}">
-                                <input type="hidden" name="user_id" value="{{ user.id }}">
-                                <select name="role">
-                                    {% if user.role == "user" %}
+                            <form method="POST"
+                                action="{{ url_for('change_role',team_id=team.id,user_id=team_member['user'].id) }}">
+                                <input type="hidden" name="user_id" value="{{team_member['user'].id }}">
+                                <select name="role" onchange="this.form.submit()">
+                                    {% if team_member['role'] =='user'%}
                                     <option value="user" selected>User</option>
-                                    {% else %}
+                                    <option value="team_leader">Team Leader</option>
+                                    {%elif team_member['role'] == 'team_leader'%}
+                                    <option value="team_leader" selected>Team Leader</option>
                                     <option value="user">User</option>
                                     {% endif %}
-                                    {% if user.role == "team_leader" %}
-                                    <option value="team_leader" selected>Team Leader</option>
-                                    {% else %}
-                                    <option value="team_leader">Team Leader</option>
-                                    {% endif %}
                                 </select>
-                                <input type="submit" value="Change Role">
                             </form>
                         </td>
                         <td>
                             <form method="POST"
-                                action="{{ url_for('unenroll_from_team', team_id=team.id, user_id=user.id) }}">
-                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                action="{{ url_for('unenroll_from_team', team_id=team.id, user_id=team_member['user'].id) }}">
+                                <input type="hidden" name="user_id" value="{{ team_member['user'].id }}">
                                 <div class="unenroll-button-container">
                                     <input type="submit" class="unenroll-button" value="Unenroll">
                                 </div>
@@ -63,8 +81,55 @@
         </div>
 
 
-    </div>
-</center>
+    </center>
+
+    <center>
+        <h1 style="color:red">Requests to join the team: </h1>
+        {% if requests_to_join %}
+        <div class="box">
+
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests_to_join %}
+                    <tr>
+                        <td>
+                            <a href="{{ url_for('view_user_profile_by_TL', user_id=request['user'].id) }}">{{
+                                request['user'].username }}</a>
+                        </td>
+                        <td style="display: flex; justify-content: center; align-items: center;">
+                            <div style="display: inline;">
+                                <form
+                                    action="{{ url_for('decide_on_enrollment', request_id=request['id'], accept='Yes') }}"
+                                    method="POST">
+                                    <button class="enroll-button" type="submit">Approve</button>
+                                </form>
+                            </div>
+                            <div style="display: inline; margin-left: 10px;">
+                                <form
+                                    action="{{ url_for('decide_on_enrollment', request_id=request['id'], accept='No') }}"
+                                    method="POST">
+                                    <button class="unenroll-button" type="submit">Decline</button>
+                                </form>
+                            </div>
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
 
 
+    </center>
+</div>
+<div class="right-sidebar">
+
+</div>
 {% endblock %}

@@ -42,6 +42,13 @@ class User(db.Model,UserMixin,AdminMixin):
     def check_password(self,password):
         return check_password_hash(self.password_hash, password)
     
+    def get_role_in_team(self, team_id):
+        user_associated = TeamUserAssociation.query.filter_by(team_id=team_id, user_id=self.id).first()
+        if user_associated:
+            return user_associated.role
+        else:
+            return None
+
     def __repr__(self):
         return '<User {}>'.format(self.username)
   
@@ -88,7 +95,7 @@ class Team(db.Model):
     users = relationship('User', secondary="team_user_association", back_populates='teams')
     join_requests = relationship("RequestsToJoinTeam", back_populates="team", cascade="all, delete-orphan")
     description = Column(String(140))
-    
+    team_picture = Column(BLOB)
     def __repr__(self):
         return '<Team {}>'.format(self.description)
 
