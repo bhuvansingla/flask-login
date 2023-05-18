@@ -34,9 +34,11 @@
 <div class="main">
 
     <center>
-        <h1 style="color:red">Users list: </h1>
         <div class="box">
-            <table class="styled-table">
+            <table>
+                <caption>
+                    <h1 style="color:red">Users list: </h1>
+                </caption>
                 <thead>
                     <tr>
                         <th>User</th>
@@ -84,11 +86,13 @@
     </center>
 
     <center>
-        <h1 style="color:red">Requests to join the team: </h1>
         {% if requests_to_join %}
         <div class="box">
 
             <table class="styled-table">
+                <caption>
+                    <h1 style="color:red">Requests to join the team: </h1>
+                </caption>
                 <thead>
                     <tr>
                         <th>User</th>
@@ -123,7 +127,9 @@
                     {% endfor %}
                 </tbody>
             </table>
-            {% endif %}
+            {% else %}
+            <h1 style="color:red">No new requests to join the team!</h1>
+            {%endif%}
         </div>
 
 

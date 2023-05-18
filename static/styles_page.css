@@ -144,16 +144,40 @@
     align-items: center;
 }
 
+.footer-button {
+    padding: 10px 20px;
+    background-color: #ccc;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
 .box table {
-    width: 90%;
-    height: 100%;
+    width: 100%;
+    /* Adjusted width to 100% */
+    table-layout: fixed;
+    /* Added table-layout property */
 }
 
 .box td,
 .box th {
-    padding: 10px;
+    padding: 5px;
+    /* Adjusted padding to make them smaller */
     border: 1px solid #ddd;
+    white-space: nowrap;
+    /* Prevent line breaks within table cells */
+    overflow: hidden;
+    /* Hide overflowing content */
+    text-overflow: ellipsis;
+    /* Add ellipsis (...) to indicate truncated text */
 }
+
+
+
+
+
+
+
 
 
 

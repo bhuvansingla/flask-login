@@ -203,7 +203,10 @@ def new_trip(user_id):
         db.session.add(trip)
         db.session.commit()
         flash('New trip registered!')
-        return redirect(url_for('member_view',team_id=form.team.data,user_id=user.id))
+        if user == current_user:
+            return redirect(url_for('trips_overview',user_id=user.id))
+        else:
+            return redirect(url_for('member_view',team_id=form.team.data,user_id=user.id))
 
     return render_template('new_trip.html',title="Add new trip", form = form )
 
@@ -228,13 +231,13 @@ def user_home(username):
     stat={}
     stat["average_speed"] = db.session.query(Trip, func.avg(Trip.speed)).group_by(Trip.user_id).filter_by(user_id=user.id).all()
     if stat["average_speed"]:
-        stat["average_speed"] = stat["average_speed"][0][1]
+        stat["average_speed"] = round(stat["average_speed"][0][1],2)
     stat["maximum_elevation"] = db.session.query(Trip, func.max(Trip.elevation)).group_by(Trip.user_id).filter_by(user_id=user.id).all()
     if stat["maximum_elevation"]:
         stat["maximum_elevation"]= stat["maximum_elevation"][0][1]
     stat["total_distance"] = db.session.query(Trip, func.sum(Trip.distance)).group_by(Trip.user_id).filter_by(user_id=user.id).all()
     if stat["total_distance"]:
-        stat["total_distance"]= stat["total_distance"][0][1]
+        stat["total_distance"]= round(stat["total_distance"][0][1],2)
     stat["activities"] = len(Trip.query.filter_by(user_id=user.id).all())
 
     return render_template('user_home.html', user=user,teams=teams,new_enrollments=message, last_trips=last_trips,stat=stat)
@@ -260,7 +263,7 @@ def trips_overview(user_id):
 
     result = []
     for team_name, trips in trips_dict.items():
-        result.append({"team_name": team_name, "trips_by_team": trips})
+        result.append({"team_name": team_name,"team_id":trips[0].team_id, "trips_by_team": trips})
     return render_template('trips_overview.html', user=user, trips_groups=result)
  
 
@@ -296,12 +299,10 @@ def team_profile(team_id):
         # Handle profile picture upload
         team.name = form.name.data
         team.description = form.description.data
-        team.team_picture = form.team_picture.data
 
-        if team.team_picture.filename:
-            team.team_picture = team.team_picture.read()
-        else:
-            team.team_picture = None
+        if form.team_picture.data:
+            team.team_picture = form.team_picture.data.read()
+
 
         db.session.commit()
         flash('Your team has been updated!', 'success')

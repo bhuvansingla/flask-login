@@ -2,79 +2,66 @@
 
 {% block content %}
 
-<head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles_user_profile.css') }}">
-</head>
+<div class="left-sidebar">
+    <div class="box">
+        <table class="styled-table">
+            <caption>
+                <h1 style="color:red">User details for {{user.username}}</h1>
 
-{%if user !=current_user%}
-<center>
-    <div style="text-align:center">
-        <h1 style="color:red">User details for {{user.username}}</h1>
-    </div>
-    <div style="text-align:center">
-        <div class="post-container" style="margin:0 auto;">
-            <table class="styled-table">
-                <thead>
-                    <tr>
-                        <th>Property</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
+            </caption>
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
 
-                    <tr>
-                        <td>Username</td>
-                        <td>{{ user.username}}</td>
-                    </tr>
-                    <tr>
-                        <td>First name</td>
-                        <td>{{ user.name}}</td>
-                    </tr>
-                    <tr>
-                        <td>Last name</td>
-                        <td>{{ user.surname}}</td>
-                    </tr>
-                    <tr>
-                        <td>Email</td>
-                        <td>{{ user.email }}</td>
-                    </tr>
-                    <tr>
-                        <td>Strava account</td>
-                        <td>{{ user.strava_account }}</td>
-                    </tr>
-                    <tr>
-                        <td>Phone number</td>
-                        <td>{{ user.phone_number }}</td>
-                    </tr>
+                <tr>
+                    <td>Username</td>
+                    <td>{{ user.username}}</td>
+                </tr>
+                <tr>
+                    <td>First name</td>
+                    <td>{{ user.name}}</td>
+                </tr>
+                <tr>
+                    <td>Last name</td>
+                    <td>{{ user.surname}}</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>{{ user.email }}</td>
+                </tr>
+                <tr>
+                    <td>Strava account</td>
+                    <td>{{ user.strava_account }}</td>
+                </tr>
+                <tr>
+                    <td>Phone number</td>
+                    <td>{{ user.phone_number }}</td>
+                </tr>
 
-                </tbody>
-            </table>
+            </tbody>
+        </table>
 
-        </div>
     </div>
 
 
-</center>
-{%else%}
-<center>
-    <a href="{{url_for('user_profile')}}">
-        <div style="text-align:center">
-            <h1 style="color:red">Your profile</h1>
-        </div>
-    </a>
-</center>
 
-{%endif%}
-<br>
-<center>
-    <div style="text-align:center">
-        <h1 style="color:red">{{user.username}}'s trips in {{team.name}}</h1>
-    </div>
+</div>
 
-    <div style="text-align:center">
-        <div class="post-container" style="margin:0 auto;">
+<div class="main">
+
+    <center>
+
+
+        <div class="box">
 
             <table class="styled-table">
+                <caption>
+                    <h1 style="color:red">{{user.username}}'s trips in {{team.name}}</h1>
+                </caption>
                 <thead>
                     <tr>
                         <th><b>Trip Name</b></th>
@@ -85,6 +72,9 @@
                         <th>Prestige</th>
                         <th>Description</th>
                         <th>Score</th>
+                        {%if role=='team_leader' or user==current_user%}
+                        <th>Actions</th>
+                        {%endif%}
                     </tr>
                 </thead>
                 <tbody>
@@ -102,7 +92,8 @@
                         {%if user in team.users%}
                         {%if user==current_user%}
                         <td><a class="delete-button"
-                                href="{{url_for('edit_trip',trip_id=trip.id,user_id=current_user.id)}}">Edit</a></td>
+                                href="{{url_for('edit_trip',trip_id=trip.id,user_id=current_user.id)}}">Edit</a>
+                        </td>
                         {%endif%}
                         {%if role=='team_leader' and user!=current_user%}
                         <td><a class="delete-button"
@@ -113,67 +104,29 @@
                     </tr>
                     {% endfor %}
                 </tbody>
+                {%if role=='team_leader'%}
+                <tfoot>
+                    <tr>
+                        <td colspan="9" style="text-align: center;">
+                            <button>
+                                <a href="{{url_for('new_trip',user_id=user.id)}}"
+                                    style="align-items:center; color:black;">Add
+                                    new
+                                    trip
+                                </a>
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+                {%endif%}
             </table>
         </div>
-    </div>
 
 
-    <br>
+        <br>
 
-    <div class="enroll-button-container">
-        {%if user==current_user%}
-        <a class="blue pull-left" href="{{ url_for('new_trip', user_id = current_user.id) }}">Add a new trip</a>
-        {%endif%}
-        {%if role=='team_leader' and user!=current_user%}
-        <a class="blue pull-left" href="{{ url_for('new_trip', user_id = user.id) }}">Add a new trip</a>
-        {%endif%}
-    </div>
+    </center>
+</div>
 
-    <br>
-
-    <div class="post-container">
-        <div class="post-container">
-            <div class="post-info">
-                <div class="row">
-                    <div class="unenroll-button-container">
-                        {%if user==current_user%}
-                        <a class="unenroll-button"
-                            href="{{url_for('unenroll_from_team',team_id=team.id,user_id=current_user.id)}}">Unenroll</a>
-                        {%endif%}
-                        {%if role=='team_leader' and user!=current_user%}
-                        <a class="unenroll-button"
-                            href="{{url_for('unenroll_from_team',team_id=team.id,user_id=user.id)}}">Unenroll</a>
-                        {%endif%}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {%if role=='team_leader' and user!=current_user%}
-    <div class="post-container">
-        <div class="post-container">
-            <div class="post-info">
-                <form method="POST" action="{{ url_for('change_role',team_id=team.id,user_id=user.id) }}">
-                    <input type="hidden" name="user_id" value="{{ user.id }}">
-                    <select name="role">
-                        {% if member_role == "user" %}
-                        <option value="user" selected>User</option>
-                        {% else %}
-                        <option value="user">User</option>
-                        {% endif %}
-                        {% if member_role == "team_leader" %}
-                        <option value="team_leader" selected>Team Leader</option>
-                        {% else %}
-                        <option value="team_leader">Team Leader</option>
-                        {% endif %}
-                    </select>
-                    <input type="submit" value="Change Role">
-                </form>
-            </div>
-        </div>
-    </div>
-    {%endif%}
-
-</center>
+<div class="right-sidebar"></div>
 {% endblock %}

@@ -10,7 +10,8 @@
     <div class="box">
         <table>
             <caption>
-                <h2>{{trips_group['team_name']}}</h2>
+                <h2><a href="{{url_for('team_home',team_id=trips_group['team_id'])}}">{{trips_group['team_name']}}</a>
+                </h2>
             </caption>
             <thead>
                 <th><strong>Trip Name</strong></th>
@@ -31,6 +32,19 @@
                 </tr>
                 {%endfor%}
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="5" style="text-align: center;">
+                        <button>
+                            <a href="{{url_for('new_trip',user_id=current_user.id)}}"
+                                style="align-items:center; color:black;">Add
+                                new
+                                trip
+                            </a>
+                        </button>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     </div>
     {% endfor %}
@@ -48,15 +62,8 @@
     </div>
     <div class="popup" id="popup">
         <ul>
-            <li><a href="{{url_for('user_profile')}}">User Profile<a></li>
-            <li class="subitem">Teams
-                <ul class="sublist">
-                    {%for team in teams%}
-
-                    <li> <a href="{{url_for('team_home',team_id=team.id)}}">{{team.name}}</a></li>
-                    {%endfor%}
-                </ul>
-            </li>
+            <li><a href="{{url_for('user_home', username=current_user.username)}}">Home</a></li>
+            <li><a href="{{url_for('user_profile')}}">Profile</a></li>
             <li><a href="{{url_for('trips_overview',user_id=current_user.id)}}"> Trips overview</a></li>
         </ul>
     </div>

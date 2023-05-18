@@ -29,13 +29,19 @@
                         {{ place+1 }}
                         {% endif %}
                     </td>
-                    <td><a href="{{url_for('member_view', user_id=ranking['user_id'],team_id=team.id)}}">
 
-                            {{ranking["user"]}}
-                            {%if ranking["user"] == current_user.username%}
-                            (you)
-                            {%endif%}
+
+                    <td>
+                        {%if ranking["user"] == current_user.username%}
+                        <a href="{{url_for('trips_overview', user_id=ranking['user_id'])}}">
+                            {{ranking["user"]}} (you)
                         </a>
+                        {%else%}
+                        <a href="{{url_for('member_view', user_id=ranking['user_id'],team_id=team.id)}}">
+                            {{ranking["user"]}}
+                        </a>
+                        {%endif%}
+
                     </td>
                     <td>{{ ranking["total score"] }}</td>
                 </tr>
