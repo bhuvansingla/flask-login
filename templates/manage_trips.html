@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="left-sidebar">
+    <div class="popup-btn-container">
+        {%if not team.team_picture%}
+        <img src="{{ url_for('static', filename='images/app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
+        {%else%}
+        <img src="data:image/png;base64,{{ team.team_picture|b64encode }}" class="popup-btn" alt="Popup Image">
+        {%endif%}
+        <i class="fas fa-bars menu-symbol"></i>
+    </div>
+    <div class="popup" id="popup">
+        <ul>
+            <li><a href="{{url_for('team_home',team_id=team.id)}}">Team home</a></li>
+            <li><a href="{{url_for('team_profile',team_id=team.id)}}">Team profile</a></li>
+            <li><a href="{{url_for('manage_team',team_id=team.id)}}">Manage team</a></li>
+            <li><a href="{{url_for('manage_trips',team_id=team.id)}}">Manage trips</a></li>
+        </ul>
+    </div>
+    <script>
+        var popup = document.querySelector(".popup");
+        var popupBtn = document.querySelector(".popup-btn");
+        popupBtn.addEventListener("click", function () {
+            if (popup.style.display === "block") {
+                popup.style.display = "none";
+            } else {
+                popup.style.display = "block";
+            }
+        });
+    </script>
+</div>
+<div class="main">
+    <center>
+        <div class="box">
+            <table>
+                <caption>
+                    <h1 style="color:red">Trips for {{team.name}} </h1>
+                </caption>
+                <thead>
+                    <th><strong>Trip Name</strong></th>
+                    <th><strong>User</strong></th>
+                    <th><strong>Date</strong></th>
+                </thead>
+
+                <tbody>
+                    {%for trip in approved_trips%}
+                    <form method="POST" action="{{url_for('approve_trip',trip_id=trip['trip'].id)}}">
+
+                        <tr>
+                            <input type="hidden" name="trip_id" value="{{trip['trip'].id }}">
+                            <td>
+                                <a
+                                    href="{{url_for('edit_trip',trip_id= trip['trip'].id,user_id=trip['trip'].user_id)}}">{{
+                                    trip["trip"].tripname }}
+                                </a>
+                            </td>
+                            <td>{{ trip["user"].username }}</td>
+                            <td>{{ trip["trip"].recorded_on.strftime("%d/%m/%Y") }}</td>
+                        </tr>
+                    </form>
+                    {%endfor%}
+                </tbody>
+
+            </table>
+        </div>
+
+
+    </center>
+
+    <center>
+        {%if non_approved_trips%}
+        <div class="box">
+            <table>
+                <caption>
+                    <h1 style="color:red">Trips approval requests for {{team.name}}</h1>
+                </caption>
+                <thead>
+                    <th><strong>Trip Name</strong></th>
+                    <th><strong>User</strong></th>
+                    <th><strong>Date</strong></th>
+                    <th><strong>Approve?</strong></th>
+                </thead>
+
+                <tbody>
+                    {%for trip in non_approved_trips%}
+                    <form method="POST" action="{{url_for('approve_trip',trip_id=trip['trip'].id)}}">
+
+                        <tr>
+                            <input type="hidden" name="trip_id" value="{{trip['trip'].id }}">
+                            <td>
+                                <a
+                                    href="{{url_for('edit_trip',trip_id= trip['trip'].id,user_id=trip['trip'].user_id)}}">{{
+                                    trip["trip"].tripname }}
+                                </a>
+                            </td>
+                            <td>{{ trip["user"].username }}</td>
+                            <td>{{ trip["trip"].recorded_on.strftime("%d/%m/%Y") }}</td>
+                            <td>
+                                <input type="submit" value="Approve trip">
+                            </td>
+                        </tr>
+                    </form>
+                    {%endfor%}
+                </tbody>
+
+            </table>
+        </div>
+        {%else%}
+        <h1 style="color:red">No new requests to publish trips!</h1>
+        {%endif%}
+
+    </center>
+
+
+</div>
+<div class="right-sidebar">
+
+</div>
+{% endblock %}

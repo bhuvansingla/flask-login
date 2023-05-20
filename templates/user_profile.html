@@ -39,7 +39,7 @@
                     </tr>
                     <tr>
                         <td>
-                            Profile Picture:
+                            {{form.profile_picture.label}}
                             {% if form.profile_picture.data %}
                             <span>{{ form.profile_picture.data.filename }}</span>
                             {% endif %}
@@ -56,10 +56,14 @@
                     <tr>
 
                         <td colspan="2" style="text-align: center;">
-                            <a class="delete-button" href="{{url_for('delete_user',user_id=current_user.id)}}">Delete
-                                account</a>
-                        </td>
+                            <button>
 
+                                <a class="delete-button" href="{{url_for('delete_user',user_id=current_user.id)}}"
+                                    style="align-items:center; color:black;">Delete
+                                    account</a>
+                            </button>
+
+                        </td>
                     </tr>
                     {% endif %}
                 </table>
