@@ -1,84 +1,71 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="main">
+    <center>
+        <form class="form-container" method="post">
+            {{ form.hidden_tag()}}
+            <div class="box">
+                <table>
+                    <caption>
+                        <h1 style="color: red;">Edit trip</h1>
+                    </caption>
+                    <tr>
+                        <th>Field</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>{{ form.tripname.label }}</td>
+                        <td>{{ form.tripname() }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.speed.label }}</td>
+                        <td>{{ form.speed() }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.distance.label }}</td>
+                        <td>{{ form.distance() }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.elevation.label }}</td>
+                        <td>{{ form.elevation() }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.n_of_partecipants.label }}</td>
+                        <td>{{ form.n_of_partecipants() }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.prestige.label }}</td>
+                        <td>
+                            <div class="prestige-label-container">
+                                {% for subfield in form.prestige %}
+                                <label class="prestige-label">
+                                    {{ subfield }}
+                                    <span>{{ subfield.label() }}</span>
+                                </label><br>
+                                {% endfor %}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.description.label }}</td>
+                        <td>{{ form.description(size=20, rows=5) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">{{ form.submit_save }}</td>
+                    </tr>
+                </table>
+                <footer>
+                    <button>
+                        <a class="delete-button" style="align-items:center; color:black;"
+                            href="{{ url_for('delete_trip', trip_id=trip_id, user_id=user_id) }}">Delete</a>
+                    </button>
 
-<head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles_base.css') }}">
-</head>
-
-<center>
-    <h1 style="color:red">Trip settings</h1>
-
-    <h1 style="color:red">Edit trip</h1>
-    <form action="{{url_for('edit_trip',trip_id=trip_id,user_id=user_id)}}" method="post" class="form-container">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.tripname.label }}<br>
-            {{ form.tripname() }}<br>
-            {% for error in form.tripname.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.speed.label }}<br>
-            {{ form.speed() }}<br>
-            {% for error in form.speed.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.distance.label }}<br>
-            {{ form.distance() }}<br>
-            {% for error in form.distance.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.elevation.label }}<br>
-            {{ form.elevation() }}<br>
-            {% for error in form.elevation.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.team.label }}
-            {{ form.team(class_="form-control") }}
-            {% for error in form.team.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{form.n_of_partecipants.label}} <br>
-            {{ form.n_of_partecipants() }}<br>
-            {% for error in form.n_of_partecipants.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <br>
-
-        <p>
-            {{ form.prestige.label }}<br>
-            {% for subfield in form.prestige %}
-            <label>
-                {{ subfield }} <span>{{ subfield.label() }}</span>
-            </label><br>
-            {% endfor %}
-            {% for error in form.prestige.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-
-        <p>{{ form.description.label }}<br>
-            {{form.description(size=20, rows=5)}}
-        </p>
-        {%if my_role_in_team == "team_leader" and current_user.id != user_id%}
-        <p>{{ form.is_approved.label }}<br>
-            {{form.is_approved()}}
-        </p>
-        {%endif%}
-        <p>{{ form.submit_save()}}</p>
-        <p><a class="delete-button" href="{{url_for('delete_trip',trip_id=trip_id,user_id=user_id)}}">Delete</a></p>
-    </form>
-</center>
-
+                </footer>
+            </div>
+        </form>
+    </center>
+</div>
+<div class="left-sidebar"></div>
+<div class="right-sidebar"></div>
 {% endblock %}

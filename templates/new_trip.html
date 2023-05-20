@@ -1,71 +1,69 @@
 {% extends "base.html" %}
 
-{% block content %}<center>
-    <h1 style="color:red">Register a new trip</h1>
-    <form method="post" class="form-container">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.tripname.label }}<br>
-            {{ form.tripname(size=32) }}<br>
-            {% for error in form.tripname.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.speed.label }}<br>
-            {{ form.speed(size=32) }}<br>
-            {% for error in form.speed.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.distance.label }}<br>
-            {{ form.distance(size=32) }}<br>
-            {% for error in form.distance.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.elevation.label }}<br>
-            {{ form.elevation(size=32) }}<br>
-            {% for error in form.elevation.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.team.label }}
-            {{ form.team(class_="form-control") }}
-            {% for error in form.team.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{form.n_of_partecipants.label}} <br>
-            {{ form.n_of_partecipants }}<br>
-            {% for error in form.n_of_partecipants.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <br>
+{% block content %}
+<div class="main">
+    <center>
+        <form class="form-container" method="post">
+            {{ form.hidden_tag()}}
+            <div class="box">
+                <table>
+                    <caption>
+                        <h1 style="color: red;">Add new trip</h1>
+                    </caption>
+                    <tr>
+                        <th>Field</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>{{ form.tripname.label }}</td>
+                        <td>{{ form.tripname() }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.speed.label }}</td>
+                        <td>{{ form.speed() }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.distance.label }}</td>
+                        <td>{{ form.distance() }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.elevation.label }}</td>
+                        <td>{{ form.elevation() }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.team.label }}</td>
+                        <td>{{ form.team(class_="form-control") }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.n_of_partecipants.label }}</td>
+                        <td>{{ form.n_of_partecipants() }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.prestige.label }}</td>
+                        <td>
+                            <div class="prestige-label-container">
+                                {% for subfield in form.prestige %}
+                                <label class="prestige-label">
+                                    {{ subfield }}
+                                    <span>{{ subfield.label() }}</span>
+                                </label><br>
+                                {% endfor %}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ form.description.label }}</td>
+                        <td>{{ form.description(size=20, rows=5) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">{{ form.submit_save }}</td>
+                    </tr>
+                </table>
 
-        <p>
-            {{ form.prestige.label }}<br>
-            {% for subfield in form.prestige %}
-            <label>
-                {{ subfield }} <span>{{ subfield.label }}</span>
-            </label><br>
-            {% endfor %}
-            {% for error in form.prestige.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-
-        <p>{{ form.description.label }}<br>
-            {{form.description(size=20, rows=5)}}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
-
-</center>
-
+            </div>
+        </form>
+    </center>
+</div>
+<div class="left-sidebar"></div>
+<div class="right-sidebar"></div>
 {% endblock %}

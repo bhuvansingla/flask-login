@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="left-sidebar">
+    <div class="box">
+        <table class="styled-table">
+            <caption>
+                <h1 style="color:red">User details for {{user.username}}</h1>
+
+            </caption>
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td>Username</td>
+                    <td>{{ user.username}}</td>
+                </tr>
+                <tr>
+                    <td>First name</td>
+                    <td>{{ user.name}}</td>
+                </tr>
+                <tr>
+                    <td>Last name</td>
+                    <td>{{ user.surname}}</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>{{ user.email }}</td>
+                </tr>
+                <tr>
+                    <td>Strava account</td>
+                    <td>{{ user.strava_account }}</td>
+                </tr>
+                <tr>
+                    <td>Phone number</td>
+                    <td>{{ user.phone_number }}</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+
+
+
+</div>
+
+<div class="main">
+
+    <center>
+
+        <h1 style="color:red; text-align: center;">Last trips of {{user.username}}!</h1>
+        {% for trip in last_trips %}
+        <div class="box">
+            <table>
+                <thead>
+                    <th><strong>Trip Name</strong></th>
+                    <th><strong>Speed (m/s)</strong></th>
+                    <th><strong>Distance (km)</strong></th>
+                    <th><strong>Elevation (m)</strong></th>
+                    <th><strong>Date</strong></th>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>{{ trip.tripname }}</td>
+                        <td>{{ trip.speed }}</td>
+                        <td>{{ trip.distance }}</td>
+                        <td>{{ trip.elevation }}</td>
+                        <td>{{ trip.recorded_on.strftime("%d/%m/%Y") }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+
+
+        <br>
+
+    </center>
+</div>
+<div class="right-sidebar">
+    <table class="stats-table">
+
+        <tbody>
+
+            <tr>
+                <td><strong>Activities</strong></td>
+                <td>{{stat["activities"]}}</td>
+            </tr>
+            <tr>
+                <td><strong>Total Distance (km)</strong></td>
+                <td>{{stat["total_distance"]}}</td>
+            </tr>
+            <tr>
+                <td><strong>Maximum Elevation (m)</strong></td>
+                <td>{{stat["maximum_elevation"]}}</td>
+            </tr>
+            <tr>
+                <td><strong>Average speed (km/h)</strong></td>
+                <td>{{stat["average_speed"]}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

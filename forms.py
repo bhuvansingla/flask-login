@@ -77,5 +77,5 @@ class ProfileForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     strava_account = StringField('Strava account')
     phone_number = StringField("Phone number")
-    profile_picture = FileField('')
+    profile_picture = FileField('Profile picture')
     submit = SubmitField('Save')

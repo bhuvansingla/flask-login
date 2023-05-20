@@ -105,12 +105,12 @@
     </div>
     <div class="popup" id="popup">
         <ul>
+            <li><a href="{{url_for('team_home',team_id=team.id)}}">Team home</a></li>
+            <li><a href="{{url_for('team_profile',team_id=team.id)}}">Team profile</a></li>
             {%if role=="team_leader"%}
             <li><a href="{{url_for('manage_team',team_id=team.id)}}">Manage team</a></li>
+            <li><a href="{{url_for('manage_trips',team_id=team.id)}}">Manage trips</a></li>
             {%endif%}
-            <li><a href="{{url_for('team_profile',team_id=team.id)}}">Team profile</a></li>
-            <li><a href="{{url_for('team_home',team_id=team.id)}}">Ranking</a></li>
-            <li><a href="#">Trips overview</a></li>
         </ul>
     </div>
     <script>

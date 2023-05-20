@@ -49,6 +49,14 @@ class User(db.Model,UserMixin,AdminMixin):
         else:
             return None
 
+    def group_user_trips_by_team(self):
+        result=[] 
+        for team in self.teams:
+            trips_in_team = [trip for trip in self.trips if trip.team_id==team.id] 
+            result.append({"team_name": team.name,"team_id":team.id, "trips_by_team": trips_in_team})
+        return result
+
+
     def __repr__(self):
         return '<User {}>'.format(self.username)
   
@@ -72,6 +80,9 @@ class Trip(db.Model):
     def __repr__(self):
         return '<Trip {}>'.format(self.description)
 
+    def get_user(self):
+        return User.query.get(self.user_id)
+    
     @staticmethod
     def calculate_score(v,dx,dz,pr,np,piazzamenti):
         """dx: distance in km,
@@ -103,7 +114,6 @@ class Team(db.Model):
         t_u_association = TeamUserAssociation(team_id=self.id,user_id=member.id,role=role,join_date=join_date)
         db.session.add(t_u_association)
         db.session.commit()
-
 
 class RequestsToJoinTeam(db.Model):
     __tablename__ = 'requests_to_join_team'

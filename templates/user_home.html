@@ -46,7 +46,8 @@
     </div>
     <div class="popup" id="popup">
         <ul>
-            <li><a href="{{url_for('user_profile')}}">Profile<a></li>
+            <li><a href="{{url_for('user_home',username=current_user.username)}}">User home</a></li>
+            <li><a href="{{url_for('user_profile')}}">User profile<a></li>
             <li class="subitem">Teams
                 <ul class="sublist">
                     {%for team in teams%}
@@ -55,7 +56,7 @@
                     {%endfor%}
                 </ul>
             </li>
-            <li><a href="{{url_for('trips_overview',user_id=current_user.id)}}"> Trips overview</a></li>
+            <li><a href="{{url_for('trips_overview',user_id=current_user.id)}}">User trips overview</a></li>
         </ul>
     </div>
     <script>

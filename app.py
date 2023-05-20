@@ -17,18 +17,3 @@ app.secret_key = os.urandom(24)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 db = SQLAlchemy(app)
-
-from routes import *
-from models import User
-
-@login_manager.user_loader
-def load_user(id):
-    
-    return User.query.get(int(id))
-  
-@app.template_filter('b64encode')
-def b64encode_filter(s):
-    return base64.b64encode(s).decode('utf-8')
-
-if __name__=="__main__":
-    app.run(debug=True)

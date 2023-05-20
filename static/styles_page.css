@@ -177,9 +177,14 @@
 
 
 
+.prestige-label-container {
+    display: flex;
+    flex-wrap: wrap;
+}
 
-
-
+.prestige-label {
+    max-width: 100%;
+}
 
 /* Set up the left sidebar */
 .left-sidebar {

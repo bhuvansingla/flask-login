@@ -12,11 +12,10 @@
     </div>
     <div class="popup" id="popup">
         <ul>
-            <li><a href="{{url_for('manage_team',team_id=team.id)}}">Manage team</a></li>
+            <li><a href="{{url_for('team_home',team_id=team.id)}}">Team home</a></li>
             <li><a href="{{url_for('team_profile',team_id=team.id)}}">Team profile</a></li>
-            <li><a href="{{url_for('team_home',team_id=team.id)}}">Ranking</a></li>
-
-            <li><a href="#">Trips overview</a></li>
+            <li><a href="{{url_for('manage_team',team_id=team.id)}}">Manage team</a></li>
+            <li><a href="{{url_for('manage_trips',team_id=team.id)}}">Manage trips</a></li>
         </ul>
     </div>
     <script>
@@ -37,7 +36,7 @@
         <div class="box">
             <table>
                 <caption>
-                    <h1 style="color:red">Users list: </h1>
+                    <h1 style="color:red">Users list</h1>
                 </caption>
                 <thead>
                     <tr>
@@ -49,7 +48,8 @@
                 <tbody>
                     {% for team_member in team_members %}
                     <tr>
-                        <td><a href="/view_user_profile_by_TL/{{team_member['user'].id }}">{{
+                        <td><a
+                                href="{{url_for('member_view',user_id = team_member['user'].id, team_id= team_member['team_id'])}}">{{
                                 team_member['user'].username }}</a></td>
                         <td>
                             <form method="POST"
@@ -88,8 +88,7 @@
     <center>
         {% if requests_to_join %}
         <div class="box">
-
-            <table class="styled-table">
+            <table>
                 <caption>
                     <h1 style="color:red">Requests to join the team: </h1>
                 </caption>
@@ -103,7 +102,7 @@
                     {% for request in requests_to_join %}
                     <tr>
                         <td>
-                            <a href="{{ url_for('view_user_profile_by_TL', user_id=request['user'].id) }}">{{
+                            <a href="{{ url_for('non_member_view', user_id=request['user'].id) }}">{{
                                 request['user'].username }}</a>
                         </td>
                         <td style="display: flex; justify-content: center; align-items: center;">
@@ -127,11 +126,10 @@
                     {% endfor %}
                 </tbody>
             </table>
-            {% else %}
-            <h1 style="color:red">No new requests to join the team!</h1>
-            {%endif%}
         </div>
-
+        {% else %}
+        <h1 style="color:red">No new requests to join the team!</h1>
+        {%endif%}
 
     </center>
 </div>
