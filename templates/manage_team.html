@@ -51,7 +51,7 @@
                         <td><a
                                 href="{{url_for('member_view',user_id = team_member['user'].id, team_id= team_member['team_id'])}}">{{
                                 team_member['user'].username }}</a></td>
-                        <td>
+                        <td style="text-align: center;">
                             <form method="POST"
                                 action="{{ url_for('change_role',team_id=team.id,user_id=team_member['user'].id) }}">
                                 <input type="hidden" name="user_id" value="{{team_member['user'].id }}">
