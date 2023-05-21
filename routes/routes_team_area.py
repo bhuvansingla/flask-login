@@ -71,17 +71,17 @@ def approve_trip(trip_id):
     return redirect(url_for("manage_trips",team_id=team.id))
   
 
-@app.route('/change_role/<int:team_id>/<int:user_id>',methods=['GET', 'POST'])
+@app.route('/change_role/<int:team_id>/<int:user_id>',methods=['POST'])
 @login_required
 def change_role(team_id,user_id):
     team_name = Team.query.get(team_id).name
-    user_mail = User.query.get(user_id).email
+    user = User.query.get(user_id)
     role = request.form.get('role')
-    user_role_in_team = TeamUserAssociation.query.filter_by(user_id=user_id,team_id=team_id).first()
-    if user_role_in_team.role != role:
-        send_email_utility('Role change', f'You role has been changed to {role} in {team_name}!',AUTO_MAIL,user_mail)
+    user_role_in_team = user.get_role_in_team(team_id)
+    if user_role_in_team != role:
+        send_email_utility('Role change', f'You role has been changed to {role} in {team_name}!',AUTO_MAIL,user.email)
+        user.set_role_in_team(team_id,role)
 
-    user_role_in_team.role = role
     db.session.commit()
    
 
@@ -151,10 +151,8 @@ def decide_on_enrollment(request_id,accept):
         user = User.query.get(request_to_join.user_id)
         team = Team.query.get(request_to_join.team_id)
         team.add_member(user,role="user")
-        db.session.delete(request_to_join)
-        db.session.commit()
-    else:
-        db.session.delete(request_to_join)
-        db.session.commit()
+
+    db.session.delete(request_to_join)
+    db.session.commit()
     
     return redirect(url_for("manage_team",team_id = request_to_join.team_id))

@@ -48,7 +48,12 @@ class User(db.Model,UserMixin,AdminMixin):
             return user_associated.role
         else:
             return None
-
+    
+    def set_role_in_team(self, team_id,role):
+        user_associated = TeamUserAssociation.query.filter_by(team_id=team_id, user_id=self.id).first()
+        if user_associated:
+            user_associated.role=role
+            
     def group_user_trips_by_team(self):
         result=[] 
         for team in self.teams:
