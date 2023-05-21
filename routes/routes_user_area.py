@@ -45,6 +45,7 @@ def user_home(username):
 def user_profile():
     user = User.query.get(current_user.id)
     form = ProfileForm(obj=user)
+    teams = Team.query.all()
     if form.validate_on_submit():
         # Handle profile picture upload
         user.username = form.username.data
@@ -61,7 +62,7 @@ def user_profile():
         db.session.commit()
         flash('Your profile has been updated!', 'success')
         return redirect(url_for('user_profile'))
-    return render_template('user_profile.html', form=form)
+    return render_template('user_profile.html', form=form,teams=teams)
 
 @app.route('/trips_overview/<int:user_id>',methods=['GET', 'POST'])
 def trips_overview(user_id):
