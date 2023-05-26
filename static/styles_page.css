@@ -11,14 +11,24 @@
     position: absolute;
     color: rgb(15, 15, 15);
     font-size: 20px;
-    right: -45px;
-    bottom: -50px;
+    left: -50px;
+    bottom: -90px;
+}
+
+
+
+.menu-text {
+    position: absolute;
+    color: rgb(15, 15, 15);
+    font-size: 20px;
+    left: -20px;
+    bottom: -90px;
 }
 
 .popup {
     position: absolute;
     display: none;
-    top: calc(70% + 10px);
+    top: calc(65% + 20px);
     left: 40%;
     transform: translate(-50%, -50%);
     background-color: #fff;
