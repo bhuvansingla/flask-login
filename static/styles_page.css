@@ -141,7 +141,6 @@
 
 .box {
     max-width: 90%;
-    max-height: 90%;
     width: fit-content;
     height: fit-content;
     background-color: orange;

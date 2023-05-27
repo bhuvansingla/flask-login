@@ -56,6 +56,14 @@
                         <td>{{ form.description(size=20, rows=5) }}</td>
                     </tr>
                     <tr>
+                        <td>{{form.n_of_placements.label}}</td>
+                        <td>{{form.n_of_placements()}}<br>
+                            <div id="placement-entries"></div>
+
+                        </td>
+                    </tr>
+
+                    <tr>
                         <td colspan="2" style="text-align: center;">{{ form.submit_save }}</td>
                     </tr>
                 </table>
@@ -64,6 +72,43 @@
         </form>
     </center>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var numPlacementsField = document.getElementById("n_of_placements");
+        var placementEntriesContainer = document.getElementById("placement-entries");
+
+        // Add event listener to numPlacementsField
+        numPlacementsField.addEventListener("input", function () {
+            var numPlacements = parseInt(numPlacementsField.value) || 0;
+
+            // Clear previous placement entries
+            placementEntriesContainer.innerHTML = "";
+
+            // Generate new placement entries
+            for (var i = 0; i < numPlacements; i++) {
+
+                var input = document.createElement("input");
+                input.type = "number";
+                input.name = "placement-" + i;
+
+                var deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButton.addEventListener("click", function () {
+                    this.parentNode.remove(); // Remove the parent div when delete button is clicked
+                });
+
+                var div = document.createElement("div");
+                div.appendChild(input);
+                div.appendChild(deleteButton);
+
+                placementEntriesContainer.appendChild(div);
+            }
+        });
+    });
+
+</script>
+
 <div class="left-sidebar"></div>
 <div class="right-sidebar"></div>
 {% endblock %}

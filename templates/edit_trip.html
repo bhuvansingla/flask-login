@@ -52,6 +52,21 @@
                         <td>{{ form.description(size=20, rows=5) }}</td>
                     </tr>
                     <tr>
+                        <td>{{ form.n_of_placements.label }}</td>
+                        <td>{{ form.n_of_placements() }}
+                            <div id="placement-entries">
+                                {% for placement in placements %}
+                                <div>
+                                    <label></label>
+                                    <input type="hidden" name="placement_id" value="{{placement.id}}">
+                                    <input type="text" name="edit_placement" value="{{ placement.place }}">
+                                    <button type="button" class="delete-button">Delete</button>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
                         <td colspan="2" style="text-align: center;">{{ form.submit_save }}</td>
                     </tr>
                 </table>
@@ -60,12 +75,55 @@
                         <a class="delete-button" style="align-items:center; color:black;"
                             href="{{ url_for('delete_trip', trip_id=trip_id, user_id=user_id) }}">Delete</a>
                     </button>
-
                 </footer>
             </div>
         </form>
     </center>
+    <div class="left-sidebar"></div>
+    <div class="right-sidebar"></div>
 </div>
-<div class="left-sidebar"></div>
-<div class="right-sidebar"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var numPlacementsField = document.getElementById("n_of_placements");
+        var placementEntriesContainer = document.getElementById("placement-entries");
+
+        // Add event listener to numPlacementsField
+        numPlacementsField.addEventListener("input", function () {
+            var numPlacements = parseInt(numPlacementsField.value) || 0;
+
+            // Clear previous placement entries
+            placementEntriesContainer.innerHTML = "";
+
+            // Generate new placement entries
+            for (var i = 0; i < numPlacements; i++) {
+
+                var input = document.createElement("input");
+                input.type = "text";
+                input.name = "placement-" + i;
+
+                var deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButton.className = "delete-button";
+                deleteButton.addEventListener("click", function () {
+                    this.parentNode.remove(); // Remove the parent div when delete button is clicked
+                });
+
+                var div = document.createElement("div");
+
+                div.appendChild(input);
+                div.appendChild(deleteButton);
+
+                placementEntriesContainer.appendChild(div);
+            }
+        });
+
+        // Add event listener to delete buttons
+        placementEntriesContainer.addEventListener("click", function (event) {
+            if (event.target.classList.contains("delete-button")) {
+                event.target.parentNode.remove(); // Remove the parent div when delete button is clicked
+            }
+        });
+    });
+</script>
 {% endblock %}
