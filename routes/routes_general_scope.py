@@ -1,5 +1,5 @@
 from app import app, db
-from flask import request, render_template, flash, redirect,url_for
+from flask import request, render_template, flash, redirect,url_for, send_from_directory
 from flask_login import current_user, login_user, logout_user,login_required
 from sqlalchemy import or_, and_, desc, func
 from models import User, Trip, Team, TeamUserAssociation, RequestsToJoinTeam
@@ -62,6 +62,10 @@ def new_trip(user_id):
             return redirect(url_for('member_view',team_id=form.team.data,user_id=user.id))
 
     return render_template('new_trip.html',title="Add new trip", form = form )
+
+@app.route('/images/<filename>')
+def serve_image(filename):
+    return send_from_directory('images', filename)
 
 @app.route("/edit_trip/<int:trip_id>/<int:user_id>", methods=['GET', 'POST'])
 @login_required

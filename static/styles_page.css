@@ -124,7 +124,9 @@
 .main {
     width: 60%;
     height: calc(100% - 100px);
-    background-color: #E8DCD9;
+    background-image: url('../images/background_picture.jpg');
+    background-size: cover;
+    background-position: center;
     left: 20%;
     right: 20%;
     top: 0px;
@@ -141,6 +143,8 @@
 .box {
     max-width: 90%;
     max-height: 90%;
+    width: fit-content;
+    height: fit-content;
     background-color: orange;
     border: 1px solid #ddd;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -152,6 +156,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    opacity: 0.75;
+
 }
 
 .footer-button {
