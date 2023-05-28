@@ -8,9 +8,9 @@
 
 
     {% if title %}
-    <title>{{ title }} - Team app</title>
+    <title>{{ title }} - app</title>
     {% else %}
-    <title>Welcome to Team app</title>
+    <title>Benvenuto nell'app</title>
     {% endif %}
 </head>
 
@@ -19,7 +19,6 @@
     <div class="header">
         {% if current_user.is_anonymous %}
         <a class="home-button" href="{{ url_for('index') }}">Home</a>
-        <a class="blue pull-right" href="{{ url_for('login') }}">Login</a>
         {% else %}
 
         <!--home management-->
@@ -48,13 +47,13 @@
     <div class="content-container">{% block content %}{% endblock %}</div>
     <div class="footer">
         <div class="imprint-links">
-            <a href="#">Imprint</a> | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
+            <a href="#">Imprint</a> | <a href="#">Guida all'uso</a>
         </div>
         <div id="date-time">
             <script>
                 function updateDateTime() {
                     var dateTime = new Date();
-                    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
+                    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', locale: 'it-IT' };
                     var dateTimeStr = dateTime.toLocaleDateString(undefined, options);
                     document.getElementById("date-time").innerHTML = dateTimeStr;
                 }

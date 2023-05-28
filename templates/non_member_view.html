@@ -6,14 +6,11 @@
     <div class="box">
         <table class="styled-table">
             <caption>
-                <h1 style="color:red">User details for {{user.username}}</h1>
+                <h1 style="color:red">Dettagli dell'utente {{user.username}}</h1>
 
             </caption>
             <thead>
-                <tr>
-                    <th>Property</th>
-                    <th>Value</th>
-                </tr>
+
             </thead>
             <tbody>
 
@@ -22,11 +19,11 @@
                     <td>{{ user.username}}</td>
                 </tr>
                 <tr>
-                    <td>First name</td>
+                    <td>Nome</td>
                     <td>{{ user.name}}</td>
                 </tr>
                 <tr>
-                    <td>Last name</td>
+                    <td>Cognome</td>
                     <td>{{ user.surname}}</td>
                 </tr>
                 <tr>
@@ -34,11 +31,11 @@
                     <td>{{ user.email }}</td>
                 </tr>
                 <tr>
-                    <td>Strava account</td>
+                    <td>Account di strava</td>
                     <td>{{ user.strava_account }}</td>
                 </tr>
                 <tr>
-                    <td>Phone number</td>
+                    <td>Numero di telefono</td>
                     <td>{{ user.phone_number }}</td>
                 </tr>
 
@@ -55,16 +52,16 @@
 
     <center>
 
-        <h1 style="color:red; text-align: center;">Last trips of {{user.username}}!</h1>
+        <h1 style="color:red; text-align: center;">Ultimi giri di {{user.username}}!</h1>
         {% for trip in last_trips %}
         <div class="box">
             <table>
                 <thead>
-                    <th><strong>Trip Name</strong></th>
-                    <th><strong>Speed (m/s)</strong></th>
-                    <th><strong>Distance (km)</strong></th>
-                    <th><strong>Elevation (m)</strong></th>
-                    <th><strong>Date</strong></th>
+                    <th><strong>Nome del giro</strong></th>
+                    <th><strong>Velocità (m/s)</strong></th>
+                    <th><strong>Distanza (km)</strong></th>
+                    <th><strong>Dislivello (m)</strong></th>
+                    <th><strong>Data</strong></th>
                 </thead>
 
                 <tbody>
@@ -92,19 +89,19 @@
         <tbody>
 
             <tr>
-                <td><strong>Activities</strong></td>
+                <td><strong>Numero di attività</strong></td>
                 <td>{{stat["activities"]}}</td>
             </tr>
             <tr>
-                <td><strong>Total Distance (km)</strong></td>
+                <td><strong>Distanza totale (km)</strong></td>
                 <td>{{stat["total_distance"]}}</td>
             </tr>
             <tr>
-                <td><strong>Maximum Elevation (m)</strong></td>
+                <td><strong>Massimo dislivello (m)</strong></td>
                 <td>{{stat["maximum_elevation"]}}</td>
             </tr>
             <tr>
-                <td><strong>Average speed (km/h)</strong></td>
+                <td><strong>Velocità media (km/h)</strong></td>
                 <td>{{stat["average_speed"]}}</td>
             </tr>
         </tbody>

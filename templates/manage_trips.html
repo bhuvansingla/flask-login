@@ -12,10 +12,10 @@
     </div>
     <div class="popup" id="popup">
         <ul>
-            <li><a href="{{url_for('team_home',team_id=team.id)}}">Team home</a></li>
-            <li><a href="{{url_for('team_profile',team_id=team.id)}}">Team profile</a></li>
-            <li><a href="{{url_for('manage_team',team_id=team.id)}}">Manage team</a></li>
-            <li><a href="{{url_for('manage_trips',team_id=team.id)}}">Manage trips</a></li>
+            <li><a href="{{url_for('team_home',team_id=team.id)}}">Home</a></li>
+            <li><a href="{{url_for('team_profile',team_id=team.id)}}">Profilo</a></li>
+            <li><a href="{{url_for('manage_team',team_id=team.id)}}">Gestisci squadra</a></li>
+            <li><a href="{{url_for('manage_trips',team_id=team.id)}}">Gesitisci giri</a></li>
         </ul>
     </div>
     <script>
@@ -35,12 +35,12 @@
         <div class="box">
             <table>
                 <caption>
-                    <h1 style="color:red">Trips for {{team.name}} </h1>
+                    <h1 style="color:red">Giri registrati per {{team.name}} </h1>
                 </caption>
                 <thead>
-                    <th><strong>Trip Name</strong></th>
-                    <th><strong>User</strong></th>
-                    <th><strong>Date</strong></th>
+                    <th><strong>Nome del giro</strong></th>
+                    <th><strong>Membro</strong></th>
+                    <th><strong>Data</strong></th>
                 </thead>
 
                 <tbody>
@@ -73,13 +73,13 @@
         <div class="box">
             <table>
                 <caption>
-                    <h1 style="color:red">Trips approval requests for {{team.name}}</h1>
+                    <h1 style="color:red">Richieste di approvazione dei giri per {{team.name}}</h1>
                 </caption>
                 <thead>
-                    <th><strong>Trip Name</strong></th>
-                    <th><strong>User</strong></th>
-                    <th><strong>Date</strong></th>
-                    <th><strong>Approve?</strong></th>
+                    <th><strong>Nome del giro</strong></th>
+                    <th><strong>Membro</strong></th>
+                    <th><strong>Data</strong></th>
+                    <th><strong>Azioni</strong></th>
                 </thead>
 
                 <tbody>
@@ -97,7 +97,7 @@
                             <td>{{ trip["user"].username }}</td>
                             <td>{{ trip["trip"].recorded_on.strftime("%d/%m/%Y") }}</td>
                             <td>
-                                <input type="submit" value="Approve trip">
+                                <input type="submit" value="Approva giro">
                             </td>
                         </tr>
                     </form>
@@ -108,7 +108,7 @@
         </div>
         {%else%}
         <div class="box">
-            <h1 style="color:red">No new requests to publish trips!</h1>
+            <h1 style="color:red">Non ci sono richieste di pubblicazione di giri!</h1>
         </div>
         {%endif%}
 

@@ -12,10 +12,10 @@
     </div>
     <div class="popup" id="popup">
         <ul>
-            <li><a href="{{url_for('team_home',team_id=team.id)}}">Team home</a></li>
-            <li><a href="{{url_for('team_profile',team_id=team.id)}}">Team profile</a></li>
-            <li><a href="{{url_for('manage_team',team_id=team.id)}}">Manage team</a></li>
-            <li><a href="{{url_for('manage_trips',team_id=team.id)}}">Manage trips</a></li>
+            <li><a href="{{url_for('team_home',team_id=team.id)}}">Home</a></li>
+            <li><a href="{{url_for('team_profile',team_id=team.id)}}">Profilo</a></li>
+            <li><a href="{{url_for('manage_team',team_id=team.id)}}">Gestisci squadra</a></li>
+            <li><a href="{{url_for('manage_trips',team_id=team.id)}}">Gestisci giri</a></li>
         </ul>
     </div>
     <script>
@@ -36,13 +36,13 @@
         <div class="box">
             <table>
                 <caption>
-                    <h1 style="color:red">Users list</h1>
+                    <h1 style="color:red">Lista dei membri</h1>
                 </caption>
                 <thead>
                     <tr>
-                        <th>User</th>
-                        <th>Role</th>
-                        <th>Action</th>
+                        <th>Membro</th>
+                        <th>Ruolo</th>
+                        <th>Azioni</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,11 +57,11 @@
                                 <input type="hidden" name="user_id" value="{{team_member['user'].id }}">
                                 <select name="role" onchange="this.form.submit()">
                                     {% if team_member['role'] =='user'%}
-                                    <option value="user" selected>User</option>
-                                    <option value="team_leader">Team Leader</option>
+                                    <option value="user" selected>Membro</option>
+                                    <option value="team_leader">Leader</option>
                                     {%elif team_member['role'] == 'team_leader'%}
-                                    <option value="team_leader" selected>Team Leader</option>
-                                    <option value="user">User</option>
+                                    <option value="team_leader" selected>Leader</option>
+                                    <option value="user">Membro</option>
                                     {% endif %}
                                 </select>
                             </form>
@@ -70,9 +70,7 @@
                             <form method="POST"
                                 action="{{ url_for('unenroll_from_team', team_id=team.id, user_id=team_member['user'].id) }}">
                                 <input type="hidden" name="user_id" value="{{ team_member['user'].id }}">
-                                <div class="unenroll-button-container">
-                                    <input type="submit" class="unenroll-button" value="Unenroll">
-                                </div>
+                                <input type="submit" value="Deregistra">
 
                             </form>
                         </td>
@@ -90,12 +88,12 @@
         <div class="box">
             <table>
                 <caption>
-                    <h1 style="color:red">Requests to join the team: </h1>
+                    <h1 style="color:red">Richieste di registrazione alla squadra: </h1>
                 </caption>
                 <thead>
                     <tr>
-                        <th>User</th>
-                        <th>Actions</th>
+                        <th>Utente</th>
+                        <th>Azioni</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -110,14 +108,14 @@
                                 <form
                                     action="{{ url_for('decide_on_enrollment', request_id=request['id'], accept='Yes') }}"
                                     method="POST">
-                                    <button class="enroll-button" type="submit">Approve</button>
+                                    <button class="enroll-button" type="submit">Approva</button>
                                 </form>
                             </div>
                             <div style="display: inline; margin-left: 10px;">
                                 <form
                                     action="{{ url_for('decide_on_enrollment', request_id=request['id'], accept='No') }}"
                                     method="POST">
-                                    <button class="unenroll-button" type="submit">Decline</button>
+                                    <button class="unenroll-button" type="submit">Rifiuta</button>
                                 </form>
                             </div>
                         </td>
@@ -129,7 +127,7 @@
         </div>
         {% else %}
         <div class="box">
-            <h1 style="color:red">No new requests to join the team!</h1>
+            <h1 style="color:red">Non ci sono richieste di registrazione alla squadra!</h1>
         </div>
         {%endif%}
 

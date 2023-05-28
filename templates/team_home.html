@@ -6,13 +6,13 @@
         {%if role%}
         <table class="styled-table">
             <caption>
-                <h1 style="color:red">{{team.name}} ranking</h1>
+                <h1 style="color:red">Classifica nel {{team.name}}</h1>
             </caption>
             <thead>
                 <tr>
-                    <th>Rank</th>
-                    <th>User</th>
-                    <th>Total Score</th>
+                    <th>Posizione</th>
+                    <th>Membro</th>
+                    <th>Punteggio totale</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,7 +34,7 @@
                     <td>
                         {%if ranking["user"] == current_user.username%}
                         <a href="{{url_for('trips_overview', user_id=ranking['user_id'])}}">
-                            {{ranking["user"]}} (you)
+                            {{ranking["user"]}} (tu)
                         </a>
                         {%else%}
                         <a href="{{url_for('member_view', user_id=ranking['user_id'],team_id=team.id)}}">
@@ -52,7 +52,7 @@
         <table class="styled-table">
             <thead>
                 <tr>
-                    <th>User</th>
+                    <th>Utente</th>
                 </tr>
             </thead>
             <tbody>
@@ -74,17 +74,17 @@
     {%if current_user not in team.users%}
     <center>
         <div class=box>
-            <h2>You don't have full access to the {{team.name}} information, please apply</h2>
+            <h2>Non hai accesso al {{team.name}}, per favore richiedi la registrazione al team!</h2>
             {%if not request%}
             <form action="{{url_for('request_enrollment_to_team', team_id=team.id)}}" method="POST"
                 class="form-container">
-                <input type="submit" class="enroll-button" value="Request Enrollment">
+                <input type="submit" class="enroll-button" value="Richiedi registrazione">
             </form>
             {%else%}
             <form action="{{url_for('withdraw_request_enrollment', request_id = request.id, team_id=team.id)}}"
                 method="POST" class="form-container">
 
-                <input type="submit" class="enroll-button" value="Withdraw request">
+                <input type="submit" class="enroll-button" value="Ritira richiesta">
             </form>
             {%endif%}
         </div>
@@ -93,10 +93,10 @@
     {%else%}
     <center>
         <div class=box>
-            <h2>The team has no members, be the first to enroll!</h2>
+            <h2>La squadra non ha membri, registrati per primo!</h2>
             <form action="{{url_for('enroll_directly', user_id = current_user.id, team_id=team.id)}}" method="POST"
                 class="form-container">
-                <input type="submit" class="enroll-button" value="Enroll">
+                <input type="submit" class="enroll-button" value="Registrati">
             </form>
             {%endif%}
         </div>
@@ -116,11 +116,11 @@
     </div>
     <div class="popup" id="popup">
         <ul>
-            <li><a href="{{url_for('team_home',team_id=team.id)}}">Team home</a></li>
-            <li><a href="{{url_for('team_profile',team_id=team.id)}}">Team profile</a></li>
+            <li><a href="{{url_for('team_home',team_id=team.id)}}">Home</a></li>
+            <li><a href="{{url_for('team_profile',team_id=team.id)}}">Profilo</a></li>
             {%if role=="team_leader"%}
-            <li><a href="{{url_for('manage_team',team_id=team.id)}}">Manage team</a></li>
-            <li><a href="{{url_for('manage_trips',team_id=team.id)}}">Manage trips</a></li>
+            <li><a href="{{url_for('manage_team',team_id=team.id)}}">Gestisci squadra</a></li>
+            <li><a href="{{url_for('manage_trips',team_id=team.id)}}">Gestisci giri</a></li>
             {%endif%}
         </ul>
     </div>
