@@ -11,12 +11,13 @@
     <div class="box">
         <table>
             <caption>
-                <h1 style="color:red; text-align: center;">List of teams</h1>
+                <h1 style="color:red; text-align: center;">Lista delle squadre</h1>
             </caption>
             <thead>
                 <tr>
-                    <th>Team</th>
-                    <th>Actions</th>
+                    <th>Squadra</th>
+                    <th>Azioni</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -29,7 +30,8 @@
                         <button>
 
                             <a class="delete-button" href="/delete_team/{{team.id}}"
-                                style="align-items:center; color:black;">Delete</a>
+                                style="align-items:center; color:black;">Elimina</a>
+
                         </button>
 
                     </td>
@@ -40,9 +42,9 @@
                 <tr>
                     <td colspan="2" style="text-align: center;">
                         <button>
-                            <a href="{{url_for('new_team')}}" style="align-content:center; color:black;">Add
-                                new
-                                team
+                            <a href="{{url_for('new_team')}}" style="align-content:center; color:black;">Aggiungi una
+                                nuova squadra
+
                             </a>
                         </button>
                     </td>
@@ -57,12 +59,13 @@
         <div class="box">
             <table>
                 <caption>
-                    <h1 style="color:red">List of users</h1>
+                    <h1 style="color:red">Lista degli utenti</h1>
                 </caption>
                 <thead>
                     <tr>
-                        <th>User</th>
-                        <th>Actions</th>
+                        <th>Utente</th>
+                        <th>Azioni</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -73,7 +76,8 @@
                         </td>
                         <td style="text-align: center;">
                             <button>
-                                <a href="/delete_user/{{user.id}}" style="align-content:center; color:black;">Delete</a>
+                                <a href="/delete_user/{{user.id}}"
+                                    style="align-content:center; color:black;">Elimina</a>
                             </button>
                         </td>
                     </tr>
@@ -83,9 +87,9 @@
                     <tr>
                         <td colspan="2" style="text-align: center;">
                             <button>
-                                <a href="{{url_for('new_user')}}" style="align-content:center; color:black;">Add
-                                    new
-                                    user
+                                <a href="{{url_for('new_user')}}" style="align-content:center; color:black;">Aggiungi un
+                                    nuovo utente
+
                                 </a>
                             </button>
                         </td>

@@ -16,8 +16,8 @@
         <div class="popup" id="popup">
             <ul>
                 <li><a href="{{url_for('user_home',username=current_user.username)}}">Home</a></li>
-                <li><a href="{{url_for('user_profile')}}">Profile settings<a></li>
-                <li class="subitem">Teams
+                <li><a href="{{url_for('user_profile')}}">Profilo<a></li>
+                <li class="subitem">Squadre
                     <ul class="sublist">
                         {%for team in teams%}
 
@@ -25,8 +25,8 @@
                         {%endfor%}
                     </ul>
                 </li>
-                <li><a href="{{url_for('trips_overview',user_id=current_user.id)}}">Trips overview</a></li>
-                <li><a href="{{url_for('new_trip',user_id=current_user.id)}}">Add new trip</a></li>
+                <li><a href="{{url_for('trips_overview',user_id=current_user.id)}}">Panoramica giri</a></li>
+                <li><a href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo giro</a></li>
 
             </ul>
         </div>
@@ -51,7 +51,7 @@
                 {{ form.hidden_tag() }}
                 <table>
                     <caption>
-                        <h1 style="color:red">Your profile settings</h1>
+                        <h1 style="color:red">Le tue impostazioni di profilo</h1>
                     </caption>
                     <tr>
                         <td>{{ form.username.label }}</td>
@@ -99,7 +99,7 @@
                             <button>
 
                                 <a class="delete-button" href="{{url_for('delete_user',user_id=current_user.id)}}"
-                                    style="align-items:center; color:black;">Delete
+                                    style="align-items:center; color:black;">Elimina
                                     account</a>
                             </button>
 

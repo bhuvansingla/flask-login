@@ -14,7 +14,8 @@
     <div class="popup" id="popup">
         <ul>
             <li><a href="{{url_for('member_view',user_id=user.id, team_id=team.id)}}">Home</a></li>
-            <li><a href="{{url_for('member_profile',user_id=user.id,team_id=team.id)}}">Profile<a></li>
+            <li><a href="{{url_for('member_profile',user_id=user.id,team_id=team.id)}}">Profilo<a></li>
+
 
         </ul>
     </div>
@@ -38,18 +39,20 @@
         <div class="box">
             <table>
                 <caption>
-                    <h1 style="color:red">User profile</h1>
+                    <h1 style="color:red">Profilo utente</h1>
+
                 </caption>
                 <tr>
                     <td>Username</td>
                     <td>{{user.username}}</td>
                 </tr>
                 <tr>
-                    <td>Name</td>
+                    <td>Nome</td>
                     <td>{{user.name}}</td>
                 </tr>
                 <tr>
-                    <td>Surname</td>
+                    <td>Cognome</td>
+
                     <td>{{user.surname}}</td>
                 </tr>
                 <tr>
@@ -57,16 +60,18 @@
                     <td>{{user.email}}</td>
                 </tr>
                 <tr>
-                    <td>Strava account</td>
+                    <td>Account di strava</td>
                     <td>{{ user.strava_account }}</td>
                 </tr>
                 <tr>
-                    <td>Phone number</td>
+                    <td>Numero di telefono</td>
+
                     <td>{{ user.phone_number }}</td>
                 </tr>
                 <tr>
                     <td>
-                        Profile picture
+                        Immagine di profilo
+
                     </td>
                     <td>{{ user.profile_picture }}</td>
                 </tr>

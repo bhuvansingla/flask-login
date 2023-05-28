@@ -8,12 +8,9 @@
             <div class="box">
                 <table>
                     <caption>
-                        <h1 style="color: red;">Add new trip</h1>
+                        <h1 style="color: red;">Aggiungi un nuovo giro</h1>
                     </caption>
-                    <tr>
-                        <th>Field</th>
-                        <th>Value</th>
-                    </tr>
+
                     <tr>
                         <td>{{ form.tripname.label }}</td>
                         <td>{{ form.tripname() }}</td>
@@ -93,7 +90,8 @@
                 input.name = "placement-" + i;
 
                 var deleteButton = document.createElement("button");
-                deleteButton.textContent = "Delete";
+                deleteButton.textContent = "Elimina";
+
                 deleteButton.addEventListener("click", function () {
                     this.parentNode.remove(); // Remove the parent div when delete button is clicked
                 });

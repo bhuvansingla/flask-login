@@ -6,7 +6,8 @@
 
 <div class="main">
     <div class="box">
-        <h1 style="color:red; text-align: center;">Welcome back {{current_user.username}}!</h1>
+        <h1 style="color:red; text-align: center;">Panoramica giri per {{current_user.username}}!</h1>
+
     </div>
     {% for trips_group in trips_groups %}
     <div class="box">
@@ -16,11 +17,11 @@
                 </h1>
             </caption>
             <thead>
-                <th><strong>Trip Name</strong></th>
-                <th><strong>Speed (km/h)</strong></th>
-                <th><strong>Distance (km)</strong></th>
-                <th><strong>Elevation (m)</strong></th>
-                <th><strong>Date</strong></th>
+                <th><strong>Nome del giro</strong></th>
+                <th><strong>Velocità (km/h)</strong></th>
+                <th><strong>Distanza (km)</strong></th>
+                <th><strong>Dislivello (m)</strong></th>
+                <th><strong>Data</strong></th>
             </thead>
 
             <tbody>
@@ -41,9 +42,7 @@
                     <td colspan="5" style="text-align: center;">
                         <button>
                             <a href="{{url_for('new_trip',user_id=current_user.id)}}"
-                                style="align-items:center; color:black;">Add
-                                new
-                                trip
+                                style="align-items:center; color:black;">Aggiungi un nuovo giro
                             </a>
                         </button>
                     </td>
@@ -68,8 +67,8 @@
     <div class="popup" id="popup">
         <ul>
             <li><a href="{{url_for('user_home',username=current_user.username)}}">Home</a></li>
-            <li><a href="{{url_for('user_profile')}}">Profile settings<a></li>
-            <li class="subitem">Teams
+            <li><a href="{{url_for('user_profile')}}">Profilo<a></li>
+            <li class="subitem">Squadre
                 <ul class="sublist">
                     {% for trips_group in trips_groups %}
 
@@ -79,8 +78,8 @@
                     {%endfor%}
                 </ul>
             </li>
-            <li><a href="{{url_for('trips_overview',user_id=current_user.id)}}">Trips overview</a></li>
-            <li><a href="{{url_for('new_trip',user_id=current_user.id)}}">Add new trip</a></li>
+            <li><a href="{{url_for('trips_overview',user_id=current_user.id)}}">Panoramica giri</a></li>
+            <li><a href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo giro</a></li>
 
         </ul>
     </div>

@@ -8,12 +8,9 @@
             <div class="box">
                 <table>
                     <caption>
-                        <h1 style="color: red;">Edit trip</h1>
+                        <h1 style="color: red;">Modifica giro</h1>
                     </caption>
-                    <tr>
-                        <th>Field</th>
-                        <th>Value</th>
-                    </tr>
+
                     <tr>
                         <td>{{ form.tripname.label }}</td>
                         <td>{{ form.tripname() }}</td>
@@ -57,10 +54,11 @@
                             <div id="placement-entries">
                                 {% for placement in placements %}
                                 <div>
-                                    <label></label>
+
                                     <input type="hidden" name="placement_id" value="{{placement.id}}">
                                     <input type="text" name="edit_placement" value="{{ placement.place }}">
-                                    <button type="button" class="delete-button">Delete</button>
+                                    <button type="button" class="delete-button">Elimina</button>
+
                                 </div>
                                 {% endfor %}
                             </div>
@@ -73,7 +71,7 @@
                 <footer>
                     <button>
                         <a class="delete-button" style="align-items:center; color:black;"
-                            href="{{ url_for('delete_trip', trip_id=trip_id, user_id=user_id) }}">Delete</a>
+                            href="{{ url_for('delete_trip', trip_id=trip_id, user_id=user_id) }}">Elimina</a>
                     </button>
                 </footer>
             </div>
@@ -103,7 +101,8 @@
                 input.name = "placement-" + i;
 
                 var deleteButton = document.createElement("button");
-                deleteButton.textContent = "Delete";
+                deleteButton.textContent = "Elimina";
+
                 deleteButton.className = "delete-button";
                 deleteButton.addEventListener("click", function () {
                     this.parentNode.remove(); // Remove the parent div when delete button is clicked

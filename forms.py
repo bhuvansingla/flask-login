@@ -17,8 +17,8 @@ class RegistrationForm(FlaskForm):
                                                                                             one lowercase letter, one uppercase letter, one digit, and one special character (@$!%*?&)')])
 
     password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Register')
+        'Ripeti Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Registrati')
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -28,42 +28,43 @@ class LoginForm(FlaskForm):
 
 class ForgotPasswordForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
-    submit = SubmitField('Send email')
+    submit = SubmitField('Invia email')
 
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8), Regexp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$', \
                                                                                             message='Password must be at least 8 characters long and contain at least \
                                                                                             one lowercase letter, one uppercase letter, one digit, and one special character (@$!%*?&)')])
     password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), EqualTo('password')])
+        'Ripeti Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Reset password')
 
 class NewTripForm(FlaskForm):
-    tripname = StringField('Trip name',validators=[DataRequired()])
-    speed = FloatField('Average speed [km/h]',validators=[DataRequired()])
-    distance = FloatField('Distance [km]',validators=[DataRequired()])
-    team = SelectField('Team choice', choices=[],coerce=int)
-    elevation = FloatField('Elevation [m]',validators=[DataRequired()])
-    prestige = RadioField('Choose an option', choices=CHOICES, validators=[DataRequired()])
-    n_of_partecipants = IntegerField('Number of partecipants', validators=[DataRequired(),NumberRange(min=1)])
-    description = TextAreaField('Description')
-    is_approved = BooleanField("Approve")
-    n_of_placements = IntegerField('Number of Placements',default=0)
+    tripname = StringField('Nome del giro',validators=[DataRequired()])
+    speed = FloatField('Velocità media [km/h]',validators=[DataRequired()])
+    distance = FloatField('Distanza [km]',validators=[DataRequired()])
+    team = SelectField('Team', choices=[],coerce=int)
+    elevation = FloatField('Dislivello [m]',validators=[DataRequired()])
+    prestige = RadioField("Scegli un'opzione", choices=CHOICES, validators=[DataRequired()])
+    n_of_partecipants = IntegerField('Numero di partecipanti', validators=[DataRequired(),NumberRange(min=1)])
+    description = TextAreaField('Descrizione')
+    is_approved = BooleanField("Approva")
+    n_of_placements = IntegerField('Numero di piazzamenti',default=0)
 
-    submit = SubmitField('Add trip')
-    submit_save = SubmitField('Save')
+    submit = SubmitField('Aggiungi giro')
+    submit_save = SubmitField('Salva')
+
 
 
 class NewTeamForm(FlaskForm):
-    name = StringField('Team name',validators=[DataRequired()])
-    description = TextAreaField('Description')
-    submit = SubmitField('Add Team')
+    name = StringField('Nome della squadra',validators=[DataRequired()])
+    description = TextAreaField('Descrizione')
+    submit = SubmitField('Aggiungi squadra')
 
 class TeamProfileForm(FlaskForm):
-    name = StringField('Team name',validators=[DataRequired()])
-    description = TextAreaField('Description')
+    name = StringField('Nome della squadra',validators=[DataRequired()])
+    description = TextAreaField('Descrizione')
     team_picture = FileField('')
-    submit = SubmitField('Save')
+    submit = SubmitField('Salva')
 
 
 class CustomFileInput(FileInput):
@@ -74,10 +75,10 @@ class CustomFileInput(FileInput):
     
 class ProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
-    name =  StringField('First Name', validators=[DataRequired()])
-    surname = StringField('Last Name', validators=[DataRequired()])
+    name =  StringField('Nome', validators=[DataRequired()])
+    surname = StringField('Cognome', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    strava_account = StringField('Strava account')
-    phone_number = StringField("Phone number")
-    profile_picture = FileField('Profile picture')
-    submit = SubmitField('Save')
+    strava_account = StringField('Account di strava')
+    phone_number = StringField("Numero di telefono")
+    profile_picture = FileField('Immagine di profilo')
+    submit = SubmitField('Salva')

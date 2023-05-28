@@ -152,13 +152,6 @@ def delete_trip(trip_id,user_id):
     else:
         return redirect(url_for('member_view', user_id=user_id,team_id=trip.team_id))
   
-    
-@app.route("/trip_details/<int:trip_id>")
-@login_required
-def trip_details(trip_id):
-    trip = Trip.query.get(trip_id)
-    return render_template("trip_details.html",trip=trip)
-
 
 
 #%% LOGIN SECTION
