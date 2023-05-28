@@ -6,7 +6,7 @@
 
         <div class="popup-btn-container">
             {%if not current_user.profile_picture%}
-            <img src="{{ url_for('static', filename='images/app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
+            <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
             {%else%}
             <img src="data:image/png;base64,{{ current_user.profile_picture|b64encode }}" class="popup-btn"
                 alt="Popup Image">

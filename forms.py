@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, FileField,RadioField,TextAreaField,FloatField,IntegerField,SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FileField,RadioField,TextAreaField,FloatField,IntegerField,SelectField,FieldList
 from wtforms.validators import DataRequired, Email, EqualTo, NumberRange,Length, Regexp
 from wtforms.widgets import FileInput
 
@@ -48,6 +48,8 @@ class NewTripForm(FlaskForm):
     n_of_partecipants = IntegerField('Number of partecipants', validators=[DataRequired(),NumberRange(min=1)])
     description = TextAreaField('Description')
     is_approved = BooleanField("Approve")
+    n_of_placements = IntegerField('Number of Placements',default=0)
+
     submit = SubmitField('Add trip')
     submit_save = SubmitField('Save')
 

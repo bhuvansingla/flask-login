@@ -11,7 +11,7 @@ class TeamUserAssociation(db.Model):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
     team_id = Column(Integer, ForeignKey('team.id', ondelete='CASCADE'))
-    role =Column(String)
+    role =Column(String(140))
     join_date = Column(DateTime)
 
 
@@ -76,12 +76,13 @@ class Trip(db.Model):
     description = Column(String(140))
     recorded_on = Column(DateTime, index=True, default=datetime.utcnow)
     n_of_partecipants = Column(Integer, nullable=False, default=1)
-    placement = Column(Integer)
     user_id = Column(Integer, ForeignKey('user.id', ondelete="CASCADE"))
     team_id = Column(Integer, ForeignKey('team.id', ondelete="CASCADE"))
     score = Column(Integer,default=0)
     is_approved = Column(Boolean,default=False)
-
+    placements = relationship("PlacementsInTrip", backref="trip", cascade="all, delete-orphan")
+    n_of_placements = Column(Integer)
+    
     def __repr__(self):
         return '<Trip {}>'.format(self.description)
 
@@ -103,7 +104,15 @@ class Trip(db.Model):
 
         p_f_o = punteggio_finale_o(v,dx,dz,pr)
         return punteggio_finale_f(p_f_o,np,piazzamenti)
-        
+
+    def get_placements(self):
+        return PlacementsInTrip.query.filter_by(trip_id=self.id).all()
+
+class PlacementsInTrip(db.Model):
+    id = Column(Integer, primary_key=True)
+    trip_id = Column(Integer, ForeignKey('trip.id', ondelete="CASCADE"))
+    place = Column(Integer)
+
 class Team(db.Model):
     id = Column(Integer, primary_key=True)
     name = Column(String(140))
@@ -126,7 +135,7 @@ class RequestsToJoinTeam(db.Model):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
     team_id = Column(Integer, ForeignKey('team.id', ondelete='CASCADE'))
-    status = Column(String)
+    status = Column(String(140))
     request_date = Column(DateTime)
 
     user = relationship("User", back_populates="join_requests")

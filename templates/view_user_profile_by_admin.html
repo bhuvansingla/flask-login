@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="left-sidebar"></div>
+<div class="right-sidebar"></div>
+<div class="main">
+    <center>
+        <div class="box">
+            <table class="styled-table">
+                <caption>
+                    <h1 style="color:red">User details for {{user.username}}</h1>
+                </caption>
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td>Username</td>
+                        <td>{{ user.username}}</td>
+                    </tr>
+                    <tr>
+                        <td>First name</td>
+                        <td>{{ user.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Last name</td>
+                        <td>{{ user.surname}}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                    <tr>
+                        <td>Strava account</td>
+                        <td>{{ user.strava_account }}</td>
+                    </tr>
+                    <tr>
+                        <td>Phone number</td>
+                        <td>{{ user.phone_number }}</td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+
+
+    </center>
+
+    <center>
+
+        {% if current_user._is_admin %}
+
+        <div class="box">
+            <table>
+                <caption>
+                    <h1 style="color:red">List of available teams</h1>
+                </caption>
+                <thead>
+                    <tr>
+                        <th style="width:20%;">Team Name</th>
+                        <th style="width:20%;">Enrollment</th>
+                        <th style="width:60%;">Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for team_role in team_roles %}
+                    <tr>
+                        <td style="vertical-align: middle;">
+                            <a
+                                href="{{url_for('team_home',team_id=team_role['team'].id)}}">{{team_role["team"].name}}</a>
+                        </td>
+                        {% if user not in team_role["team"].users %}
+                        <td>
+                            <a
+                                href="{{url_for('enroll_directly',team_id=team_role['team'].id,user_id=user.id)}}">Enroll</a>
+
+                        </td>
+                        {% else %}
+                        <td>
+                            <a
+                                href="{{url_for('unenroll_from_team',team_id=team_role['team'].id,user_id=user.id)}}">Unenroll</a>
+                        </td>
+                        <td>
+
+                            <form method="POST"
+                                action="{{ url_for('change_role',team_id=team_role['team'].id,user_id=user.id) }}"
+                                style="margin-top: 10px;">
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <select name="role" onchange="this.form.submit()">
+                                    {% if team_role["team_role"] == "user" %}
+                                    <option value="user" selected>User</option>
+                                    <option value="team_leader">Team Leader</option>
+                                    {% elif team_role["team_role"] == "team_leader" %}
+                                    <option value="user">User</option>
+                                    <option value="team_leader" selected>Team Leader</option>
+                                    {% endif %}
+                                </select>
+                            </form>
+                        </td>
+
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+    </center>
+</div>
+{% endblock %}

@@ -64,6 +64,7 @@ def user_profile():
         return redirect(url_for('user_profile'))
     return render_template('user_profile.html', form=form,teams=teams)
 
+
 @app.route('/trips_overview/<int:user_id>',methods=['GET', 'POST'])
 def trips_overview(user_id):
     
@@ -87,7 +88,10 @@ def unenroll_from_team(team_id,user_id):
         team.users.remove(user)
         db.session.commit()
     
-    return redirect(url_for("manage_team",team_id=team_id))
+    if current_user._is_admin:
+        return redirect(url_for("view_user_profile_by_admin",user_id=user.id))
+    else:
+        return redirect(url_for("manage_team",team_id=team_id))
 
 
 @app.route('/request_enrollment_to_team/<int:team_id>',methods=['GET', 'POST'])

@@ -2,64 +2,103 @@
 
 {% block content %}
 
-<head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles_user_home.css') }}">
-</head>
 
-<!-- admin section-->
-<center>
-    <h1 style="color:red">List of teams</h1>
-</center>
-<div class="post-container">
-    {% for team in teams %}
-    <div class="post-container">
-        <div class="post-info">
-            <div class="row">
-                <ul>&#128205;
-                    <a href="{{url_for('team_home',team_id=team.id)}}">{{team.name}}</a>
-                </ul>
 
-                <div class="delete-button-container">
-                    <a class="delete-button" href="/delete_team/{{team.id}}">Delete</a>
-                </div>
-            </div>
-        </div>
+<div class="main">
+
+
+    <!-- admin section-->
+    <div class="box">
+        <table>
+            <caption>
+                <h1 style="color:red; text-align: center;">List of teams</h1>
+            </caption>
+            <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for team in teams %}
+                <tr>
+                    <td style="text-align: center;">
+                        <a href="{{url_for('team_home',team_id=team.id)}}">{{team.name}}</a>
+                    </td>
+                    <td style="text-align: center;">
+                        <button>
+
+                            <a class="delete-button" href="/delete_team/{{team.id}}"
+                                style="align-items:center; color:black;">Delete</a>
+                        </button>
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2" style="text-align: center;">
+                        <button>
+                            <a href="{{url_for('new_team')}}" style="align-content:center; color:black;">Add
+                                new
+                                team
+                            </a>
+                        </button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
-    {%endfor%}
-</div>
 
 
 
-<center>
-    <h1 style="color:red">List of users</h1>
-    <div class="post-container">
-        <div class="post-container">
-            <table class="styled-table">
+    <center>
+        <div class="box">
+            <table>
+                <caption>
+                    <h1 style="color:red">List of users</h1>
+                </caption>
                 <thead>
                     <tr>
                         <th>User</th>
-                        <th></th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for user in users %}
                     <tr>
-                        <td><a href="/view_user_profile_by_TL/{{user.id}}">{{ user.username }}</a></td>
-                        <td>
-                            <div class="delete-button-container">
-                                <a class="delete-button" href="/delete_user/{{user.id}}">Delete</a>
-                            </div>
+                        <td style="text-align: center;">
+                            <a href="/view_user_profile_by_admin/{{user.id}}">{{ user.username }}</a>
                         </td>
-
+                        <td style="text-align: center;">
+                            <button>
+                                <a href="/delete_user/{{user.id}}" style="align-content:center; color:black;">Delete</a>
+                            </button>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2" style="text-align: center;">
+                            <button>
+                                <a href="{{url_for('new_user')}}" style="align-content:center; color:black;">Add
+                                    new
+                                    user
+                                </a>
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
+    </center>
 
 
-    </div>
-</center>
+</div>
 
+<div class="left-sidebar"></div>
+<div class="right-sidebar"></div>
 
 {% endblock %}

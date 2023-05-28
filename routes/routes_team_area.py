@@ -84,8 +84,10 @@ def change_role(team_id,user_id):
 
     db.session.commit()
    
-
-    return redirect(url_for('manage_team',team_id=team_id))
+    if current_user._is_admin:
+        return redirect(url_for('view_user_profile_by_admin',user_id=user.id))
+    else:
+        return redirect(url_for('manage_team',team_id=team_id))
 
  
 @app.route("/team_home/<int:team_id>")
@@ -116,8 +118,28 @@ def member_view(user_id,team_id):
         my_role_in_team = None
 
     trips_in_team = Trip.query.filter(and_(Trip.user_id==user_id,Trip.team_id==team_id)).all()
+    stat={}
+    stat["average_speed"] = db.session.query(Trip, func.avg(Trip.speed)).group_by(Trip.user_id).filter_by(user_id=member.id,team_id=team.id).all()
+    if stat["average_speed"]:
+        stat["average_speed"] = round(stat["average_speed"][0][1],2)
+    stat["maximum_elevation"] = db.session.query(Trip, func.max(Trip.elevation)).group_by(Trip.user_id).filter_by(user_id=member.id,team_id=team.id).all()
+    if stat["maximum_elevation"]:
+        stat["maximum_elevation"]= stat["maximum_elevation"][0][1]
+    stat["total_distance"] = db.session.query(Trip, func.sum(Trip.distance)).group_by(Trip.user_id).filter_by(user_id=member.id,team_id=team.id).all()
+    if stat["total_distance"]:
+        stat["total_distance"]= round(stat["total_distance"][0][1],2)
+    stat["activities"] = len(Trip.query.filter_by(user_id=member.id,team_id=team.id).all())
 
-    return render_template("member_view.html",trips= trips_in_team,user=member,team=team, role=my_role_in_team)
+    return render_template("member_view.html",trips= trips_in_team,user=member,team=team, role=my_role_in_team,stat=stat)
+
+@app.route('/member_profile/<int:user_id>/<int:team_id>', methods=['GET', 'POST'])
+@login_required
+def member_profile(user_id,team_id):
+    user = User.query.get(user_id)
+    team = Team.query.get(team_id)
+    return render_template('member_profile.html',team=team,user=user)
+
+
 
 @app.route("/member_view/<int:user_id>")
 @login_required

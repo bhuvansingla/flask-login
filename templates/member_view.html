@@ -3,50 +3,32 @@
 {% block content %}
 
 <div class="left-sidebar">
-    <div class="box">
-        <table class="styled-table">
-            <caption>
-                <h1 style="color:red">User details for {{user.username}}</h1>
-
-            </caption>
-            <thead>
-                <tr>
-                    <th>Property</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tbody>
-
-                <tr>
-                    <td>Username</td>
-                    <td>{{ user.username}}</td>
-                </tr>
-                <tr>
-                    <td>First name</td>
-                    <td>{{ user.name}}</td>
-                </tr>
-                <tr>
-                    <td>Last name</td>
-                    <td>{{ user.surname}}</td>
-                </tr>
-                <tr>
-                    <td>Email</td>
-                    <td>{{ user.email }}</td>
-                </tr>
-                <tr>
-                    <td>Strava account</td>
-                    <td>{{ user.strava_account }}</td>
-                </tr>
-                <tr>
-                    <td>Phone number</td>
-                    <td>{{ user.phone_number }}</td>
-                </tr>
-
-            </tbody>
-        </table>
-
+    <div class="popup-btn-container">
+        {%if not user.profile_picture%}
+        <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
+        {%else%}
+        <img src="data:image/png;base64,{{ user.profile_picture|b64encode }}" class="popup-btn" alt="Popup Image">
+        {%endif%}
+        <i class="fas fa-bars menu-symbol"></i><span class="menu-text">Menu</span>
     </div>
+    <div class="popup" id="popup">
+        <ul>
+            <li><a href="{{url_for('member_view',user_id=user.id, team_id=team.id)}}">Home</a></li>
+            <li><a href="{{url_for('member_profile',user_id=user.id,team_id=team.id)}}">Profile<a></li>
 
+        </ul>
+    </div>
+    <script>
+        var popup = document.querySelector(".popup");
+        var popupBtn = document.querySelector(".popup-btn");
+        popupBtn.addEventListener("click", function () {
+            if (popup.style.display === "block") {
+                popup.style.display = "none";
+            } else {
+                popup.style.display = "block";
+            }
+        });
+    </script>
 
 
 </div>
@@ -119,5 +101,28 @@
     </center>
 </div>
 
-<div class="right-sidebar"></div>
+<div class="right-sidebar">
+    <table class="stats-table">
+
+        <tbody>
+
+            <tr>
+                <td><strong>Activities</strong></td>
+                <td>{{stat["activities"]}}</td>
+            </tr>
+            <tr>
+                <td><strong>Total Distance (km)</strong></td>
+                <td>{{stat["total_distance"]}}</td>
+            </tr>
+            <tr>
+                <td><strong>Maximum Elevation (m)</strong></td>
+                <td>{{stat["maximum_elevation"]}}</td>
+            </tr>
+            <tr>
+                <td><strong>Average speed (km/h)</strong></td>
+                <td>{{stat["average_speed"]}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 {% endblock %}

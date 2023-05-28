@@ -70,10 +70,11 @@
     </div>
     {%if not current_user._is_admin%}
     <br>
+    {%if team.users%}
     {%if current_user not in team.users%}
     <center>
-        <h2>You don't have full access to the {{team.name}} information, please apply</h2>
-        <div class="post-container">
+        <div class=box>
+            <h2>You don't have full access to the {{team.name}} information, please apply</h2>
             {%if not request%}
             <form action="{{url_for('request_enrollment_to_team', team_id=team.id)}}" method="POST"
                 class="form-container">
@@ -86,10 +87,20 @@
                 <input type="submit" class="enroll-button" value="Withdraw request">
             </form>
             {%endif%}
-
         </div>
     </center>
     {%endif%}
+    {%else%}
+    <center>
+        <div class=box>
+            <h2>The team has no members, be the first to enroll!</h2>
+            <form action="{{url_for('enroll_directly', user_id = current_user.id, team_id=team.id)}}" method="POST"
+                class="form-container">
+                <input type="submit" class="enroll-button" value="Enroll">
+            </form>
+            {%endif%}
+        </div>
+    </center>
     {%endif%}
 
 </div>
@@ -97,7 +108,7 @@
 <div class="left-sidebar">
     <div class="popup-btn-container">
         {%if not team.team_picture%}
-        <img src="{{ url_for('static', filename='images/app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
+        <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
         {%else%}
         <img src="data:image/png;base64,{{ team.team_picture|b64encode }}" class="popup-btn" alt="Popup Image">
         {%endif%}

@@ -5,7 +5,9 @@
 
 
 <div class="main">
-    <h1 style="color:red; text-align: center;">Welcome back {{current_user.username}}!</h1>
+    <div class="box">
+        <h1 style="color:red; text-align: center;">Welcome back {{current_user.username}}!</h1>
+    </div>
     {% for trips_group in trips_groups %}
     <div class="box">
         <table>
@@ -56,7 +58,7 @@
 
     <div class="popup-btn-container">
         {%if not current_user.profile_picture%}
-        <img src="{{ url_for('static', filename='images/app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
+        <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
         {%else%}
         <img src="data:image/png;base64,{{ user.profile_picture|b64encode }}" class="popup-btn" alt="Popup Image">
         {%endif%}
