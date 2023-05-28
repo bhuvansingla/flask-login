@@ -11,7 +11,7 @@ class TeamUserAssociation(db.Model):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
     team_id = Column(Integer, ForeignKey('team.id', ondelete='CASCADE'))
-    role =Column(String)
+    role =Column(String(140))
     join_date = Column(DateTime)
 
 
@@ -135,7 +135,7 @@ class RequestsToJoinTeam(db.Model):
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'))
     team_id = Column(Integer, ForeignKey('team.id', ondelete='CASCADE'))
-    status = Column(String)
+    status = Column(String(140))
     request_date = Column(DateTime)
 
     user = relationship("User", back_populates="join_requests")
