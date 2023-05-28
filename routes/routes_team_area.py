@@ -84,8 +84,10 @@ def change_role(team_id,user_id):
 
     db.session.commit()
    
-
-    return redirect(url_for('manage_team',team_id=team_id))
+    if current_user._is_admin:
+        return redirect(url_for('view_user_profile_by_admin',user_id=user.id))
+    else:
+        return redirect(url_for('manage_team',team_id=team_id))
 
  
 @app.route("/team_home/<int:team_id>")

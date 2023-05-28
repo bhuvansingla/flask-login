@@ -30,13 +30,6 @@
         {%endif%}
 
 
-
-
-        <!--add new user-->
-        {%if current_user._is_admin%}
-        <a class="home-button" href="{{ url_for('new_user') }}">Add a new user</a>
-        {% endif %}
-
         <a class="logout-button" href="{{ url_for('logout') }}">Logout</a>
         {% endif %}
 

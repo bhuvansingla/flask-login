@@ -251,7 +251,7 @@ def reset_password(token):
 @app.route('/register', methods=['GET', 'POST'])
 def register():
   #check if current_user logged in, if so redirect to a page that makes sense
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and not current_user._is_admin:
         return redirect(url_for('index'))
     
     form = RegistrationForm()
@@ -271,7 +271,8 @@ def register():
         db.session.commit()
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
-
+   
+        
     return render_template('register.html', title='Register', form=form)
 
 @app.route('/logout')

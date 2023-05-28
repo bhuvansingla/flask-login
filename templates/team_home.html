@@ -70,12 +70,11 @@
     </div>
     {%if not current_user._is_admin%}
     <br>
+    {%if team.users%}
     {%if current_user not in team.users%}
     <center>
         <div class=box>
             <h2>You don't have full access to the {{team.name}} information, please apply</h2>
-        </div>
-        <div class="post-container">
             {%if not request%}
             <form action="{{url_for('request_enrollment_to_team', team_id=team.id)}}" method="POST"
                 class="form-container">
@@ -88,10 +87,20 @@
                 <input type="submit" class="enroll-button" value="Withdraw request">
             </form>
             {%endif%}
-
         </div>
     </center>
     {%endif%}
+    {%else%}
+    <center>
+        <div class=box>
+            <h2>The team has no members, be the first to enroll!</h2>
+            <form action="{{url_for('enroll_directly', user_id = current_user.id, team_id=team.id)}}" method="POST"
+                class="form-container">
+                <input type="submit" class="enroll-button" value="Enroll">
+            </form>
+            {%endif%}
+        </div>
+    </center>
     {%endif%}
 
 </div>

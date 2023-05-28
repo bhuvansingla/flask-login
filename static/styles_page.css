@@ -139,6 +139,10 @@
     justify-content: center;
 }
 
+.main.override-background {
+    background-image: none !important;
+}
+
 .box {
     max-width: 90%;
     width: fit-content;
