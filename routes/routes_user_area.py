@@ -64,6 +64,7 @@ def user_profile():
         return redirect(url_for('user_profile'))
     return render_template('user_profile.html', form=form,teams=teams)
 
+
 @app.route('/trips_overview/<int:user_id>',methods=['GET', 'POST'])
 def trips_overview(user_id):
     

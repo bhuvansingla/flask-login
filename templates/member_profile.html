@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="left-sidebar">
+    <div class="popup-btn-container">
+        {%if not user.profile_picture%}
+        <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
+        {%else%}
+        <img src="data:image/png;base64,{{ user.profile_picture|b64encode }}" class="popup-btn" alt="Popup Image">
+        {%endif%}
+        <i class="fas fa-bars menu-symbol"></i><span class="menu-text">Menu</span>
+    </div>
+    <div class="popup" id="popup">
+        <ul>
+            <li><a href="{{url_for('member_view',user_id=user.id, team_id=team.id)}}">Home</a></li>
+            <li><a href="{{url_for('member_profile',user_id=user.id,team_id=team.id)}}">Profile<a></li>
+
+        </ul>
+    </div>
+    <script>
+        var popup = document.querySelector(".popup");
+        var popupBtn = document.querySelector(".popup-btn");
+        popupBtn.addEventListener("click", function () {
+            if (popup.style.display === "block") {
+                popup.style.display = "none";
+            } else {
+                popup.style.display = "block";
+            }
+        });
+    </script>
+
+
+</div>
+
+<div class="main">
+    <center>
+        <div class="box">
+            <table>
+                <caption>
+                    <h1 style="color:red">User profile</h1>
+                </caption>
+                <tr>
+                    <td>Username</td>
+                    <td>{{user.username}}</td>
+                </tr>
+                <tr>
+                    <td>Name</td>
+                    <td>{{user.name}}</td>
+                </tr>
+                <tr>
+                    <td>Surname</td>
+                    <td>{{user.surname}}</td>
+                </tr>
+                <tr>
+                    <td>Email</td>
+                    <td>{{user.email}}</td>
+                </tr>
+                <tr>
+                    <td>Strava account</td>
+                    <td>{{ user.strava_account }}</td>
+                </tr>
+                <tr>
+                    <td>Phone number</td>
+                    <td>{{ user.phone_number }}</td>
+                </tr>
+                <tr>
+                    <td>
+                        Profile picture
+                    </td>
+                    <td>{{ user.profile_picture }}</td>
+                </tr>
+            </table>
+        </div>
+
+    </center>
+</div>
+<div class="right-sidebar">
+
+</div>
+
+{% endblock %}
