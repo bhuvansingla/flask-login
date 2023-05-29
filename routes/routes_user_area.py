@@ -91,7 +91,10 @@ def unenroll_from_team(team_id,user_id):
     if current_user._is_admin:
         return redirect(url_for("view_user_profile_by_admin",user_id=user.id))
     else:
-        return redirect(url_for("manage_team",team_id=team_id))
+        if current_user == user:
+            return redirect(url_for("team_home",team_id=team_id))
+        else:   
+            return redirect(url_for("manage_team",team_id=team_id))
 
 
 @app.route('/request_enrollment_to_team/<int:team_id>',methods=['GET', 'POST'])

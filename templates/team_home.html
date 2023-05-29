@@ -47,6 +47,16 @@
                 </tr>
                 {% endfor %}
             </tbody>
+            <tfoot>
+                <td colspan="3" style="text-align: center;">
+                    <form method="POST"
+                        action="{{ url_for('unenroll_from_team', team_id=team.id, user_id=current_user.id) }}">
+                        <input type="hidden" name="user_id" value="{{ current_user.id }}">
+                        <input type="submit" value="Deregistrati">
+
+                    </form>
+                </td>
+            </tfoot>
         </table>
         {%else%}
         <table class="styled-table">

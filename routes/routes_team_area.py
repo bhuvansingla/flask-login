@@ -42,7 +42,7 @@ def team_profile(team_id):
 def manage_team(team_id):
 
     team = Team.query.filter_by(id=team_id).first()
-    team_members = [{"user": user, "role": user.get_role_in_team(team_id=team_id), "team_id":team_id} for user in team.users if user.id != current_user.id]
+    team_members = [{"user": user, "role": user.get_role_in_team(team_id=team_id), "team_id":team_id} for user in team.users]
  
     requests_to_join = RequestsToJoinTeam.query.filter_by(team_id=team_id).all()
     requests_to_join = [{"id":request_to_join.id,"user":User.query.get(request_to_join.user_id)} for request_to_join in requests_to_join] 

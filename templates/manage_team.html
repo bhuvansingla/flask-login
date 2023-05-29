@@ -50,7 +50,8 @@
                     <tr>
                         <td><a
                                 href="{{url_for('member_view',user_id = team_member['user'].id, team_id= team_member['team_id'])}}">{{
-                                team_member['user'].username }}</a></td>
+                                team_member['user'].username }}
+                                {%if team_member['user'].username == current_user.username%} (tu){%endif%}</a></td>
                         <td style="text-align: center;">
                             <form method="POST"
                                 action="{{ url_for('change_role',team_id=team.id,user_id=team_member['user'].id) }}">
