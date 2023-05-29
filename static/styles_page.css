@@ -3,7 +3,8 @@
     color: rgb(15, 15, 15);
     font-size: 20px;
     left: -50px;
-    bottom: -90px;
+    bottom: -140px;
+    cursor: pointer;
 }
 
 
@@ -12,7 +13,7 @@
     color: rgb(15, 15, 15);
     font-size: 20px;
     left: -20px;
-    bottom: -90px;
+    bottom: -140px;
 }
 
 .popup-btn-container {
@@ -27,7 +28,7 @@
 .popup {
     position: absolute;
     display: none;
-    top: calc(70% + 20px);
+    top: calc(70% + 80px);
     left: 40%;
     transform: translate(-50%, -50%);
     background-color: #fff;
@@ -36,14 +37,14 @@
 
 .popup-btn {
     position: absolute;
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     top: 30%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-color: #fff;
     border: 1px solid #ccc;
-    cursor: pointer;
+    border-radius: 50%;
 }
 
 .popup-btn img {
@@ -123,7 +124,7 @@
 .main {
     width: 60%;
     height: calc(100% - 100px);
-    background-image: url('../images/background_picture.jpg');
+    background-image: url('../images/wallpaper_user_home.jpg');
     background-size: cover;
     background-position: center;
     left: 20%;
@@ -189,6 +190,7 @@
     /* Hide overflowing content */
     text-overflow: ellipsis;
     /* Add ellipsis (...) to indicate truncated text */
+
 }
 
 
@@ -199,10 +201,15 @@
 .prestige-label-container {
     display: flex;
     flex-wrap: wrap;
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow: auto;
+
 }
 
 .prestige-label {
     max-width: 100%;
+
 }
 
 /* Set up the left sidebar */

@@ -37,10 +37,10 @@
                     </tr>
                     <tr>
                         <td>{{ form.prestige.label }}</td>
-                        <td>
+                        <td style="word-wrap: break-word; word-break: break-all;">
                             <div class="prestige-label-container">
                                 {% for subfield in form.prestige %}
-                                <label class="prestige-label">
+                                <label class="prestige-label" style="word-wrap: break-word; word-break: break-all;">
                                     {{ subfield }}
                                     <span>{{ subfield.label() }}</span>
                                 </label><br>
@@ -55,7 +55,8 @@
                     <tr>
                         <td>{{form.n_of_placements.label}}</td>
                         <td>{{form.n_of_placements()}}<br>
-                            <div id="placement-entries"></div>
+                            <div id=" placement-entries">
+                            </div>
 
                         </td>
                     </tr>
@@ -86,25 +87,33 @@
             for (var i = 0; i < numPlacements; i++) {
 
                 var input = document.createElement("input");
-                input.type = "number";
+                input.type = "text";
                 input.name = "placement-" + i;
 
                 var deleteButton = document.createElement("button");
                 deleteButton.textContent = "Elimina";
 
+                deleteButton.className = "delete-button";
                 deleteButton.addEventListener("click", function () {
                     this.parentNode.remove(); // Remove the parent div when delete button is clicked
                 });
 
                 var div = document.createElement("div");
+
                 div.appendChild(input);
                 div.appendChild(deleteButton);
 
                 placementEntriesContainer.appendChild(div);
             }
         });
-    });
 
+        // Add event listener to delete buttons
+        placementEntriesContainer.addEventListener("click", function (event) {
+            if (event.target.classList.contains("delete-button")) {
+                event.target.parentNode.remove(); // Remove the parent div when delete button is clicked
+            }
+        });
+    });
 </script>
 
 <div class="left-sidebar"></div>

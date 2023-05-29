@@ -8,7 +8,7 @@
 
 <div class="main">
     <div class="box">
-        <h1 style="color:red; text-align: center;">Welcome back {{current_user.username}}!</h1>
+        <h1 style="color:red; text-align: center;">Bentornato {{current_user.username}}!</h1>
     </div>
     {% for trip in last_trips %}
     <div class="box">
@@ -65,7 +65,7 @@
     </div>
     <script>
         var popup = document.querySelector(".popup");
-        var popupBtn = document.querySelector(".popup-btn");
+        var popupBtn = document.querySelector(".menu-symbol");
         popupBtn.addEventListener("click", function () {
             if (popup.style.display === "block") {
                 popup.style.display = "none";
@@ -81,7 +81,11 @@
     <table class="stats-table">
 
         <tbody>
-
+            <tr>
+                <td colspan="2">
+                    <h2> Statistiche</h2>
+                </td>
+            </tr>
             <tr>
                 <td><strong>Numero di attività</strong></td>
                 <td>{{stat["activities"]}}</td>

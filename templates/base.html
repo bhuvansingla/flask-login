@@ -8,9 +8,9 @@
 
 
     {% if title %}
-    <title>{{ title }} - app</title>
+    <title>{{ title }}</title>
     {% else %}
-    <title>Benvenuto nell'app</title>
+    <title>Benvenuto su TeamUp</title>
     {% endif %}
 </head>
 
@@ -33,6 +33,8 @@
             {% for team in auth_user_teams %}
             <a class="home-button" href="{{ url_for('team_home', team_id=team.id) }}">{{ team.name }}</a>
             {% endfor %}
+            <a class="home-button" href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo
+                giro</a>
         </div>
 
 
