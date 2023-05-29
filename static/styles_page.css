@@ -218,35 +218,34 @@
 
 .logout-button {
     position: absolute;
-    top: 10px;
     right: 20px;
     background-color: grey;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    height: 60%;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 3px;
 }
 
-
 .home-button {
-    position: absolute;
-    top: 10px;
-    left: 20px;
     background-color: grey;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    height: 60%;
+    margin-right: 10px;
+    margin-left: 10px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-}
+    padding: 3px;
 
+}
 
 
 /* Set up the header */
@@ -259,6 +258,8 @@
     text-align: center;
     line-height: 50px;
     z-index: 999;
+    display: flex;
+    align-items: center;
 }
 
 /* Set up the footer */
@@ -302,10 +303,11 @@ body {
 
 .content-container {
     min-height: calc(100vh - 100px);
-    /* subtract the header and footer height from the viewport height */
     padding-top: 50px;
-    background-color: #E8DCD9;
-    /* set the padding-top to the height of the header */
+    background-image: url("../images/wallpaper_landing_page.jpg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .login-table {
@@ -363,4 +365,12 @@ body {
 
 .stats-table td {
     text-align: center;
+}
+
+.teams-container {
+    display: flex;
+}
+
+.teams-container .home-button {
+    margin-right: 10px;
 }

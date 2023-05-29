@@ -20,13 +20,21 @@
         {% if current_user.is_anonymous %}
         <a class="home-button" href="{{ url_for('index') }}">Home</a>
         {% else %}
+        <div class="teams-container">
+            <!--home management-->
+            {% if current_user._is_admin %}
+            <a class="home-button" href="{{ url_for('admin_home', username=current_user.username) }}">Home</a>
+            {% else %}
+            <a class="home-button" href="{{ url_for('user_home', username=current_user.username) }}">Home</a>
+            {% endif %}
 
-        <!--home management-->
-        {%if current_user._is_admin%}
-        <a class="home-button" href="{{ url_for('admin_home', username=current_user.username) }}">Home</a>
-        {%else%}
-        <a class="home-button" href="{{ url_for('user_home', username=current_user.username) }}">Home</a>
-        {%endif%}
+            {% set auth_user_teams = current_user.teams %}
+
+            {% for team in auth_user_teams %}
+            <a class="home-button" href="{{ url_for('team_home', team_id=team.id) }}">{{ team.name }}</a>
+            {% endfor %}
+        </div>
+
 
 
         <a class="logout-button" href="{{ url_for('logout') }}">Logout</a>
