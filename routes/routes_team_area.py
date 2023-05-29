@@ -65,9 +65,13 @@ def manage_trips(team_id):
 def approve_trip(trip_id):
     trip = Trip.query.get(trip_id)
     team = Team.query.get(trip.team_id)
+    recipient_email = User.query.get(trip.user_id).email
     trip.is_approved=True
-    trip.score = Trip.calculate_score(trip.speed,trip.distance,trip.elevation,trip.prestige,trip.n_of_partecipants,[])  
+    placements = [pl.place for pl in trip.get_placements()]
+    trip.score = Trip.calculate_score(trip.speed,trip.distance,trip.elevation,trip.prestige,trip.n_of_partecipants,placements)  
     db.session.commit()
+    send_email_utility("Approvazione giro",f"Il tuo giro: {trip.tripname} e' stato approvato da {current_user.username}",AUTO_MAIL,recipient_email)
+
     return redirect(url_for("manage_trips",team_id=team.id))
   
 
@@ -79,8 +83,8 @@ def change_role(team_id,user_id):
     role = request.form.get('role')
     user_role_in_team = user.get_role_in_team(team_id)
     if user_role_in_team != role:
-        send_email_utility('Role change', f'You role has been changed to {role} in {team_name}!',AUTO_MAIL,user.email)
         user.set_role_in_team(team_id,role)
+        send_email_utility('Cambio di ruolo', f"Il tuo ruolo nel {team_name} e' stato cambiato da {user_role_in_team} a {role}!",AUTO_MAIL,user.email)
 
     db.session.commit()
    
@@ -169,10 +173,14 @@ def non_member_view(user_id):
 def decide_on_enrollment(request_id,accept):
     
     request_to_join = RequestsToJoinTeam.query.get(request_id)
-    if accept=="Yes":
-        user = User.query.get(request_to_join.user_id)
-        team = Team.query.get(request_to_join.team_id)
+    user = User.query.get(request_to_join.user_id)
+    team = Team.query.get(request_to_join.team_id)
+   
+    if accept=="Yes": 
         team.add_member(user,role="user")
+        send_email_utility("Approvazione richiesta",f"La tua richiesta di unirti al team {team.name} e' stata approvata!",AUTO_MAIL,user.email)
+    else:
+        send_email_utility("Approvazione richiesta",f"La tua richiesta di unirti al team {team.name} e' stata rifiutata!",AUTO_MAIL,user.email)
 
     db.session.delete(request_to_join)
     db.session.commit()

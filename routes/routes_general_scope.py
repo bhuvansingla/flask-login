@@ -70,6 +70,11 @@ def new_trip(user_id):
             db.session.add(placement)
         db.session.commit()
 
+        if t_r!="team_leader":
+            team=Team.query.get(trip.team_id)
+            emails_leaders = [tl.email for tl in team.get_leaders()]
+            send_email_utility('Richiesta approvazione giro',f"{user.username} ha richiesto di registrare il giro: {trip.tripname}, controlla la tua pagina 'Gestisci giri'!",AUTO_MAIL,emails_leaders)
+
         if user == current_user:
             return redirect(url_for('trips_overview',user_id=user.id))
         else:
@@ -206,7 +211,7 @@ def forgot_password():
         password_reset_requests[token] = {'email': email, 'timestamp': datetime.now()}
         # Send an email to the user with the password reset link
         # You'll need to replace the placeholders with your own values
-        send_email_utility('Password reset', f'Click the following link to reset your password: {url_for("reset_password", token=token, _external=True)}',AUTO_MAIL,email)
+        send_email_utility('Password reset', f'Clicca il seguente link per resettare la tua password: {url_for("reset_password", token=token, _external=True)}',AUTO_MAIL,email)
               
         flash('An email has been sent to your account with further instructions.')
         return redirect(url_for('login'))

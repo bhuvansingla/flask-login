@@ -129,6 +129,10 @@ class Team(db.Model):
         db.session.add(t_u_association)
         db.session.commit()
 
+    def get_leaders(self):
+        leaders = User.query.join(TeamUserAssociation).filter(TeamUserAssociation.team_id == self.id, TeamUserAssociation.role == "team_leader").all()
+        return leaders
+    
 class RequestsToJoinTeam(db.Model):
     __tablename__ = 'requests_to_join_team'
 

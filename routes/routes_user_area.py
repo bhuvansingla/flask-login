@@ -5,8 +5,8 @@ from sqlalchemy import or_, and_, desc, func
 from models import User, Trip, Team, TeamUserAssociation, RequestsToJoinTeam
 from forms import *
 from werkzeug.urls import url_parse
-from datetime import datetime, timedelta
-
+from datetime import datetime
+from tools import send_email_utility,AUTO_MAIL
 
 @app.route('/user_home/<username>',methods=['GET', 'POST'])
 @login_required
@@ -87,7 +87,8 @@ def unenroll_from_team(team_id,user_id):
         [db.session.delete(trip) for trip in trips]
         team.users.remove(user)
         db.session.commit()
-    
+        
+        send_email_utility("Deregistrazione dal team",f"Sei stato deregistrato dal team {team.name}!",AUTO_MAIL,user.email)
     if current_user._is_admin:
         return redirect(url_for("view_user_profile_by_admin",user_id=user.id))
     else:
@@ -107,10 +108,13 @@ def request_enrollment_to_team(team_id):
         return redirect(url_for("team_home",team_id=team_id))
 
     req = RequestsToJoinTeam(team_id = team_id,user_id = current_user.id,status="pending",request_date=datetime.now())
+
     if current_user not in team.users:
         db.session.add(req)
         db.session.commit()
 
+        emails_leaders = [tl.email for tl in team.get_leaders()]
+        send_email_utility('Richiesta di registrazione nel team', f"{current_user.username} ha richiesto di registrarsi nel {team.name}, controlla la tua pagina 'gestisci squadra'!",AUTO_MAIL,emails_leaders)
         return redirect(url_for("team_home",team_id=team_id,requests_to_join=req))
 
 @app.route('/withdraw_request_enrollment/<int:request_id>/<int:team_id>',methods=['GET', 'POST'])

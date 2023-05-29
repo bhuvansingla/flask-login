@@ -11,8 +11,6 @@ import smtplib
 from tools import AUTO_MAIL, send_email_utility
 
 #%% ADMIN SECTION
-
-#%% ADMIN SECTION
 @app.route('/admin_home',methods=['GET', 'POST'])
 @login_required
 def admin_home():
