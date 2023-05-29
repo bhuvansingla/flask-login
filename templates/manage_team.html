@@ -135,7 +135,25 @@
 
     </center>
 </div>
+
 <div class="right-sidebar">
+    <img src="{{ url_for('serve_image', filename='mas_que_un_team.png') }}" alt="motto" class="centered-image">
+
+    <style>
+        .right-sidebar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .centered-image-container {
+            text-align: center;
+        }
+
+        .centered-image {
+            background-color: transparent;
+        }
+    </style>
 
 </div>
 {% endblock %}
