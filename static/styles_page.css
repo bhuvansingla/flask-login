@@ -148,7 +148,7 @@
     width: fit-content;
     height: fit-content;
     background-color: orange;
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     padding: 20px;
@@ -159,6 +159,7 @@
     justify-content: center;
     align-items: center;
     opacity: 0.75;
+    border-radius: 10px;
 
 }
 
@@ -311,12 +312,13 @@ body {
 }
 
 .login-table {
-    background-color: #eb8500;
+    background-color: orange;
     border: 1px solid #ccc;
     border-radius: 10px;
     padding: 20px;
-    width: 400px;
+    width: fit-content;
     margin: 30 auto;
+    opacity: 0.75;
 }
 
 .login-table table {

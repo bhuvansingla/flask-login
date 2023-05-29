@@ -13,8 +13,8 @@ class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8), Regexp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$', \
-                                                                                            message='Password must be at least 8 characters long and contain at least \
-                                                                                            one lowercase letter, one uppercase letter, one digit, and one special character (@$!%*?&)')])
+                                                                                            message='La password deve contenere almeno 8 caratteri, di cui almeno\
+                                                                                            una lettera maiuscola, una minuscola, una cifra ed un carattere speciale (@$!%*?&)')])
 
     password2 = PasswordField(
         'Ripeti Password', validators=[DataRequired(), EqualTo('password')])
@@ -32,8 +32,8 @@ class ForgotPasswordForm(FlaskForm):
 
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8), Regexp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$', \
-                                                                                            message='Password must be at least 8 characters long and contain at least \
-                                                                                            one lowercase letter, one uppercase letter, one digit, and one special character (@$!%*?&)')])
+                                                                                            message='La password deve contenere almeno 8 caratteri, di cui almeno\
+                                                                                            una lettera maiuscola, una minuscola, una cifra ed un carattere speciale (@$!%*?&)')])
     password2 = PasswordField(
         'Ripeti Password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Reset password')
