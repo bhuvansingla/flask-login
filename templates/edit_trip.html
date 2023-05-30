@@ -28,6 +28,10 @@
                         <td>{{ form.elevation() }}</td>
                     </tr>
                     <tr>
+                        <td>{{ form.team.label }}</td>
+                        <td>{{ form.team(class_="form-control") }}</td>
+                    </tr>
+                    <tr>
                         <td>{{ form.n_of_partecipants.label }}</td>
                         <td>{{ form.n_of_partecipants() }}</td>
                     </tr>
@@ -50,19 +54,25 @@
                     </tr>
                     <tr>
                         <td>{{ form.n_of_placements.label }}</td>
-                        <td>{{ form.n_of_placements() }}
+                        <td>
                             <div id="placement-entries">
                                 {% for placement in placements %}
                                 <div>
-
-                                    <input type="hidden" name="placement_id" value="{{placement.id}}">
-                                    <input type="text" name="edit_placement" value="{{ placement.place }}">
-                                    <button type="button" class="delete-button">Elimina</button>
-
+                                    <input type="hidden" name="placement_id" value="{{ placement.id }}">
+                                    <label for="edit_placement">Placement {{loop.index }}:</label>
+                                    <select name="edit_placement">
+                                        {% for position in range(1, 11) %}
+                                        <option value="{{ position }}" {% if placement.place==position %}selected{%
+                                            endif %}>{{ position }}&#186;</option>
+                                        {% endfor %}
+                                    </select>
+                                    <button type="button" class="delete-button">Delete</button>
                                 </div>
                                 {% endfor %}
                             </div>
+                            <button id="add-placement-button">Add Placement</button>
                         </td>
+
                     </tr>
                     <tr>
                         <td colspan="2" style="text-align: center;">{{ form.submit_save }}</td>
@@ -80,49 +90,68 @@
     <div class="left-sidebar"></div>
     <div class="right-sidebar"></div>
 </div>
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        var numPlacementsField = document.getElementById("n_of_placements");
         var placementEntriesContainer = document.getElementById("placement-entries");
 
-        // Add event listener to numPlacementsField
-        numPlacementsField.addEventListener("input", function () {
-            var numPlacements = parseInt(numPlacementsField.value) || 0;
+        // Function to update the placement numeration
+        function updatePlacementNumeration() {
+            var placementLabels = placementEntriesContainer.getElementsByTagName("label");
 
-            // Clear previous placement entries
-            placementEntriesContainer.innerHTML = "";
-
-            // Generate new placement entries
-            for (var i = 0; i < numPlacements; i++) {
-
-                var input = document.createElement("input");
-                input.type = "text";
-                input.name = "placement-" + i;
-
-                var deleteButton = document.createElement("button");
-                deleteButton.textContent = "Elimina";
-
-                deleteButton.className = "delete-button";
-                deleteButton.addEventListener("click", function () {
-                    this.parentNode.remove(); // Remove the parent div when delete button is clicked
-                });
-
-                var div = document.createElement("div");
-
-                div.appendChild(input);
-                div.appendChild(deleteButton);
-
-                placementEntriesContainer.appendChild(div);
+            for (var i = 0; i < placementLabels.length; i++) {
+                placementLabels[i].textContent = "Placement " + (i + 1) + ": ";
             }
+        }
+
+        // Add event listener to "Add Placement" button
+        document.getElementById("add-placement-button").addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent the button from triggering a form submission
+
+            var label = document.createElement("label");
+            label.textContent = "Placement " + (placementEntriesContainer.childElementCount + 1) + ": ";
+
+            var select = document.createElement("select");
+            select.name = "placement[]";
+
+            // Add options with values 1 to 10
+            for (var j = 1; j <= 10; j++) {
+                var option = document.createElement("option");
+                option.value = j;
+                option.text = j + "\u00BA";
+                select.appendChild(option);
+            }
+
+            var deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.className = "delete-button";
+            deleteButton.style.marginLeft = "4px";
+
+
+            deleteButton.addEventListener("click", function () {
+                this.parentNode.remove(); // Remove the parent div when delete button is clicked
+                updatePlacementNumeration(); // Update the placement numeration
+            });
+
+            var div = document.createElement("div");
+            div.appendChild(label);
+            div.appendChild(select);
+            div.appendChild(deleteButton);
+
+            placementEntriesContainer.appendChild(div);
         });
 
         // Add event listener to delete buttons
         placementEntriesContainer.addEventListener("click", function (event) {
             if (event.target.classList.contains("delete-button")) {
                 event.target.parentNode.remove(); // Remove the parent div when delete button is clicked
+                updatePlacementNumeration(); // Update the placement numeration
             }
         });
+
+        // Initial placement numeration update
+        updatePlacementNumeration();
     });
+
 </script>
+
 {% endblock %}

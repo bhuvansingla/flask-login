@@ -48,7 +48,7 @@ class NewTripForm(FlaskForm):
     n_of_partecipants = IntegerField('Numero di partecipanti del team (te incluso)', validators=[DataRequired(),NumberRange(min=1)])
     description = TextAreaField('Descrizione')
     is_approved = BooleanField("Approva")
-    n_of_placements = IntegerField('Numero di piazzamenti',default=0)
+    n_of_placements = IntegerField('Numero di piazzamenti',validators=[NumberRange(min=0)],default=0)
 
     submit = SubmitField('Aggiungi giro')
     submit_save = SubmitField('Salva')

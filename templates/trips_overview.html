@@ -41,7 +41,7 @@
                 <tr>
                     <td colspan="5" style="text-align: center;">
                         <button>
-                            <a href="{{url_for('new_trip',user_id=current_user.id)}}"
+                            <a href="{{url_for('new_trip',user_id=current_user.id,team_id=trips_group['team_id'])}}"
                                 style="align-items:center; color:black;">Aggiungi un nuovo giro
                             </a>
                         </button>
