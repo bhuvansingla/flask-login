@@ -133,7 +133,8 @@ def edit_trip(trip_id,user_id):
         db.session.commit() 
 
         if trip.is_approved:
-            trip.score = Trip.calculate_score(trip.speed,trip.distance,trip.elevation,trip.prestige,trip.n_of_partecipants,placement_values)
+            placements_updated = [pl.place for pl in trip.get_placements()]
+            trip.score = Trip.calculate_score(trip.speed,trip.distance,trip.elevation,trip.prestige,trip.n_of_partecipants,placements_updated)
         else:
             trip.score = 0
         db.session.commit()
