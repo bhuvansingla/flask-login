@@ -9,6 +9,7 @@ import secrets
 from datetime import datetime, timedelta
 import smtplib
 from tools import AUTO_MAIL, send_email_utility
+DATE_FORMAT = "%d/%m/%Y"
 
 #%% GENERAL   
 with app.app_context():
@@ -44,13 +45,20 @@ def new_trip(user_id,team_id=None):
     else:
         team_chosen = Team.query.get(team_id)
         form.team.choices = [(team_chosen.id,team_chosen.name)]
+        form.team.data = team_chosen.id
         form.team.render_kw = {'disabled': 'disabled'}
 
 
-    if form.validate_on_submit():
+    if request.method=="POST":
+
+        try:
+            recorded_on =  datetime.strptime(form.recorded_on.data,DATE_FORMAT)
+        except ValueError:
+            # Invalid date format
+            return render_template('new_trip.html',title="Add new trip", form = form )
 
         trip = Trip(tripname=form.tripname.data,speed=form.speed.data, n_of_placements=form.n_of_placements.data,
-                    distance=form.distance.data,elevation=form.elevation.data, team_id=form.team.data,
+                    distance=form.distance.data,elevation=form.elevation.data, team_id=form.team.data, recorded_on=recorded_on,
                     prestige = int(form.prestige.data),description=form.description.data,user_id=user_id,n_of_partecipants=form.n_of_partecipants.data)
         
         placement_values=[]
@@ -103,6 +111,10 @@ def edit_trip(trip_id,user_id):
     form = NewTripForm(obj=trip)
     trip_team = Team.query.get(trip.team_id)
     form.team.choices = [(trip_team.id,trip_team.name)]
+    form.team.render_kw = {'disabled': 'disabled'}
+
+    form.recorded_on.data = trip.recorded_on.strftime(DATE_FORMAT)
+
 
     if request.method == 'POST':
 
@@ -120,6 +132,13 @@ def edit_trip(trip_id,user_id):
         placement_values = [int(pl) for pl in request.form.getlist('placement[]')]
         edit_placements = [int(pl) for pl in request.form.getlist('edit_placement')]
         placement_ids  = request.form.getlist('placement_id')
+     
+
+        try:
+            trip.recorded_on =  datetime.strptime(request.form["recorded_on"],DATE_FORMAT)
+        except ValueError:
+            # Invalid date format
+            return render_template('edit_trip.html', form=form,trip_id=trip.id,user_id=user_id,my_role_in_team=my_role_in_team,is_approved=trip.is_approved,placements=placements)
 
         if edit_placements:
             for id, place in zip(placement_ids, edit_placements):
