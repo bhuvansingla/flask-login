@@ -20,7 +20,7 @@
     </div>
     <script>
         var popup = document.querySelector(".popup");
-        var popupBtn = document.querySelector(".popup-btn");
+        var popupBtn = document.querySelector(".menu-symbol");
         popupBtn.addEventListener("click", function () {
             if (popup.style.display === "block") {
                 popup.style.display = "none";
@@ -46,47 +46,42 @@
                 </caption>
                 <thead>
                     <tr>
-                        <th><b>Trip Name</b></th>
-                        <th>Speed [km/h]</th>
-                        <th>Distance [km]</th>
-                        <th>Elevation [m]</th>
-                        <th>Number of partecipants</th>
-                        <th>Prestige</th>
-                        <th>Description</th>
-                        <th>Score</th>
+                        <th><strong>Nome del giro</strong></th>
+                        <th><strong>Velocità (km/h)</strong></th>
+                        <th><strong>Distanza (km)</strong></th>
+                        <th><strong>Dislivello (m)</strong></th>
+                        <th><strong>Numero di partecipanti</strong></th>
+                        <th><strong>Data</strong></th>
+                        <th><strong>Prestigio</strong></th>
+                        <th><strong>Punteggio</strong></th>
+                        {%if role=='team_leader'%}
+
+                        <th><strong>Azioni</strong></th>
+                        {%endif%}
 
                     </tr>
                 </thead>
                 <tbody>
                     {% for trip in trips %}
                     <tr>
-                        {%if user in team.users%}
-                        {%if role=='user' and user!=current_user%}
+
+                        <td>{{ trip.tripname}}</td>
+                        <td>{{ trip.speed }}</td>
+                        <td>{{ trip.distance }}</td>
+                        <td>{{ trip.elevation }}</td>
+                        <td>{{ trip.n_of_partecipants }}</td>
+                        <td>{{ trip.recorded_on.strftime("%d/%m/%Y") }}</td>
+                        <td>{{ trip.prestige }}</td>
+                        <td><strong>{{ trip.score }}</strong></td>
+                        {%if role=='team_leader'%}
                         <td>
-                            {{trip.tripname}}
+
+                            <a href="{{url_for('edit_trip',trip_id=trip.id,user_id=current_user.id)}}"><i
+                                    class="fas fa-edit"></i></a>
+                            <a href="{{ url_for('delete_trip', trip_id=trip.id, user_id=current_user.id) }}"><i
+                                    class="fas fa-times"></i></a>
                         </td>
                         {%endif%}
-                        {%if role=='team_leader' and user!=current_user%}
-                        <td><a href="{{url_for('edit_trip',trip_id=trip.id,user_id=user.id)}}">{{trip.tripname}}</a>
-                        </td>
-                        {%endif%}
-
-
-                        {%else%}
-                        <td>
-                            {{trip.tripname}}
-                        </td>
-                        {%endif%}
-
-                        <td>{{ trip.speed }} </td>
-                        <td>{{ trip.distance }} </td>
-                        <td>{{trip.elevation}}</td>
-                        <td>{{trip.n_of_partecipants}}</td>
-                        <td>{{trip.prestige}}</td>
-                        <td>{{trip.description}}</td>
-                        <td>{{trip.score}}</td>
-
-
 
                     </tr>
                     {% endfor %}

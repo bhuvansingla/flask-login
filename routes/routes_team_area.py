@@ -55,8 +55,8 @@ def manage_team(team_id):
 def manage_trips(team_id):
     team = Team.query.get(team_id)
     trips = Trip.query.filter(Trip.team_id==team_id,Trip.user_id!=current_user.id).all()
-    approved_trips = [{"user":trip.get_user(),"trip":trip, "approval_state":trip.is_approved} for trip in trips if trip.is_approved]
-    non_approved_trips = [{"user":trip.get_user(),"trip":trip, "approval_state":trip.is_approved} for trip in trips if not trip.is_approved]
+    approved_trips = [{"user":trip.get_user(),"trip":trip} for trip in trips if trip.is_approved]
+    non_approved_trips = [{"user":trip.get_user(),"trip":trip} for trip in trips if not trip.is_approved]
 
     return render_template('manage_trips.html',title="Manage trips",approved_trips = approved_trips,non_approved_trips=non_approved_trips,team=team)
 
@@ -67,8 +67,6 @@ def approve_trip(trip_id):
     team = Team.query.get(trip.team_id)
     recipient_email = User.query.get(trip.user_id).email
     trip.is_approved=True
-    placements = [pl.place for pl in trip.get_placements()]
-    trip.score = Trip.calculate_score(trip.speed,trip.distance,trip.elevation,trip.prestige,trip.n_of_partecipants,placements)  
     db.session.commit()
     send_email_utility("Approvazione giro",f"Il tuo giro: {trip.tripname} e' stato approvato da {current_user.username}",AUTO_MAIL,recipient_email)
 
@@ -103,7 +101,7 @@ def team_home(team_id):
     my_role_in_team = current_user.get_role_in_team(team_id=team_id)
     my_request_to_join_team = RequestsToJoinTeam.query.filter_by(team_id=team_id,user_id=current_user.id).first()
     for user_by_team in members_by_team:
-        all_scores_by_user = Trip.query.filter_by(user_id=user_by_team.id,team_id=team_id).all()
+        all_scores_by_user = Trip.query.filter_by(user_id=user_by_team.id,team_id=team_id,is_approved=True).all()
         tot_score_by_user =sum([score_by_user.score for score_by_user in all_scores_by_user])
         ranking_list.append({"user_id":user_by_team.id,"user":user_by_team.username,"total score":tot_score_by_user})
     ranking_list = list(enumerate(sorted(ranking_list, key=lambda x: x['total score'],reverse=True)))

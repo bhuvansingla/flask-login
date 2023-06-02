@@ -60,31 +60,31 @@ def new_trip(user_id,team_id=None):
         trip = Trip(tripname=form.tripname.data,speed=form.speed.data, n_of_placements=form.n_of_placements.data,
                     distance=form.distance.data,elevation=form.elevation.data, team_id=form.team.data, recorded_on=recorded_on,
                     prestige = int(form.prestige.data),description=form.description.data,user_id=user_id,n_of_partecipants=form.n_of_partecipants.data)
+    
+        db.session.add(trip)
+        db.session.flush()  # Flush changes to assign an ID to the trip object
         
-        placement_values=[]
-        for i in range(form.n_of_placements.data):
-            field_name = f"placement-{i}"
-            placement_value = request.form.get(field_name)
-            placement_values.append(int(placement_value))
+        placement_values= [int(pl) for pl in request.form.getlist('placement[]')]
+
+        for placement_value in placement_values:
+              
+            placement = PlacementsInTrip(trip_id=trip.id, place=placement_value)
+            db.session.add(placement)
+
        
+        trip.score = Trip.calculate_score(trip.speed,trip.distance,trip.elevation,trip.prestige,trip.n_of_partecipants,placement_values)
 
         t_r = TeamUserAssociation.query.filter(and_(TeamUserAssociation.user_id==user.id,TeamUserAssociation.team_id==form.team.data)).first().role
 
-        if t_r == "team_leader" or user._is_admin: 
+        if t_r == "team_leader": 
             trip.is_approved = True
-            trip.score = Trip.calculate_score(trip.speed,trip.distance,trip.elevation,trip.prestige,trip.n_of_partecipants,placement_values)
         else:
             trip.is_approved = False
 
-        db.session.add(trip)
         db.session.commit()
         flash('New trip registered!')
 
-        for placement_value in placement_values:
-            placement = PlacementsInTrip(trip_id=trip.id, place=placement_value)
-            db.session.add(placement)
-        db.session.commit()
-
+   
         if t_r!="team_leader":
             team=Team.query.get(trip.team_id)
             emails_leaders = [tl.email for tl in team.get_leaders()]
@@ -149,16 +149,14 @@ def edit_trip(trip_id,user_id):
             placement = PlacementsInTrip(trip_id=trip.id, place=int(placement_value))
             db.session.add(placement)
 
+        trip.score = Trip.calculate_score(trip.speed,trip.distance,trip.elevation,trip.prestige,trip.n_of_partecipants,placement_values+edit_placements)
+
         db.session.commit() 
 
-        if trip.is_approved:
-            placements_updated = [pl.place for pl in trip.get_placements()]
-            trip.score = Trip.calculate_score(trip.speed,trip.distance,trip.elevation,trip.prestige,trip.n_of_partecipants,placements_updated)
-        else:
-            trip.score = 0
-        db.session.commit()
         flash('Your trip has been updated!', 'success')
 
+        if trip.get_user() != current_user and current_user in trip.get_team().get_leaders():
+            send_email_utility('Modifica giro', f"Il tuo giro e' stato modificato dal team leader {current_user.username}",AUTO_MAIL,trip.get_user().email)
        
         if user != current_user:
             if trip.is_approved:
@@ -181,7 +179,7 @@ def delete_trip(trip_id,user_id):
     if user_id == current_user.id:
         return redirect(url_for('trips_overview',user_id=current_user.id))
     else:
-        return redirect(url_for('member_view', user_id=user_id,team_id=trip.team_id))
+        return redirect(url_for('manage_trips', team_id=trip.team_id))
   
 
 

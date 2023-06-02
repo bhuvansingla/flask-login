@@ -38,27 +38,40 @@
                     <h1 style="color:red">Giri registrati per {{team.name}} </h1>
                 </caption>
                 <thead>
-                    <th><strong>Nome del giro</strong></th>
                     <th><strong>Membro</strong></th>
+                    <th><strong>Nome del giro</strong></th>
+                    <th><strong>Velocità (km/h)</strong></th>
+                    <th><strong>Distanza (km)</strong></th>
+                    <th><strong>Dislivello (m)</strong></th>
+                    <th><strong>Numero di partecipanti</strong></th>
                     <th><strong>Data</strong></th>
+                    <th><strong>Prestigio</strong></th>
+                    <th><strong>Punteggio</strong></th>
+                    <th><strong>Azioni</strong></th>
+
                 </thead>
 
                 <tbody>
                     {%for trip in approved_trips%}
-                    <form method="POST" action="{{url_for('approve_trip',trip_id=trip['trip'].id)}}">
+                    <tr>
+                        <td>{{ trip["user"].username }}</td>
 
-                        <tr>
-                            <input type="hidden" name="trip_id" value="{{trip['trip'].id }}">
-                            <td>
-                                <a
-                                    href="{{url_for('edit_trip',trip_id= trip['trip'].id,user_id=trip['trip'].user_id)}}">{{
-                                    trip["trip"].tripname }}
-                                </a>
-                            </td>
-                            <td>{{ trip["user"].username }}</td>
-                            <td>{{ trip["trip"].recorded_on.strftime("%d/%m/%Y") }}</td>
-                        </tr>
-                    </form>
+                        <input type="hidden" name="trip_id" value="{{trip['trip'].id }}">
+                        <td>{{ trip["trip"].tripname }}</td>
+                        <td>{{ trip["trip"].speed }}</td>
+                        <td>{{ trip["trip"].distance }}</td>
+                        <td>{{ trip["trip"].elevation }}</td>
+                        <td>{{ trip["trip"].n_of_partecipants }}</td>
+                        <td>{{ trip["trip"].recorded_on.strftime("%d/%m/%Y") }}</td>
+                        <td>{{ trip["trip"].prestige }}</td>
+                        <td><strong>{{ trip["trip"].score }}</strong></td>
+                        <td style="text-align: center;">
+                            <a href="{{ url_for('delete_trip', trip_id=trip['trip'].id, user_id=trip['user'].id) }}"><i
+                                    class="fas fa-times"></i></a>
+                            <a href="{{url_for('edit_trip',trip_id=trip['trip'].id,user_id=trip['user'].id)}}"><i
+                                    class="fas fa-edit"></i></a>
+                        </td>
+                    </tr>
                     {%endfor%}
                 </tbody>
 
@@ -76,28 +89,44 @@
                     <h1 style="color:red">Richieste di approvazione dei giri per {{team.name}}</h1>
                 </caption>
                 <thead>
-                    <th><strong>Nome del giro</strong></th>
                     <th><strong>Membro</strong></th>
+                    <th><strong>Nome del giro</strong></th>
+                    <th><strong>Velocità (km/h)</strong></th>
+                    <th><strong>Distanza (km)</strong></th>
+                    <th><strong>Dislivello (m)</strong></th>
+                    <th><strong>Numero di partecipanti</strong></th>
                     <th><strong>Data</strong></th>
+                    <th><strong>Prestigio</strong></th>
+                    <th><strong>Punteggio</strong></th>
                     <th><strong>Azioni</strong></th>
                 </thead>
 
                 <tbody>
                     {%for trip in non_approved_trips%}
-                    <form method="POST" action="{{url_for('approve_trip',trip_id=trip['trip'].id)}}">
+                    <form method="POST" action=>
 
                         <tr>
-                            <input type="hidden" name="trip_id" value="{{trip['trip'].id }}">
-                            <td>
-                                <a
-                                    href="{{url_for('edit_trip',trip_id= trip['trip'].id,user_id=trip['trip'].user_id)}}">{{
-                                    trip["trip"].tripname }}
-                                </a>
-                            </td>
                             <td>{{ trip["user"].username }}</td>
+
+                            <input type="hidden" name="trip_id" value="{{trip['trip'].id }}">
+                            <td>{{trip["trip"].tripname }}</td>
+                            <td>{{ trip["trip"].speed }}</td>
+                            <td>{{ trip["trip"].distance }}</td>
+                            <td>{{ trip["trip"].elevation }}</td>
+                            <td>{{ trip["trip"].n_of_partecipants }}</td>
                             <td>{{ trip["trip"].recorded_on.strftime("%d/%m/%Y") }}</td>
-                            <td>
-                                <input type="submit" value="Approva giro">
+                            <td>{{ trip["trip"].prestige }}</td>
+                            <td><strong>{{ trip["trip"].score }}</strong></td>
+
+                            <td style="text-align: center;">
+                                <a href="{{url_for('approve_trip',trip_id=trip['trip'].id)}}"><i
+                                        class="fas fa-check"></i></a>
+                                <a
+                                    href="{{ url_for('delete_trip', trip_id=trip['trip'].id, user_id=trip['user'].id) }}"><i
+                                        class="fas fa-times"></i></a>
+                                <a href="{{url_for('edit_trip',trip_id=trip['trip'].id,user_id=trip['user'].id)}}"><i
+                                        class="fas fa-edit"></i></a>
+
                             </td>
                         </tr>
                     </form>

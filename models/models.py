@@ -42,6 +42,7 @@ class User(db.Model,UserMixin,AdminMixin):
     def check_password(self,password):
         return check_password_hash(self.password_hash, password)
     
+        
     def get_role_in_team(self, team_id):
         user_associated = TeamUserAssociation.query.filter_by(team_id=team_id, user_id=self.id).first()
         if user_associated:
@@ -89,6 +90,9 @@ class Trip(db.Model):
     def get_user(self):
         return User.query.get(self.user_id)
     
+    def get_team(self):
+        return Team.query.get(self.team_id)
+
     @staticmethod
     def calculate_score(v,dx,dz,pr,np,piazzamenti):
         """dx: distance in km,

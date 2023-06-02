@@ -137,6 +137,7 @@
     align-items: center;
     align-content: center;
     overflow-y: auto;
+    overflow-x: auto;
     justify-content: center;
 }
 
@@ -177,6 +178,14 @@
     /* Adjusted width to 100% */
     table-layout: fixed;
     /* Added table-layout property */
+}
+
+.green-bg {
+    background-color: green;
+}
+
+.red-bg {
+    background-color: yellow;
 }
 
 .box td,
