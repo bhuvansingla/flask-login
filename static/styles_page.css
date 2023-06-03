@@ -118,13 +118,29 @@
     overflow-y: auto;
     position: fixed;
     background-color: #CCCCCC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.centered-image-container {
+    text-align: center;
+}
+
+.centered-image {
+    background-color: transparent;
+    width: 400px;
+    /* desired width */
+    height: 400px;
+    /* desired height */
 }
 
 /* Set up the main content area */
 .main {
     width: 60%;
     height: calc(100% - 100px);
-    background-image: url('../images/wallpaper_user_home.jpg');
+    background-image: url('../images/background_picture.jpg');
     background-size: cover;
     background-position: center;
     left: 20%;

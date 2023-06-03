@@ -14,12 +14,12 @@
     <div class="box">
         <table>
             <thead>
-                <th><strong>Nome del giro</strong></th>
+                <th><strong>Giro</strong></th>
                 <th><strong>Team</strong></th>
-                <th><strong>Velocità (km/h)</strong></th>
-                <th><strong>Distanza (km)</strong></th>
-                <th><strong>Dislivello (m)</strong></th>
-                <th><strong>Numero di partecipanti</strong></th>
+                <th><strong>Velocità</strong></th>
+                <th><strong>Distanza</strong></th>
+                <th><strong>Dislivello</strong></th>
+                <th><strong>Partecipanti</strong></th>
                 <th><strong>Data</strong></th>
                 <th><strong>Prestigio</strong></th>
                 <th><strong>Punteggio</strong></th>
@@ -30,7 +30,6 @@
                 <tr>
                     <td>{{ trip.tripname}}</td>
                     <td>{{ trip.get_team().name}}</td>
-
                     <td>{{ trip.speed }}</td>
                     <td>{{ trip.distance }}</td>
                     <td>{{ trip.elevation }}</td>
