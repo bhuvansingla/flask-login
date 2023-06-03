@@ -117,12 +117,15 @@
     right: 0px;
     overflow-y: auto;
     position: fixed;
-    background-color: #CCCCCC;
+    background-image: url('../images/trama_sidebars.png');
     display: flex;
     align-items: center;
     justify-content: center;
+    border-left: 6px solid black;
+
 }
 
+.right-sidebar {}
 
 .centered-image-container {
     text-align: center;
@@ -246,7 +249,8 @@
     left: 0px;
     overflow-y: auto;
     position: fixed;
-    background-color: #CCCCCC;
+    background-image: url('../images/trama_sidebars.png');
+    border-right: 6px solid black;
 }
 
 .logout-button {
