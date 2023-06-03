@@ -73,7 +73,7 @@ def approve_trip(trip_id):
     db.session.commit()
    
     send_email_utility("Approvazione giro",f"Il tuo giro: {trip.tripname} e' stato approvato da {current_user.username}",AUTO_MAIL, approved_member.email)
-    send_email_utility("Registrazione nuovo giro",f"Il giro: {trip.tripname} di {current_user.username} e' stato registrato",AUTO_MAIL,other_members_emails)
+    send_email_utility("Registrazione nuovo giro",f"Il giro: {trip.tripname} di {approved_member.username} e' stato registrato",AUTO_MAIL,other_members_emails)
 
 
     return redirect(url_for("manage_trips",team_id=team.id))

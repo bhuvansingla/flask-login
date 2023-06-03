@@ -84,11 +84,16 @@ def new_trip(user_id,team_id=None):
         db.session.commit()
         flash('New trip registered!')
 
-   
+        
+        team=Team.query.get(trip.team_id)
+
         if t_r!="team_leader":
-            team=Team.query.get(trip.team_id)
             emails_leaders = [tl.email for tl in team.get_leaders()]
-            send_email_utility('Richiesta approvazione giro',f"{user.username} ha richiesto di registrare il giro: {trip.tripname}, controlla la tua pagina 'Gestisci giri'!",AUTO_MAIL,emails_leaders)
+            send_email_utility('Richiesta approvazione giro',f"{user.username} ha richiesto di registrare il giro: {trip.tripname} per il team {trip.get_team().name}, controlla la tua pagina 'Gestisci giri'!",AUTO_MAIL,emails_leaders)
+        else:
+            other_members_emails = [user.email for user in team.users if trip.get_user()!=user]
+            send_email_utility("Registrazione nuovo giro",f"Il giro: {trip.tripname} di {trip.get_user().username} e' stato registrato per il team {trip.get_team().name}",AUTO_MAIL,other_members_emails)
+
 
         if user == current_user:
             return redirect(url_for('trips_overview',user_id=user.id))
