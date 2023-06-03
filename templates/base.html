@@ -31,12 +31,30 @@
             {% set auth_user_teams = current_user.teams %}
 
             {% for team in auth_user_teams %}
+            {% if current_user in team.get_leaders() %}
+
+
+            <div class="home-button-menu">
+                <a href="{{ url_for('team_home', team_id=team.id) }}">{{ team.name }}</a>
+                <div class="sublist-home">
+                    <ul>
+                        <li><a href="{{ url_for('manage_team', team_id=team.id) }}">Gestisci squadra</a></li>
+                        <li><a href="{{ url_for('manage_trips', team_id=team.id) }}">Gestisci giri</a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+            {%else%}
             <a class="home-button" href="{{ url_for('team_home', team_id=team.id) }}">{{ team.name }}</a>
+
+            {%endif%}
             {% endfor %}
+            {%if auth_user_teams%}
             <a class="home-button" href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo
                 giro</a>
+            {%endif%}
         </div>
-
 
 
         <a class="logout-button" href="{{ url_for('logout') }}">Logout</a>

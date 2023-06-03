@@ -54,7 +54,7 @@ def manage_team(team_id):
 @login_required
 def manage_trips(team_id):
     team = Team.query.get(team_id)
-    trips = Trip.query.filter(Trip.team_id==team_id,Trip.user_id!=current_user.id).all()
+    trips = Trip.query.filter(Trip.team_id==team_id).all()
     approved_trips = [{"user":trip.get_user(),"trip":trip} for trip in trips if trip.is_approved]
     non_approved_trips = [{"user":trip.get_user(),"trip":trip} for trip in trips if not trip.is_approved]
 
@@ -65,10 +65,16 @@ def manage_trips(team_id):
 def approve_trip(trip_id):
     trip = Trip.query.get(trip_id)
     team = Team.query.get(trip.team_id)
-    recipient_email = User.query.get(trip.user_id).email
+    approved_member = User.query.get(trip.user_id)
+    other_members_emails = [user.email for user in team.users]
+
     trip.is_approved=True
+    
     db.session.commit()
-    send_email_utility("Approvazione giro",f"Il tuo giro: {trip.tripname} e' stato approvato da {current_user.username}",AUTO_MAIL,recipient_email)
+   
+    send_email_utility("Approvazione giro",f"Il tuo giro: {trip.tripname} e' stato approvato da {current_user.username}",AUTO_MAIL, approved_member.email)
+    send_email_utility("Registrazione nuovo giro",f"Il giro: {trip.tripname} di {current_user.username} e' stato registrato",AUTO_MAIL,other_members_emails)
+
 
     return redirect(url_for("manage_trips",team_id=team.id))
   

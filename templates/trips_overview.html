@@ -30,7 +30,7 @@
 
             <tbody>
                 {%for trip in trips_group['trips_by_team']%}
-                <tr class="{{ 'green-bg' if trip.is_approved else 'red-bg' }}">
+                <tr class="{{ 'green-bg' if trip.is_approved else 'yellow-bg' }}">
                     <td>{{ trip.tripname}}</td>
                     <td>{{ trip.speed }}</td>
                     <td>{{ trip.distance }}</td>
