@@ -37,14 +37,14 @@ def new_user():
     if form.validate_on_submit():
         user_check = User.query.filter(or_(User.email==form.email.data, User.username==form.username.data)).first()
         if user_check:
-            flash('The user already exists, please register under different email and/or username!')
+            flash("L'utente esiste! Provare uno username e/o una password differente.")
             return redirect(url_for('new_user'))
         
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you registered a new user!')
+        flash('Congratulazioni, registrazione andata a buon fine!')
         return redirect(url_for('admin_home',username = user.username))
 
     return render_template('new_user.html', title='Register new user', form=form)
@@ -111,7 +111,7 @@ def new_team():
        
         db.session.add(team)
         db.session.commit()
-        flash('New team registered!')
+        flash('Nuovo team registrato!')
         return redirect(url_for('admin_home',username = current_user.username))
 
     return render_template('new_team.html',title="Add new team", form = form )

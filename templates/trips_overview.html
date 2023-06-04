@@ -67,13 +67,16 @@
             </table>
         </div>
         {% endfor %}
+
         {% with messages = get_flashed_messages() %}
         {% if messages %}
-        <ul>
-            {% for message in messages %}
-            {{message}}
-            {% endfor %}
-        </ul>
+        <div class="flash-messages">
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
         {% endif %}
         {% endwith %}
     </div>

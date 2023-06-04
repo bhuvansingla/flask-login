@@ -47,7 +47,17 @@
             </table>
         </div>
         {% endfor %}
-
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="flash-messages">
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% endwith %}
     </div>
     {%if not current_user.profile_banner%}
     <div class="left-sidebar" style="background-image: url('../images/default_vertical_banner.png');">

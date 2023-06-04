@@ -62,20 +62,10 @@
 
 
     </div>
-
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-        {% for message in messages %}
-
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
     <div class="content-container">{% block content %}{% endblock %}</div>
     <div class="footer">
         <div class="imprint-links">
-            <a href="#">Imprint</a> | <a href="#">Guida all'uso</a>
+            <a href="#">TeamUp</a> | <a href="#">Guida all'uso</a>
         </div>
         <div id="date-time">
             <script>

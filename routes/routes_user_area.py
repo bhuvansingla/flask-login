@@ -66,7 +66,7 @@ def user_profile():
 
 
         db.session.commit()
-        flash('Your profile has been updated!', 'success')
+        flash("Il tuo profilo e' stato aggiornato!", 'success')
         return redirect(url_for('user_profile'))
     return render_template('user_profile.html', form=form,teams=teams)
 

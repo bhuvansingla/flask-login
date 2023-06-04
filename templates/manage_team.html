@@ -77,14 +77,15 @@
                                     </form>
                                 </td>
                                 <td>
+                                    {%set member_to_deregister = team_member['user'].username %}
                                     <form method="POST"
                                         action="{{ url_for('unenroll_from_team', team_id=team.id, user_id=team_member['user'].id) }}"
-                                        onsubmit="return confirmFormSubmission()">
+                                        onsubmit="return confirmFormSubmission('{{member_to_deregister}}')">
                                         <input type="hidden" name="user_id" value="{{ team_member['user'].id }}">
                                         <input type="submit" value="Deregistra">
                                         <script>
-                                            function confirmFormSubmission() {
-                                                var userName = "{{ team_member['user'].username }}";
+                                            function confirmFormSubmission(userName) {
+
                                                 return confirm("Sei sicuro di voler deregistrare l'utente " + userName + " dal team?");
                                             }
                                         </script>
@@ -149,6 +150,17 @@
                 {%endif%}
 
             </center>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="flash-messages">
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            {% endwith %}
         </div>
 
         {%if not team.team_banner%}

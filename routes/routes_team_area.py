@@ -35,7 +35,7 @@ def team_profile(team_id):
             team.team_motto = form.team_motto.data.read()
 
         db.session.commit()
-        flash('Your team has been updated!', 'success')
+        flash('Le impostazioni del team sono state aggiornate!', 'success')
         return redirect(url_for('team_profile',team_id=team_id))
     
     # Disable the form fields

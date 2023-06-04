@@ -83,7 +83,7 @@ def new_trip(user_id,team_id=None):
             trip.is_approved = False
 
         db.session.commit()
-        flash('New trip registered!')
+        flash('Nuovo giro registrato!')
 
         
         team=Team.query.get(trip.team_id)
@@ -158,16 +158,13 @@ def edit_trip(trip_id,user_id):
 
         db.session.commit() 
 
-        flash('Your trip has been updated!', 'success')
+        flash("Il giro e stato aggiornato!", 'success')
 
         if trip.get_user() != current_user and current_user in trip.get_team().get_leaders():
             send_email_utility('Modifica giro', f"Il tuo giro e' stato modificato dal team leader {current_user.username}",AUTO_MAIL,trip.get_user().email)
        
         if user != current_user:
-            if trip.is_approved:
-                return redirect(url_for('member_view',team_id=trip.team_id,user_id=trip.user_id))
-            else:
-                return redirect(url_for('manage_trips',team_id=trip.team_id))
+            return redirect(url_for('manage_trips',team_id=trip.team_id))
         else:
             return redirect(url_for('trips_overview',user_id=user.id))
 
@@ -181,6 +178,7 @@ def delete_trip(trip_id,user_id):
     trip = Trip.query.filter_by(id=trip_id).first()
     db.session.delete(trip)
     db.session.commit()
+    flash("Il giro e' stato eliminato!")
     if user_id == current_user.id:
         return redirect(url_for('trips_overview',user_id=current_user.id))
     else:
@@ -202,7 +200,7 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
 
         if user is None or not user.check_password(form.password.data):
-            flash("Invalid username or password")
+            flash("Username o password non validi")
             return redirect(url_for('login'))
         
   
@@ -230,7 +228,7 @@ def forgot_password():
         username = request.form.get('username')
         user_recover = User.query.filter_by(username=username).first()
         if not user_recover:
-            flash(f"There is no \'{username}\' registered in the system!")
+            flash(f"Non esiste alcun \'{username}\' registrato nel sistema!")
             return redirect(url_for('login'))
 
         email = user_recover.email
@@ -242,7 +240,7 @@ def forgot_password():
         # You'll need to replace the placeholders with your own values
         send_email_utility('Password reset', f'Clicca il seguente link per resettare la tua password: {url_for("reset_password", token=token, _external=True)}',AUTO_MAIL,email)
               
-        flash('An email has been sent to your account with further instructions.')
+        flash("Una email e' stata inviata alla tua casella di posta con ulteriori istruzioni!")
         return redirect(url_for('login'))
     
 # Form for resetting the password
@@ -250,7 +248,7 @@ def forgot_password():
 def reset_password(token):
     # Check if the token is valid and hasn't expired
     if token not in password_reset_requests:
-        flash(f'The token is invalid!')
+        flash("Il token non e' valido!")
         return redirect(url_for('login'))
 
     request_data = password_reset_requests[token]
@@ -258,7 +256,7 @@ def reset_password(token):
     if datetime.now() - request_data['timestamp'] > timedelta(minutes=5):
         # Expired token
         del password_reset_requests[token]
-        flash(f'Token has expired. Retry a new password reset request!')
+        flash("Il token e' scaduto. Richiedere recupero password!")
         return redirect(url_for('login'))
    
     form = ResetPasswordForm()
@@ -270,7 +268,7 @@ def reset_password(token):
         db.session.commit()
         # Delete the token from the temporary database
         del password_reset_requests[token]
-        flash(f'Password reset succesful!')
+        flash(f'Password reset avvenuto con successo!')
         return redirect(url_for('login'))
 
     return render_template('reset_password.html',form=form)
@@ -286,9 +284,9 @@ def register():
         user_check = User.query.filter(or_(User.email==form.email.data, User.username==form.username.data)).first()
         if user_check:
             if user_check.email == form.email.data:
-                flash('The email already exist, please register under different email!')
+                flash("La mail email esiste gia', per favore scegli una mail diversa!")
             if user_check.username == form.username.data:
-                flash('The username already exist, please register under different username!')
+                flash("Lo username esiste gia', per favore scegli uno username diverso!")
 
             return redirect(url_for('register'))
 
@@ -296,7 +294,7 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
+        flash('Congratulazioni, ti sei registrato sulla piattaforma!')
         return redirect(url_for('login'))
    
         

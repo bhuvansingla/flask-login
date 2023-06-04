@@ -59,19 +59,16 @@
                 </form>
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}
-                <tr>
-                    <td colspan="2">
-                        <ul class=flashes>
-                            {% for message in messages %}
-                            <li>{{ message }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
+                <div class="flash-messages">
+                    <ul>
+                        {% for message in messages %}
+                        <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
                 {% endif %}
                 {% endwith %}
-                </td>
-                </tr>
+
             </tbody>
         </table>
     </div>

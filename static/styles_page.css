@@ -384,6 +384,55 @@ body {
     padding: 0;
 }
 
+.main {
+    position: relative;
+    padding-bottom: 60px;
+    /* Add space for flash messages */
+}
+
+.box {
+    margin-bottom: 20px;
+    /* Add margin between boxes */
+}
+
+.flash-messages {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 40%;
+    padding: 10px;
+    background-color: orange;
+    color: white;
+    text-align: center;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 1;
+    margin: 0 auto;
+    /* Center horizontally */
+    animation: fadeOut 2s ease-in-out forwards;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+.flash-messages.show {
+    opacity: 1;
+}
+
+
+
+
 .stats-table {
     position: absolute;
     top: calc(43% + 5px);

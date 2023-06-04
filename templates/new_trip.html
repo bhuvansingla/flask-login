@@ -79,6 +79,17 @@
                     </table>
 
                 </div>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="flash-messages">
+                    <ul>
+                        {% for message in messages %}
+                        <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                {% endwith %}
             </form>
         </center>
         {%if not current_user.profile_banner%}
