@@ -56,6 +56,7 @@ def new_trip(user_id,team_id=None):
             recorded_on =  datetime.strptime(form.recorded_on.data,DATE_FORMAT)
         except ValueError:
             # Invalid date format
+            flash("Data nel formato errato: per favore inserisci una data nel formato dd/mm/yyyy")
             return render_template('new_trip.html',title="Add new trip", form = form )
 
         trip = Trip(tripname=form.tripname.data,speed=form.speed.data, n_of_placements=form.n_of_placements.data,
