@@ -34,12 +34,12 @@
                     <td>
                         {%if ranking["user"] == current_user.username%}
                         <a style="color:black" href="{{url_for('trips_overview', user_id=ranking['user_id'])}}">
-                            {{ranking["user"]}} (tu)
+                            <strong>{{ranking["user"]}} (tu)</strong>
                         </a>
                         {%else%}
                         <a style="color:black"
                             href="{{url_for('member_view', user_id=ranking['user_id'],team_id=team.id)}}">
-                            {{ranking["user"]}}
+                            <strong>{{ranking["user"]}}</strong>
                         </a>
                         {%endif%}
 

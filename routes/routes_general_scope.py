@@ -48,6 +48,7 @@ def new_trip(user_id,team_id=None):
         form.team.data = team_chosen.id
         form.team.render_kw = {'disabled': 'disabled'}
 
+    teams=Team.query.all()  
 
     if request.method=="POST":
 
@@ -99,8 +100,8 @@ def new_trip(user_id,team_id=None):
             return redirect(url_for('trips_overview',user_id=user.id))
         else:
             return redirect(url_for('member_view',team_id=form.team.data,user_id=user.id))
-
-    return render_template('new_trip.html',title="Add new trip", form = form )
+        
+    return render_template('new_trip.html',title="Add new trip", form = form, teams= teams)
 
 @app.route('/images/<filename>')
 def serve_image(filename):
@@ -117,9 +118,8 @@ def edit_trip(trip_id,user_id):
     trip_team = Team.query.get(trip.team_id)
     form.team.choices = [(trip_team.id,trip_team.name)]
     form.team.render_kw = {'disabled': 'disabled'}
-
     form.recorded_on.data = trip.recorded_on.strftime(DATE_FORMAT)
-
+    teams = Team.query.all()
 
     if request.method == 'POST':
 
@@ -173,7 +173,7 @@ def edit_trip(trip_id,user_id):
 
  
 
-    return render_template('edit_trip.html', form=form,trip_id=trip.id,user_id=user_id,my_role_in_team=my_role_in_team,is_approved=trip.is_approved,placements=placements)
+    return render_template('edit_trip.html', form=form,trip_id=trip.id,user_id=user_id,my_role_in_team=my_role_in_team,is_approved=trip.is_approved,placements=placements,teams=teams)
 
 @app.route("/delete_trip/<int:trip_id>/<int:user_id>")
 @login_required

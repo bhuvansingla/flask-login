@@ -122,10 +122,8 @@
     align-items: center;
     justify-content: center;
     border-left: 6px solid black;
-
 }
 
-.right-sidebar {}
 
 .centered-image-container {
     text-align: center;
@@ -144,7 +142,7 @@
     width: 60%;
     height: calc(100% - 100px);
     background-image: url('../images/background_picture.jpg');
-    background-size: cover;
+    background-size: 100% 100%;
     background-position: center;
     left: 20%;
     right: 20%;
@@ -158,6 +156,9 @@
     overflow-y: auto;
     overflow-x: auto;
     justify-content: center;
+    border-left: 6px solid black;
+
+
 }
 
 .main.override-background {
@@ -330,7 +331,7 @@ a {
 body {
     display: block;
     margin: 0px;
-    height: calc(100% - 100px);
+    height: 100%;
 
     color: #000;
     font-family: MaisonNeue, Segoe UI, Helvetica Neue, -apple-system, system-ui, BlinkMacSystemFont, Roboto, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
@@ -339,7 +340,7 @@ body {
 }
 
 .content-container {
-    min-height: calc(100vh - 100px);
+    height: calc(100% - 100px);
     padding-top: 50px;
     background-image: url("../images/wallpaper_landing_page.jpg");
     background-size: 100% 100%;

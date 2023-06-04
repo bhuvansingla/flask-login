@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ url_for('static', filename='styles_profile.css') }}">
 
 <div class="left-sidebar">
     <div class="popup-btn-container">
@@ -62,7 +61,13 @@
                         </td>
                         <td>{{ form.team_picture() }}</td>
                     </tr>
+                    <tr>
+                        <td>
+                            Immagine di background:
 
+                        </td>
+                        <td>{{ form.team_background() }}</td>
+                    </tr>
                     <tr>
 
                         <td colspan="2" style="text-align: center;">{{ form.submit }}</td>

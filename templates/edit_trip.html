@@ -91,9 +91,50 @@
             </div>
         </form>
     </center>
-    <div class="left-sidebar"></div>
-    <div class="right-sidebar"></div>
+
 </div>
+<div class="left-sidebar">
+
+    <div class="popup-btn-container">
+        {%if not current_user.profile_picture%}
+        <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
+        {%else%}
+        <img src="data:image/png;base64,{{ current_user.profile_picture|b64encode }}" class="popup-btn"
+            alt="Popup Image">
+        {%endif%}
+        <i class="fas fa-bars menu-symbol"></i><span class="menu-text">Menu</span>
+    </div>
+    <div class="popup" id="popup">
+        <ul>
+            <li><a href="{{url_for('user_home',username=current_user.username)}}">Home</a></li>
+            <li><a href="{{url_for('user_profile')}}">Profilo<a></li>
+            <li class="subitem">Squadre
+                <ul class="sublist">
+                    {%for team in teams%}
+
+                    <li> <a href="{{url_for('team_home',team_id=team.id)}}">{{team.name}}</a></li>
+                    {%endfor%}
+                </ul>
+            </li>
+            <li><a href="{{url_for('trips_overview',user_id=current_user.id)}}">Panoramica giri</a></li>
+            <li><a href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo giro</a></li>
+
+        </ul>
+    </div>
+    <script>
+        var popup = document.querySelector(".popup");
+        var popupBtn = document.querySelector(".menu-symbol");
+        popupBtn.addEventListener("click", function () {
+            if (popup.style.display === "block") {
+                popup.style.display = "none";
+            } else {
+                popup.style.display = "block";
+            }
+        });
+    </script>
+
+</div>
+<div class="right-sidebar"></div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var placementEntriesContainer = document.getElementById("placement-entries");

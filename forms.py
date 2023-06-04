@@ -50,11 +50,11 @@ class NewTripForm(FlaskForm):
     team = SelectField('Team', choices=[],coerce=int)
     elevation = FloatField('Dislivello [m]',validators=[DataRequired()])
     recorded_on = StringField('Seleziona la data del giro', render_kw={'placeholder': 'dd/mm/yyyy'})
-    prestige = RadioField("Scegli un'opzione", choices=CHOICES, validators=[DataRequired()])
+    prestige = RadioField("Scegli un'opzione per il prestigio", choices=CHOICES, validators=[DataRequired()])
     n_of_partecipants = IntegerField('Numero di partecipanti del team (te incluso)', validators=[DataRequired(),NumberRange(min=1)])
     description = TextAreaField('Descrizione')
     is_approved = BooleanField("Approva")
-    n_of_placements = IntegerField('Numero di piazzamenti',validators=[NumberRange(min=0)],default=0)
+    n_of_placements = IntegerField('Piazzamenti',validators=[NumberRange(min=0)],default=0)
     submit = SubmitField('Aggiungi giro')
     submit_save = SubmitField('Salva')
 
@@ -69,6 +69,7 @@ class TeamProfileForm(FlaskForm):
     name = StringField('Nome della squadra',validators=[DataRequired()])
     description = TextAreaField('Descrizione')
     team_picture = FileField('')
+    team_background = FileField('')
     submit = SubmitField('Salva')
 
 

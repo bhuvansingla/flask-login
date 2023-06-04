@@ -66,10 +66,10 @@
                         <td>{{ trip["trip"].prestige }}</td>
                         <td><strong>{{ trip["trip"].score }}</strong></td>
                         <td style="text-align: center;">
-                            <a href="{{ url_for('delete_trip', trip_id=trip['trip'].id, user_id=trip['user'].id) }}"><i
-                                    class="fas fa-times"></i></a>
                             <a href="{{url_for('edit_trip',trip_id=trip['trip'].id,user_id=trip['user'].id)}}"><i
                                     class="fas fa-edit"></i></a>
+                            <a href="{{ url_for('delete_trip', trip_id=trip['trip'].id, user_id=trip['user'].id) }}"><i
+                                    class="fas fa-times"></i></a>
                         </td>
                     </tr>
                     {%endfor%}
@@ -121,11 +121,11 @@
                             <td style="text-align: center;">
                                 <a href="{{url_for('approve_trip',trip_id=trip['trip'].id)}}"><i
                                         class="fas fa-check"></i></a>
+                                <a href="{{url_for('edit_trip',trip_id=trip['trip'].id,user_id=trip['user'].id)}}"><i
+                                        class="fas fa-edit"></i></a>
                                 <a
                                     href="{{ url_for('delete_trip', trip_id=trip['trip'].id, user_id=trip['user'].id) }}"><i
                                         class="fas fa-times"></i></a>
-                                <a href="{{url_for('edit_trip',trip_id=trip['trip'].id,user_id=trip['user'].id)}}"><i
-                                        class="fas fa-edit"></i></a>
 
                             </td>
                         </tr>
