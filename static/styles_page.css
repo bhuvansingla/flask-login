@@ -117,11 +117,13 @@
     right: 0px;
     overflow-y: auto;
     position: fixed;
-    background-image: url('../images/trama_sidebars.png');
     display: flex;
     align-items: center;
     justify-content: center;
     border-left: 6px solid black;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+
 }
 
 
@@ -141,7 +143,6 @@
 .main {
     width: 60%;
     height: calc(100% - 100px);
-    background-image: url('../images/background_picture.jpg');
     background-size: 100% 100%;
     background-position: center;
     left: 20%;
@@ -250,8 +251,10 @@
     left: 0px;
     overflow-y: auto;
     position: fixed;
-    background-image: url('../images/trama_sidebars.png');
     border-right: 6px solid black;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+
 }
 
 .logout-button {

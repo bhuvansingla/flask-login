@@ -1,156 +1,185 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="left-sidebar">
-    <div class="popup-btn-container">
-        {%if not team.team_picture%}
-        <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
-        {%else%}
-        <img src="data:image/png;base64,{{ team.team_picture|b64encode }}" class="popup-btn" alt="Popup Image">
+{%if not team.team_banner%}
+<div class="left-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
+    {%else%}
+    <div class="left-sidebar" style="background-image: url('data:image/png;base64,{{ team.team_banner|b64encode }}');">
         {%endif%}
-        <i class="fas fa-bars menu-symbol"></i><span class="menu-text">Menu</span>
-    </div>
-    <div class="popup" id="popup">
-        <ul>
-            <li><a href="{{url_for('team_home',team_id=team.id)}}">Home</a></li>
-            <li><a href="{{url_for('team_profile',team_id=team.id)}}">Profilo</a></li>
-            <li><a href="{{url_for('manage_team',team_id=team.id)}}">Gestisci squadra</a></li>
-            <li><a href="{{url_for('manage_trips',team_id=team.id)}}">Gesitisci giri</a></li>
-        </ul>
-    </div>
-    <script>
-        var popup = document.querySelector(".popup");
-        var popupBtn = document.querySelector(".menu-symbol");
-        popupBtn.addEventListener("click", function () {
-            if (popup.style.display === "block") {
-                popup.style.display = "none";
-            } else {
-                popup.style.display = "block";
-            }
-        });
-    </script>
-</div>
-<div class="main">
-    <center>
-        <div class="box">
-            <table>
-                <caption>
-                    <h1 style="color:red">Giri registrati per {{team.name}} </h1>
-                </caption>
-                <thead>
-                    <th><strong>Membro</strong></th>
-                    <th><strong>Nome del giro</strong></th>
-                    <th><strong>Velocità (km/h)</strong></th>
-                    <th><strong>Distanza (km)</strong></th>
-                    <th><strong>Dislivello (m)</strong></th>
-                    <th><strong>Numero di partecipanti</strong></th>
-                    <th><strong>Data</strong></th>
-                    <th><strong>Prestigio</strong></th>
-                    <th><strong>Punteggio</strong></th>
-                    <th><strong>Azioni</strong></th>
-
-                </thead>
-
-                <tbody>
-                    {%for trip in approved_trips%}
-                    <tr>
-                        <td>{{ trip["user"].username }}</td>
-
-                        <input type="hidden" name="trip_id" value="{{trip['trip'].id }}">
-                        <td>{{ trip["trip"].tripname }}</td>
-                        <td>{{ trip["trip"].speed }}</td>
-                        <td>{{ trip["trip"].distance }}</td>
-                        <td>{{ trip["trip"].elevation }}</td>
-                        <td>{{ trip["trip"].n_of_partecipants }}</td>
-                        <td>{{ trip["trip"].recorded_on.strftime("%d/%m/%Y") }}</td>
-                        <td>{{ trip["trip"].prestige }}</td>
-                        <td><strong>{{ trip["trip"].score }}</strong></td>
-                        <td style="text-align: center;">
-                            <a href="{{url_for('edit_trip',trip_id=trip['trip'].id,user_id=trip['user'].id)}}"><i
-                                    class="fas fa-edit"></i></a>
-                            <a href="{{ url_for('delete_trip', trip_id=trip['trip'].id, user_id=trip['user'].id) }}"><i
-                                    class="fas fa-times"></i></a>
-                        </td>
-                    </tr>
-                    {%endfor%}
-                </tbody>
-
-            </table>
+        <div class="popup-btn-container">
+            {%if not team.team_picture%}
+            <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
+            {%else%}
+            <img src="data:image/png;base64,{{ team.team_picture|b64encode }}" class="popup-btn" alt="Popup Image">
+            {%endif%}
+            <i class="fas fa-bars menu-symbol"></i><span class="menu-text">Menu</span>
         </div>
-
-
-    </center>
-
-    <center>
-        {%if non_approved_trips%}
-        <div class="box">
-            <table>
-                <caption>
-                    <h1 style="color:red">Richieste di approvazione dei giri per {{team.name}}</h1>
-                </caption>
-                <thead>
-                    <th><strong>Membro</strong></th>
-                    <th><strong>Nome del giro</strong></th>
-                    <th><strong>Velocità (km/h)</strong></th>
-                    <th><strong>Distanza (km)</strong></th>
-                    <th><strong>Dislivello (m)</strong></th>
-                    <th><strong>Numero di partecipanti</strong></th>
-                    <th><strong>Data</strong></th>
-                    <th><strong>Prestigio</strong></th>
-                    <th><strong>Punteggio</strong></th>
-                    <th><strong>Azioni</strong></th>
-                </thead>
-
-                <tbody>
-                    {%for trip in non_approved_trips%}
-                    <form method="POST" action=>
-
-                        <tr>
-                            <td>{{ trip["user"].username }}</td>
-
-                            <input type="hidden" name="trip_id" value="{{trip['trip'].id }}">
-                            <td>{{trip["trip"].tripname }}</td>
-                            <td>{{ trip["trip"].speed }}</td>
-                            <td>{{ trip["trip"].distance }}</td>
-                            <td>{{ trip["trip"].elevation }}</td>
-                            <td>{{ trip["trip"].n_of_partecipants }}</td>
-                            <td>{{ trip["trip"].recorded_on.strftime("%d/%m/%Y") }}</td>
-                            <td>{{ trip["trip"].prestige }}</td>
-                            <td><strong>{{ trip["trip"].score }}</strong></td>
-
-                            <td style="text-align: center;">
-                                <a href="{{url_for('approve_trip',trip_id=trip['trip'].id)}}"><i
-                                        class="fas fa-check"></i></a>
-                                <a href="{{url_for('edit_trip',trip_id=trip['trip'].id,user_id=trip['user'].id)}}"><i
-                                        class="fas fa-edit"></i></a>
-                                <a
-                                    href="{{ url_for('delete_trip', trip_id=trip['trip'].id, user_id=trip['user'].id) }}"><i
-                                        class="fas fa-times"></i></a>
-
-                            </td>
-                        </tr>
-                    </form>
-                    {%endfor%}
-                </tbody>
-
-            </table>
+        <div class="popup" id="popup">
+            <ul>
+                <li><a href="{{url_for('team_home',team_id=team.id)}}">Home</a></li>
+                <li><a href="{{url_for('team_profile',team_id=team.id)}}">Profilo</a></li>
+                <li><a href="{{url_for('manage_team',team_id=team.id)}}">Gestisci squadra</a></li>
+                <li><a href="{{url_for('manage_trips',team_id=team.id)}}">Gesitisci giri</a></li>
+            </ul>
         </div>
+        <script>
+            var popup = document.querySelector(".popup");
+            var popupBtn = document.querySelector(".menu-symbol");
+            popupBtn.addEventListener("click", function () {
+                if (popup.style.display === "block") {
+                    popup.style.display = "none";
+                } else {
+                    popup.style.display = "block";
+                }
+            });
+        </script>
+    </div>
+    {%if not team.team_background%}
+    <div class="main" style="background-image: url('../images/wallpaper_team_home.jpg');">
         {%else%}
-        <div class="box">
-            <h1 style="color:red">Non ci sono richieste di pubblicazione di giri!</h1>
+        <div class="main" style="background-image: url('data:image/png;base64,{{ team.team_background|b64encode }}');">
+            {%endif%}
+            <center>
+                <div class="box">
+                    <table>
+                        <caption>
+                            <h1 style="color:red">Giri registrati per {{team.name}} </h1>
+                        </caption>
+                        <thead>
+                            <th><strong>Membro</strong></th>
+                            <th><strong>Nome del giro</strong></th>
+                            <th><strong>Velocità (km/h)</strong></th>
+                            <th><strong>Distanza (km)</strong></th>
+                            <th><strong>Dislivello (m)</strong></th>
+                            <th><strong>Numero di partecipanti</strong></th>
+                            <th><strong>Data</strong></th>
+                            <th><strong>Prestigio</strong></th>
+                            <th><strong>Punteggio</strong></th>
+                            <th><strong>Azioni</strong></th>
+
+                        </thead>
+
+                        <tbody>
+                            {%for trip in approved_trips%}
+                            <tr>
+                                <td>{{ trip["user"].username }}</td>
+
+                                <input type="hidden" name="trip_id" value="{{trip['trip'].id }}">
+                                <td>{{ trip["trip"].tripname }}</td>
+                                <td>{{ trip["trip"].speed }}</td>
+                                <td>{{ trip["trip"].distance }}</td>
+                                <td>{{ trip["trip"].elevation }}</td>
+                                <td>{{ trip["trip"].n_of_partecipants }}</td>
+                                <td>{{ trip["trip"].recorded_on.strftime("%d/%m/%Y") }}</td>
+                                <td>{{ trip["trip"].prestige }}</td>
+                                <td><strong>{{ trip["trip"].score }}</strong></td>
+                                <td style="text-align: center;">
+                                    <a href="{{url_for('edit_trip',trip_id=trip['trip'].id,user_id=trip['user'].id)}}"><i
+                                            class="fas fa-edit"></i></a>
+                                    <a
+                                        href="{{ url_for('delete_trip', trip_id=trip['trip'].id, user_id=trip['user'].id) }}"><i
+                                            class="fas fa-times"></i></a>
+                                </td>
+                            </tr>
+                            {%endfor%}
+                        </tbody>
+
+                    </table>
+                </div>
+
+
+            </center>
+
+            <center>
+                {%if non_approved_trips%}
+                <div class="box">
+                    <table>
+                        <caption>
+                            <h1 style="color:red">Richieste di approvazione dei giri per {{team.name}}</h1>
+                        </caption>
+                        <thead>
+                            <th><strong>Membro</strong></th>
+                            <th><strong>Nome del giro</strong></th>
+                            <th><strong>Velocità (km/h)</strong></th>
+                            <th><strong>Distanza (km)</strong></th>
+                            <th><strong>Dislivello (m)</strong></th>
+                            <th><strong>Numero di partecipanti</strong></th>
+                            <th><strong>Data</strong></th>
+                            <th><strong>Prestigio</strong></th>
+                            <th><strong>Punteggio</strong></th>
+                            <th><strong>Azioni</strong></th>
+                        </thead>
+
+                        <tbody>
+                            {%for trip in non_approved_trips%}
+                            <form method="POST" action=>
+
+                                <tr>
+                                    <td>{{ trip["user"].username }}</td>
+
+                                    <input type="hidden" name="trip_id" value="{{trip['trip'].id }}">
+                                    <td>{{trip["trip"].tripname }}</td>
+                                    <td>{{ trip["trip"].speed }}</td>
+                                    <td>{{ trip["trip"].distance }}</td>
+                                    <td>{{ trip["trip"].elevation }}</td>
+                                    <td>{{ trip["trip"].n_of_partecipants }}</td>
+                                    <td>{{ trip["trip"].recorded_on.strftime("%d/%m/%Y") }}</td>
+                                    <td>{{ trip["trip"].prestige }}</td>
+                                    <td><strong>{{ trip["trip"].score }}</strong></td>
+
+                                    <td style="text-align: center;">
+                                        <a href="{{url_for('approve_trip',trip_id=trip['trip'].id)}}"><i
+                                                class="fas fa-check"></i></a>
+                                        <a
+                                            href="{{url_for('edit_trip',trip_id=trip['trip'].id,user_id=trip['user'].id)}}"><i
+                                                class="fas fa-edit"></i></a>
+                                        <a
+                                            href="{{ url_for('delete_trip', trip_id=trip['trip'].id, user_id=trip['user'].id) }}"><i
+                                                class="fas fa-times"></i></a>
+
+                                    </td>
+                                </tr>
+                            </form>
+                            {%endfor%}
+                        </tbody>
+
+                    </table>
+                </div>
+                {%else%}
+                <div class="box">
+                    <h1 style="color:red">Non ci sono richieste di pubblicazione di giri!</h1>
+
+                </div>
+                {%endif%}
+
+            </center>
+
 
         </div>
-        {%endif%}
+        {%if not team.team_banner%}
+        <div class="right-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
+            {%else%}
+            <div class="right-sidebar"
+                style="background-image: url('data:image/png;base64,{{ team.team_banner|b64encode }}');">
+                {%endif%}
 
-    </center>
+                {%if team.team_motto%}
+                <img src="data:image/png;base64,{{ team.team_motto|b64encode }}" alt="motto" class="centered-image">
+                <style>
+                    .right-sidebar {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
 
+                    .centered-image-container {
+                        text-align: center;
+                    }
 
-</div>
-<div class="right-sidebar">
-    <img src="{{ url_for('serve_image', filename='mas_que_un_team.png') }}" alt="motto" class="centered-image">
-
-    <style>
-
-    </style>
-</div>
-{% endblock %}
+                    .centered-image {
+                        background-color: transparent;
+                    }
+                </style>
+                {%endif%}
+            </div>
+            {% endblock %}

@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="left-sidebar">
+<div class="left-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
     <div class="box">
         <table class="styled-table">
             <caption>
@@ -48,64 +48,67 @@
 
 </div>
 
-<div class="main">
+{%if not user.profile_background%}
+<div class="main" style="background-image: url('../images/wallpaper_user_home.jpg');">
+    {%else%}
+    <div class="main" style="background-image: url('data:image/png;base64,{{ user.profile_background|b64encode }}');">
+        {%endif%}
+        <center>
 
-    <center>
+            <h1 style="color:red; text-align: center;">Ultimi giri di {{user.username}}!</h1>
+            {% for trip in last_trips %}
+            <div class="box">
+                <table>
+                    <thead>
+                        <th><strong>Nome del giro</strong></th>
+                        <th><strong>Velocità (m/s)</strong></th>
+                        <th><strong>Distanza (km)</strong></th>
+                        <th><strong>Dislivello (m)</strong></th>
+                        <th><strong>Data</strong></th>
+                    </thead>
 
-        <h1 style="color:red; text-align: center;">Ultimi giri di {{user.username}}!</h1>
-        {% for trip in last_trips %}
-        <div class="box">
-            <table>
-                <thead>
-                    <th><strong>Nome del giro</strong></th>
-                    <th><strong>Velocità (m/s)</strong></th>
-                    <th><strong>Distanza (km)</strong></th>
-                    <th><strong>Dislivello (m)</strong></th>
-                    <th><strong>Data</strong></th>
-                </thead>
+                    <tbody>
 
-                <tbody>
-
-                    <tr>
-                        <td>{{ trip.tripname }}</td>
-                        <td>{{ trip.speed }}</td>
-                        <td>{{ trip.distance }}</td>
-                        <td>{{ trip.elevation }}</td>
-                        <td>{{ trip.recorded_on.strftime("%d/%m/%Y") }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        {% endfor %}
+                        <tr>
+                            <td>{{ trip.tripname }}</td>
+                            <td>{{ trip.speed }}</td>
+                            <td>{{ trip.distance }}</td>
+                            <td>{{ trip.elevation }}</td>
+                            <td>{{ trip.recorded_on.strftime("%d/%m/%Y") }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            {% endfor %}
 
 
-        <br>
+            <br>
 
-    </center>
-</div>
-<div class="right-sidebar">
-    <table class="stats-table">
+        </center>
+    </div>
+    <div class="right-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
+        <table class="stats-table">
 
-        <tbody>
+            <tbody>
 
-            <tr>
-                <td><strong>Numero di attività</strong></td>
-                <td>{{stat["activities"]}}</td>
-            </tr>
-            <tr>
-                <td><strong>Distanza totale (km)</strong></td>
-                <td>{{stat["total_distance"]}}</td>
-            </tr>
-            <tr>
-                <td><strong>Massimo dislivello (m)</strong></td>
-                <td>{{stat["maximum_elevation"]}}</td>
-            </tr>
-            <tr>
-                <td><strong>Velocità media (km/h)</strong></td>
-                <td>{{stat["average_speed"]}}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+                <tr>
+                    <td><strong>Numero di attività</strong></td>
+                    <td>{{stat["activities"]}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Distanza totale (km)</strong></td>
+                    <td>{{stat["total_distance"]}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Massimo dislivello (m)</strong></td>
+                    <td>{{stat["maximum_elevation"]}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Velocità media (km/h)</strong></td>
+                    <td>{{stat["average_speed"]}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-{% endblock %}
+    {% endblock %}

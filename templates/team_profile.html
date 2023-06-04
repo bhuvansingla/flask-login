@@ -2,104 +2,123 @@
 
 {% block content %}
 
-<div class="left-sidebar">
-    <div class="popup-btn-container">
-        {%if not team.team_picture%}
-        <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
-        {%else%}
-        <img src="data:image/png;base64,{{ team.team_picture|b64encode }}" class="popup-btn" alt="Popup Image">
+{%if not team.team_banner%}
+<div class="left-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
+    {%else%}
+    <div class="left-sidebar" style="background-image: url('data:image/png;base64,{{ team.team_banner|b64encode }}');">
         {%endif%}
-        <i class="fas fa-bars menu-symbol"></i><span class="menu-text">Menu</span>
-    </div>
-    <div class="popup" id="popup">
-        <ul>
-            <li><a href="{{url_for('team_home',team_id=team.id)}}">Home</a></li>
-            <li><a href="{{url_for('team_profile',team_id=team.id)}}">Profilo</a></li>
-            {%if role=="team_leader"%}
-            <li><a href="{{url_for('manage_team',team_id=team.id)}}">Gestisci squadra</a></li>
-            <li><a href="{{url_for('manage_trips',team_id=team.id)}}">Gestisci giri</a></li>
+        <div class="popup-btn-container">
+            {%if not team.team_picture%}
+            <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
+            {%else%}
+            <img src="data:image/png;base64,{{ team.team_picture|b64encode }}" class="popup-btn" alt="Popup Image">
             {%endif%}
-        </ul>
-    </div>
-    <script>
-        var popup = document.querySelector(".popup");
-        var popupBtn = document.querySelector(".menu-symbol");
-        popupBtn.addEventListener("click", function () {
-            if (popup.style.display === "block") {
-                popup.style.display = "none";
-            } else {
-                popup.style.display = "block";
-            }
-        });
-    </script>
-
-</div>
-
-<div class="main">
-    <center>
-
-        <div class="box">
-            <form class="form-container" method="POST" enctype="multipart/form-data">
-                {{ form.hidden_tag() }}
-
-                <table class="profile-table">
-                    <caption>
-                        <h1 style="color:red">Profilo di squadra</h1>
-                    </caption>
-                    <tr>
-                        <td>{{ form.name.label }}</td>
-                        <td>{{ form.name() }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.description.label }}</td>
-                        <td>{{ form.description() }}</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Immagine di profilo:
-
-                        </td>
-                        <td>{{ form.team_picture() }}</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Immagine di background:
-
-                        </td>
-                        <td>{{ form.team_background() }}</td>
-                    </tr>
-                    <tr>
-
-                        <td colspan="2" style="text-align: center;">{{ form.submit }}</td>
-
-                    </tr>
-                </table>
-            </form>
+            <i class="fas fa-bars menu-symbol"></i><span class="menu-text">Menu</span>
         </div>
-    </center>
+        <div class="popup" id="popup">
+            <ul>
+                <li><a href="{{url_for('team_home',team_id=team.id)}}">Home</a></li>
+                <li><a href="{{url_for('team_profile',team_id=team.id)}}">Profilo</a></li>
+                {%if role=="team_leader"%}
+                <li><a href="{{url_for('manage_team',team_id=team.id)}}">Gestisci squadra</a></li>
+                <li><a href="{{url_for('manage_trips',team_id=team.id)}}">Gestisci giri</a></li>
+                {%endif%}
+            </ul>
+        </div>
+        <script>
+            var popup = document.querySelector(".popup");
+            var popupBtn = document.querySelector(".menu-symbol");
+            popupBtn.addEventListener("click", function () {
+                if (popup.style.display === "block") {
+                    popup.style.display = "none";
+                } else {
+                    popup.style.display = "block";
+                }
+            });
+        </script>
 
-</div>
+    </div>
+    {%if not team.team_background%}
+    <div class="main" style="background-image: url('../images/wallpaper_team_home.jpg');">
+        {%else%}
+        <div class="main" style="background-image: url('data:image/png;base64,{{ team.team_background|b64encode }}');">
+            {%endif%}
+            <center>
+
+                <div class="box">
+                    <form class="form-container" method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+
+                        <table class="profile-table">
+                            <caption>
+                                <h1 style="color:red">Profilo di squadra</h1>
+                            </caption>
+                            <tr>
+                                <td>{{ form.name.label }}</td>
+                                <td>{{ form.name() }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form.description.label }}</td>
+                                <td>{{ form.description() }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form.team_picture.label }}</td>
+                                <td>{{ form.team_picture() }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form.team_background.label }}</td>
+                                <td>{{ form.team_background() }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form.team_banner.label }}</td>
+                                <td>{{ form.team_banner() }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form.team_motto.label }}</td>
+                                <td>{{ form.team_motto() }}</td>
+                            </tr>
+                            <tr>
+
+                                <td colspan="2" style="text-align: center;">{{ form.submit }}</td>
+
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </center>
+
+        </div>
 
 
 
-<div class="right-sidebar">
-    <img src="{{ url_for('serve_image', filename='mas_que_un_team.png') }}" alt="motto" class="centered-image">
+        {%if not team.team_banner%}
+        <div class="right-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
+            {%else%}
+            <div class="right-sidebar"
+                style="background-image: url('data:image/png;base64,{{ team.team_banner|b64encode }}');">
+                {%endif%}
 
-    <style>
-        .right-sidebar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+                {%if team.team_motto%}
+                <img src="data:image/png;base64,{{ team.team_motto|b64encode }}" alt="motto" class="centered-image">
 
-        .centered-image-container {
-            text-align: center;
-        }
+                <style>
+                    .right-sidebar {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
 
-        .centered-image {
-            background-color: transparent;
-        }
-    </style>
+                    .centered-image-container {
+                        text-align: center;
 
-</div>
-{% endblock %}
+                    }
+
+                    .centered-image {
+                        background-color: transparent;
+                    }
+                </style>
+                {%endif%}
+
+
+            </div>
+            {% endblock %}

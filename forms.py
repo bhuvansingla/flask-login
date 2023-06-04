@@ -68,8 +68,10 @@ class NewTeamForm(FlaskForm):
 class TeamProfileForm(FlaskForm):
     name = StringField('Nome della squadra',validators=[DataRequired()])
     description = TextAreaField('Descrizione')
-    team_picture = FileField('')
-    team_background = FileField('')
+    team_picture = FileField('Immagine del team')
+    team_background = FileField('Background del team')
+    team_banner = FileField('Banner del team')
+    team_motto = FileField('Motto del team')
     submit = SubmitField('Salva')
 
 
@@ -87,4 +89,6 @@ class ProfileForm(FlaskForm):
     strava_account = StringField('Account di strava')
     phone_number = StringField("Numero di telefono")
     profile_picture = FileField('Immagine di profilo')
+    profile_background = FileField('Background di profilo')
+    profile_banner = FileField('Banner di profilo')
     submit = SubmitField('Salva')

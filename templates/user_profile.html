@@ -1,8 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="left-sidebar">
-    <div class="left-sidebar">
+
+{%if not current_user.profile_banner%}
+<div class="left-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
+    {%else%}
+    <div class="left-sidebar"
+        style="background-image: url('data:image/png;base64,{{ current_user.profile_banner|b64encode }}');">
+        {%endif%}
 
         <div class="popup-btn-container">
             {%if not current_user.profile_picture%}
@@ -43,77 +48,90 @@
         </script>
 
     </div>
-</div>
-<div class="main">
-    <center>
-        <div class="box">
-            <form method="POST" enctype="multipart/form-data">
-                {{ form.hidden_tag() }}
-                <table>
-                    <caption>
-                        <h1 style="color:red">Le tue impostazioni di profilo</h1>
-                    </caption>
-                    <tr>
-                        <td>{{ form.username.label }}</td>
-                        <td>{{ form.username() }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.name.label }}</td>
-                        <td>{{ form.name() }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.surname.label }}</td>
-                        <td>{{ form.surname() }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.email.label }}</td>
-                        <td>{{ form.email() }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.strava_account.label }}</td>
-                        <td>{{ form.strava_account() }}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.phone_number.label }}</td>
-                        <td>{{ form.phone_number() }}</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            {{form.profile_picture.label}}
-                            {% if form.profile_picture.data %}
-                            <span>{{ form.profile_picture.data.filename }}</span>
+
+    {%if not current_user.profile_background%}
+    <div class="main" style="background-image: url('../images/wallpaper_user_home.jpg');">
+        {%else%}
+        <div class="main"
+            style="background-image: url('data:image/png;base64,{{ current_user.profile_background|b64encode }}');">
+            {%endif%}
+            <center>
+                <div class="box">
+                    <form method="POST" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+                        <table>
+                            <caption>
+                                <h1 style="color:red">Le tue impostazioni di profilo</h1>
+                            </caption>
+                            <tr>
+                                <td>{{ form.username.label }}</td>
+                                <td>{{ form.username() }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form.name.label }}</td>
+                                <td>{{ form.name() }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form.surname.label }}</td>
+                                <td>{{ form.surname() }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form.email.label }}</td>
+                                <td>{{ form.email() }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form.strava_account.label }}</td>
+                                <td>{{ form.strava_account() }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form.phone_number.label }}</td>
+                                <td>{{ form.phone_number() }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{form.profile_picture.label}}</td>
+                                <td>{{ form.profile_picture() }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{form.profile_background.label}}</td>
+                                <td>{{ form.profile_background() }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form.profile_banner.label }}</td>
+                                <td>{{ form.profile_banner() }}</td>
+                            </tr>
+                            <tr>
+
+                                <td colspan="2" style="text-align: center;">{{ form.submit }}</td>
+
+                            </tr>
+                            {% if not current_user._is_admin %}
+                            <tr>
+
+                                <td colspan="2" style="text-align: center;">
+                                    <button>
+
+                                        <a class="delete-button"
+                                            href="{{url_for('delete_user',user_id=current_user.id)}}"
+                                            style="align-items:center; color:black;">Elimina
+                                            account</a>
+                                    </button>
+
+                                </td>
+                            </tr>
                             {% endif %}
-                        </td>
-                        <td>{{ form.profile_picture() }}</td>
-                    </tr>
+                        </table>
+                    </form>
+                </div>
 
-                    <tr>
-
-                        <td colspan="2" style="text-align: center;">{{ form.submit }}</td>
-
-                    </tr>
-                    {% if not current_user._is_admin %}
-                    <tr>
-
-                        <td colspan="2" style="text-align: center;">
-                            <button>
-
-                                <a class="delete-button" href="{{url_for('delete_user',user_id=current_user.id)}}"
-                                    style="align-items:center; color:black;">Elimina
-                                    account</a>
-                            </button>
-
-                        </td>
-                    </tr>
-                    {% endif %}
-                </table>
-            </form>
+            </center>
         </div>
+        {%if not current_user.profile_banner%}
+        <div class="right-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
+            {%else%}
+            <div class="right-sidebar"
+                style="background-image: url('data:image/png;base64,{{ current_user.profile_banner|b64encode }}');">
+                {%endif%}
 
-    </center>
-</div>
-<div class="right-sidebar">
+            </div>
 
-</div>
-
-{% endblock %}
+            {% endblock %}

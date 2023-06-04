@@ -4,121 +4,140 @@
 
 
 
-<div class="main">
-    <div class="box">
-        <h1 style="color:red; text-align: center;">Panoramica giri per {{current_user.username}}!</h1>
-
-    </div>
-    {% for trips_group in trips_groups %}
-    <div class="box">
-        <table>
-            <caption>
-                <h1>{{trips_group['team_name']}}
-                </h1>
-            </caption>
-            <thead>
-                <th><strong>Nome del giro</strong></th>
-                <th><strong>Velocità (km/h)</strong></th>
-                <th><strong>Distanza (km)</strong></th>
-                <th><strong>Dislivello (m)</strong></th>
-                <th><strong>Numero di partecipanti</strong></th>
-                <th><strong>Data</strong></th>
-                <th><strong>Prestigio</strong></th>
-                <th><strong>Punteggio</strong></th>
-                <th><strong>Azioni</strong></th>
-            </thead>
-
-            <tbody>
-                {%for trip in trips_group['trips_by_team']%}
-                <tr class="{{ 'green-bg' if trip.is_approved else 'yellow-bg' }}">
-                    <td>{{ trip.tripname}}</td>
-                    <td>{{ trip.speed }}</td>
-                    <td>{{ trip.distance }}</td>
-                    <td>{{ trip.elevation }}</td>
-                    <td>{{ trip.n_of_partecipants }}</td>
-                    <td>{{ trip.recorded_on.strftime("%d/%m/%Y") }}</td>
-                    <td>{{ trip.prestige }}</td>
-                    <td><strong>{{ trip.score }}</strong></td>
-                    <td><a href="{{url_for('edit_trip',trip_id=trip.id,user_id=current_user.id)}}"><i
-                                class="fas fa-edit"></i></a>
-                        <a href="{{ url_for('delete_trip', trip_id=trip.id, user_id=current_user.id) }}"><i
-                                class="fas fa-times"></i></a>
-                    </td>
-
-                </tr>
-                {%endfor%}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="9" style="text-align: center;">
-                        <button>
-                            <a href="{{url_for('new_trip',user_id=current_user.id,team_id=trips_group['team_id'])}}"
-                                style="align-items:center; color:black;">Aggiungi un nuovo giro
-                            </a>
-                        </button>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
-    {% endfor %}
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-        {% for message in messages %}
-        {{message}}
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-</div>
-<div class="left-sidebar">
-
-    <div class="popup-btn-container">
-        {%if not current_user.profile_picture%}
-        <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
-        {%else%}
-        <img src="data:image/png;base64,{{ user.profile_picture|b64encode }}" class="popup-btn" alt="Popup Image">
+{%if not current_user.profile_background%}
+<div class="main" style="background-image: url('../images/wallpaper_user_home.jpg');">
+    {%else%}
+    <div class="main"
+        style="background-image: url('data:image/png;base64,{{ current_user.profile_background|b64encode }}');">
         {%endif%}
-        <i class="fas fa-bars menu-symbol"></i><span class="menu-text">Menu</span>
-    </div>
+        <div class="box">
+            <h1 style="color:red; text-align: center;">Panoramica giri per {{current_user.username}}!</h1>
 
-    <div class="popup" id="popup">
-        <ul>
-            <li><a href="{{url_for('user_home',username=current_user.username)}}">Home</a></li>
-            <li><a href="{{url_for('user_profile')}}">Profilo<a></li>
-            <li class="subitem">Squadre
-                <ul class="sublist">
-                    {% for trips_group in trips_groups %}
+        </div>
+        {% for trips_group in trips_groups %}
+        <div class="box">
+            <table>
+                <caption>
+                    <h1>{{trips_group['team_name']}}
+                    </h1>
+                </caption>
+                <thead>
+                    <th><strong>Nome del giro</strong></th>
+                    <th><strong>Velocità (km/h)</strong></th>
+                    <th><strong>Distanza (km)</strong></th>
+                    <th><strong>Dislivello (m)</strong></th>
+                    <th><strong>Numero di partecipanti</strong></th>
+                    <th><strong>Data</strong></th>
+                    <th><strong>Prestigio</strong></th>
+                    <th><strong>Punteggio</strong></th>
+                    <th><strong>Azioni</strong></th>
+                </thead>
 
-                    <li> <a
-                            href="{{url_for('team_home',team_id=trips_group['team_id'])}}">{{trips_group['team_name']}}</a>
-                    </li>
+                <tbody>
+                    {%for trip in trips_group['trips_by_team']%}
+                    <tr class="{{ 'green-bg' if trip.is_approved else 'yellow-bg' }}">
+                        <td>{{ trip.tripname}}</td>
+                        <td>{{ trip.speed }}</td>
+                        <td>{{ trip.distance }}</td>
+                        <td>{{ trip.elevation }}</td>
+                        <td>{{ trip.n_of_partecipants }}</td>
+                        <td>{{ trip.recorded_on.strftime("%d/%m/%Y") }}</td>
+                        <td>{{ trip.prestige }}</td>
+                        <td><strong>{{ trip.score }}</strong></td>
+                        <td><a href="{{url_for('edit_trip',trip_id=trip.id,user_id=current_user.id)}}"><i
+                                    class="fas fa-edit"></i></a>
+                            <a href="{{ url_for('delete_trip', trip_id=trip.id, user_id=current_user.id) }}"><i
+                                    class="fas fa-times"></i></a>
+                        </td>
+
+                    </tr>
                     {%endfor%}
-                </ul>
-            </li>
-            <li><a href="{{url_for('trips_overview',user_id=current_user.id)}}">Panoramica giri</a></li>
-            <li><a href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo giro</a></li>
-
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="9" style="text-align: center;">
+                            <button>
+                                <a href="{{url_for('new_trip',user_id=current_user.id,team_id=trips_group['team_id'])}}"
+                                    style="align-items:center; color:black;">Aggiungi un nuovo giro
+                                </a>
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        {% endfor %}
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            {{message}}
+            {% endfor %}
         </ul>
+        {% endif %}
+        {% endwith %}
     </div>
-    <script>
-        var popup = document.querySelector(".popup");
-        var popupBtn = document.querySelector(".menu-symbol");
-        popupBtn.addEventListener("click", function () {
-            if (popup.style.display === "block") {
-                popup.style.display = "none";
-            } else {
-                popup.style.display = "block";
-            }
-        });
-    </script>
-
-</div>
 
 
-<div class="right-sidebar">
-</div>
+    {%if not current_user.profile_banner%}
+    <div class="left-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
+        {%else%}
+        <div class="left-sidebar"
+            style="background-image: url('data:image/png;base64,{{ current_user.profile_banner|b64encode }}');">
+            {%endif%}
 
 
-{% endblock %}
+            <div class="popup-btn-container">
+                {%if not current_user.profile_picture%}
+                <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
+                {%else%}
+                <img src="data:image/png;base64,{{ user.profile_picture|b64encode }}" class="popup-btn"
+                    alt="Popup Image">
+                {%endif%}
+                <i class="fas fa-bars menu-symbol"></i><span class="menu-text">Menu</span>
+            </div>
+
+            <div class="popup" id="popup">
+                <ul>
+                    <li><a href="{{url_for('user_home',username=current_user.username)}}">Home</a></li>
+                    <li><a href="{{url_for('user_profile')}}">Profilo<a></li>
+                    <li class="subitem">Squadre
+                        <ul class="sublist">
+                            {% for trips_group in trips_groups %}
+
+                            <li> <a
+                                    href="{{url_for('team_home',team_id=trips_group['team_id'])}}">{{trips_group['team_name']}}</a>
+                            </li>
+                            {%endfor%}
+                        </ul>
+                    </li>
+                    <li><a href="{{url_for('trips_overview',user_id=current_user.id)}}">Panoramica giri</a></li>
+                    <li><a href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo giro</a></li>
+
+                </ul>
+            </div>
+            <script>
+                var popup = document.querySelector(".popup");
+                var popupBtn = document.querySelector(".menu-symbol");
+                popupBtn.addEventListener("click", function () {
+                    if (popup.style.display === "block") {
+                        popup.style.display = "none";
+                    } else {
+                        popup.style.display = "block";
+                    }
+                });
+            </script>
+
+        </div>
+
+
+        {%if not current_user.profile_banner%}
+        <div class="right-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
+            {%else%}
+            <div class="right-sidebar"
+                style="background-image: url('data:image/png;base64,{{ current_user.profile_banner|b64encode }}');">
+                {%endif%}
+            </div>
+
+
+            {% endblock %}

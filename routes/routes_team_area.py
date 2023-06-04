@@ -25,6 +25,14 @@ def team_profile(team_id):
         if form.team_picture.data:
             team.team_picture = form.team_picture.data.read()
 
+        if form.team_background.data:
+            team.team_background = form.team_background.data.read()
+        
+        if form.team_banner.data:
+            team.team_banner = form.team_banner.data.read()
+
+        if form.team_motto.data:
+            team.team_motto = form.team_motto.data.read()
 
         db.session.commit()
         flash('Your team has been updated!', 'success')
@@ -182,9 +190,9 @@ def decide_on_enrollment(request_id,accept):
    
     if accept=="Yes": 
         team.add_member(user,role="user")
-        send_email_utility("Approvazione richiesta",f"La tua richiesta di unirti al team {team.name} e' stata approvata!",AUTO_MAIL,user.email)
+        send_email_utility(f"La tua richiesta a {team.name}",f"La tua richiesta di unirti al team {team.name} e' stata approvata!",AUTO_MAIL,user.email)
     else:
-        send_email_utility("Approvazione richiesta",f"La tua richiesta di unirti al team {team.name} e' stata rifiutata!",AUTO_MAIL,user.email)
+        send_email_utility(f"La tua richiesta a {team.name}",f"La tua richiesta di unirti al team {team.name} e' stata rifiutata!",AUTO_MAIL,user.email)
 
     db.session.delete(request_to_join)
     db.session.commit()

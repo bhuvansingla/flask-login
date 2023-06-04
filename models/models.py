@@ -34,6 +34,9 @@ class User(db.Model,UserMixin,AdminMixin):
     teams = relationship('Team', secondary="team_user_association", back_populates='users')
     join_requests = relationship("RequestsToJoinTeam", back_populates="user", cascade="all, delete-orphan")
     profile_picture = Column(BLOB)
+    profile_background = Column(BLOB)
+    profile_banner = Column(BLOB)
+    
     _is_admin = Column(Boolean,nullable=True)
 
     def set_password(self,password):
@@ -126,6 +129,8 @@ class Team(db.Model):
     description = Column(String(140))
     team_picture = Column(BLOB)
     team_background = Column(BLOB)
+    team_banner = Column(BLOB)
+    team_motto = Column(BLOB)
 
     def __repr__(self):
         return '<Team {}>'.format(self.description)

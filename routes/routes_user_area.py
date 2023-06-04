@@ -57,6 +57,12 @@ def user_profile():
      
         if form.profile_picture.data:
             user.profile_picture = form.profile_picture.data.read()
+            
+        if form.profile_background.data:
+            user.profile_background = form.profile_background.data.read()
+
+        if form.profile_banner.data:
+            user.profile_banner = form.profile_banner.data.read()
 
 
         db.session.commit()
