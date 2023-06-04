@@ -110,11 +110,17 @@
 
                                 <td colspan="2" style="text-align: center;">
                                     <button>
+                                        <a href="{{ url_for('delete_user', user_id=current_user.id) }}"
+                                            onclick="return confirmLinkClick();"
+                                            style="align-content:center; color:black;">
+                                            Elimina account
+                                        </a>
 
-                                        <a class="delete-button"
-                                            href="{{url_for('delete_user',user_id=current_user.id)}}"
-                                            style="align-items:center; color:black;">Elimina
-                                            account</a>
+                                        <script>
+                                            function confirmLinkClick() {
+                                                return confirm("Sei sicuro di voler eliminare l'account?");
+                                            }
+                                        </script>
                                     </button>
 
                                 </td>

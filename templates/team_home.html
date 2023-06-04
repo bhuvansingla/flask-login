@@ -55,10 +55,15 @@
                 <tfoot>
                     <td colspan="3" style="text-align: center;">
                         <form method="POST"
-                            action="{{ url_for('unenroll_from_team', team_id=team.id, user_id=current_user.id) }}">
+                            action="{{ url_for('unenroll_from_team', team_id=team.id, user_id=current_user.id) }}"
+                            onsubmit="return confirmFormSubmission();">
                             <input type="hidden" name="user_id" value="{{ current_user.id }}">
                             <input type="submit" value="Deregistrati">
-
+                            <script>
+                                function confirmFormSubmission() {
+                                    return confirm("Sei sicuro di deregistrarti dal team?");
+                                }
+                            </script>
                         </form>
                     </td>
                 </tfoot>

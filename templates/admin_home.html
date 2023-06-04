@@ -27,12 +27,16 @@
                         <a href="{{url_for('team_home',team_id=team.id)}}">{{team.name}}</a>
                     </td>
                     <td style="text-align: center;">
-                        <button>
 
-                            <a class="delete-button" href="/delete_team/{{team.id}}"
-                                style="align-items:center; color:black;">Elimina</a>
-
-                        </button>
+                        <form method="POST" action="{{ url_for('delete_user', user_id=current_user.id) }}"
+                            onsubmit="return confirmFormSubmission();">
+                            <input type="submit" value="Elimina">
+                            <script>
+                                function confirmFormSubmission() {
+                                    return confirm("Sei sicuro di voler eliminare l'account?");
+                                }
+                            </script>
+                        </form>
 
                     </td>
                 </tr>

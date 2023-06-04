@@ -117,7 +117,7 @@ def new_team():
     return render_template('new_team.html',title="Add new team", form = form )
 
 
-@app.route("/delete_user/<int:user_id>")
+@app.route("/delete_user/<int:user_id>",methods=['GET','POST'])
 @login_required
 def delete_user(user_id):
     user = User.query.filter_by(id=user_id).first()
