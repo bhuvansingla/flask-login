@@ -103,17 +103,16 @@
                     <li><a href="{{url_for('user_profile')}}">Profilo<a></li>
                     <li class="subitem">Squadre
                         <ul class="sublist">
-                            {% for trips_group in trips_groups %}
-
-                            <li> <a
-                                    href="{{url_for('team_home',team_id=trips_group['team_id'])}}">{{trips_group['team_name']}}</a>
-                            </li>
+                            {%for team in teams%}
+                            <li> <a href="{{url_for('team_home',team_id=team.id)}}">{{team.name}}</a></li>
                             {%endfor%}
                         </ul>
                     </li>
                     <li><a href="{{url_for('trips_overview',user_id=current_user.id)}}">Panoramica giri</a></li>
-                    <li><a href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo giro</a></li>
 
+                    {%if current_user.teams %}
+                    <li><a href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo giro</a></li>
+                    {%endif%}
                 </ul>
             </div>
             <script>

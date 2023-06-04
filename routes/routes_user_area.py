@@ -76,8 +76,9 @@ def trips_overview(user_id):
     
     user = User.query.filter_by(id=user_id).first()
     result=user.group_user_trips_by_team()
+    teams = Team.query.all()
 
-    return render_template('trips_overview.html', user=user, trips_groups=result)
+    return render_template('trips_overview.html', user=user, trips_groups=result,teams=teams)
  
 
 

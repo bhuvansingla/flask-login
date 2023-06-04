@@ -78,8 +78,9 @@
                         </ul>
                     </li>
                     <li><a href="{{url_for('trips_overview',user_id=current_user.id)}}">Panoramica giri</a></li>
+                    {%if current_user.teams %}
                     <li><a href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo giro</a></li>
-
+                    {%endif%}
                 </ul>
             </div>
             <script>
