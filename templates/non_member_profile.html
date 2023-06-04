@@ -19,8 +19,8 @@
         </div>
         <div class="popup" id="popup">
             <ul>
-                <li><a href="{{url_for('member_view',user_id=user.id, team_id=team.id)}}">Home</a></li>
-                <li><a href="{{url_for('member_profile',user_id=user.id,team_id=team.id)}}">Profilo<a></li>
+                <li><a href="{{url_for('non_member_view',user_id=user.id)}}">Home</a></li>
+                <li><a href="{{url_for('non_member_profile',user_id=user.id)}}">Profilo<a></li>
 
 
             </ul>

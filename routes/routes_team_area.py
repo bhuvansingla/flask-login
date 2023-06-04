@@ -155,6 +155,11 @@ def member_profile(user_id,team_id):
     team = Team.query.get(team_id)
     return render_template('member_profile.html',team=team,user=user)
 
+@app.route('/non_member_profile/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def non_member_profile(user_id):
+    user = User.query.get(user_id)
+    return render_template('non_member_profile.html',user=user)
 
 
 @app.route("/member_view/<int:user_id>")

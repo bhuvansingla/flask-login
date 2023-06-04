@@ -2,113 +2,106 @@
 
 {% block content %}
 
-<div class="left-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
-    <div class="box">
-        <table class="styled-table">
-            <caption>
-                <h1 style="color:red">Dettagli dell'utente {{user.username}}</h1>
-
-            </caption>
-            <thead>
-
-            </thead>
-            <tbody>
-
-                <tr>
-                    <td>Username</td>
-                    <td>{{ user.username}}</td>
-                </tr>
-                <tr>
-                    <td>Nome</td>
-                    <td>{{ user.name}}</td>
-                </tr>
-                <tr>
-                    <td>Cognome</td>
-                    <td>{{ user.surname}}</td>
-                </tr>
-                <tr>
-                    <td>Email</td>
-                    <td>{{ user.email }}</td>
-                </tr>
-                <tr>
-                    <td>Account di strava</td>
-                    <td>{{ user.strava_account }}</td>
-                </tr>
-                <tr>
-                    <td>Numero di telefono</td>
-                    <td>{{ user.phone_number }}</td>
-                </tr>
-
-            </tbody>
-        </table>
-
-    </div>
-
-
-
-</div>
-
-{%if not user.profile_background%}
-<div class="main" style="background-image: url('../images/wallpaper_user_home.jpg');">
+{%if not user.profile_banner%}
+<div class="left-sidebar" style="background-image: url('../../images/default_vertical_banner.png');">
     {%else%}
-    <div class="main" style="background-image: url('data:image/png;base64,{{ user.profile_background|b64encode }}');">
+    <div class="left-sidebar"
+        style="background-image: url('data:image/png;base64,{{ user.profile_banner|b64encode }}');">
         {%endif%}
-        <center>
 
-            <h1 style="color:red; text-align: center;">Ultimi giri di {{user.username}}!</h1>
-            {% for trip in last_trips %}
-            <div class="box">
-                <table>
-                    <thead>
-                        <th><strong>Nome del giro</strong></th>
-                        <th><strong>Velocità (m/s)</strong></th>
-                        <th><strong>Distanza (km)</strong></th>
-                        <th><strong>Dislivello (m)</strong></th>
-                        <th><strong>Data</strong></th>
-                    </thead>
-
-                    <tbody>
-
-                        <tr>
-                            <td>{{ trip.tripname }}</td>
-                            <td>{{ trip.speed }}</td>
-                            <td>{{ trip.distance }}</td>
-                            <td>{{ trip.elevation }}</td>
-                            <td>{{ trip.recorded_on.strftime("%d/%m/%Y") }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            {% endfor %}
+        <div class="popup-btn-container">
+            {%if not user.profile_picture%}
+            <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
+            {%else%}
+            <img src="data:image/png;base64,{{ user.profile_picture|b64encode }}" class="popup-btn" alt="Popup Image">
+            {%endif%}
+            <i class="fas fa-bars menu-symbol"></i><span class="menu-text">Menu</span>
+        </div>
+        <div class="popup" id="popup">
+            <ul>
+                <li><a href="{{url_for('non_member_view',user_id=user.id)}}">Home</a></li>
+                <li><a href="{{url_for('non_member_profile',user_id=user.id)}}">Profilo<a></li>
 
 
-            <br>
+            </ul>
+        </div>
+        <script>
+            var popup = document.querySelector(".popup");
+            var popupBtn = document.querySelector(".menu-symbol");
+            popupBtn.addEventListener("click", function () {
+                if (popup.style.display === "block") {
+                    popup.style.display = "none";
+                } else {
+                    popup.style.display = "block";
+                }
+            });
+        </script>
 
-        </center>
-    </div>
-    <div class="right-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
-        <table class="stats-table">
 
-            <tbody>
-
-                <tr>
-                    <td><strong>Numero di attività</strong></td>
-                    <td>{{stat["activities"]}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Distanza totale (km)</strong></td>
-                    <td>{{stat["total_distance"]}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Massimo dislivello (m)</strong></td>
-                    <td>{{stat["maximum_elevation"]}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Velocità media (km/h)</strong></td>
-                    <td>{{stat["average_speed"]}}</td>
-                </tr>
-            </tbody>
-        </table>
     </div>
 
-    {% endblock %}
+    {%if not user.profile_background%}
+    <div class="main" style="background-image: url('../images/wallpaper_user_home.jpg');">
+        {%else%}
+        <div class="main"
+            style="background-image: url('data:image/png;base64,{{ user.profile_background|b64encode }}');">
+            {%endif%}
+            <center>
+
+                <h1 style="color:red; text-align: center;">Ultimi giri di {{user.username}}!</h1>
+                {% for trip in last_trips %}
+                <div class="box">
+                    <table>
+                        <thead>
+                            <th><strong>Nome del giro</strong></th>
+                            <th><strong>Velocità (m/s)</strong></th>
+                            <th><strong>Distanza (km)</strong></th>
+                            <th><strong>Dislivello (m)</strong></th>
+                            <th><strong>Data</strong></th>
+                        </thead>
+
+                        <tbody>
+
+                            <tr>
+                                <td>{{ trip.tripname }}</td>
+                                <td>{{ trip.speed }}</td>
+                                <td>{{ trip.distance }}</td>
+                                <td>{{ trip.elevation }}</td>
+                                <td>{{ trip.recorded_on.strftime("%d/%m/%Y") }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                {% endfor %}
+
+
+                <br>
+
+            </center>
+        </div>
+        <div class="right-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
+            <table class="stats-table">
+
+                <tbody>
+
+                    <tr>
+                        <td><strong>Numero di attività</strong></td>
+                        <td>{{stat["activities"]}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Distanza totale (km)</strong></td>
+                        <td>{{stat["total_distance"]}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Massimo dislivello (m)</strong></td>
+                        <td>{{stat["maximum_elevation"]}}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Velocità media (km/h)</strong></td>
+                        <td>{{stat["average_speed"]}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {% endblock %}
