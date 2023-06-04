@@ -162,7 +162,7 @@ def non_member_profile(user_id):
     return render_template('non_member_profile.html',user=user)
 
 
-@app.route("/member_view/<int:user_id>")
+@app.route("/non_member_view/<int:user_id>")
 @login_required
 def non_member_view(user_id):
     non_member = User.query.get(user_id)
