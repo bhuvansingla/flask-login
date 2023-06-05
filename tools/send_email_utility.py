@@ -1,7 +1,7 @@
 import smtplib
 
 AUTO_MAIL = 'noreply.teamlabomba@gmail.com'
-
+APP_PASSWORD = "wydydghyesmfahwq"
 def send_email_utility(subject,message,sender_email,recipient_email):
     # connect to SMTP server
     with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
@@ -10,7 +10,7 @@ def send_email_utility(subject,message,sender_email,recipient_email):
         smtp.ehlo()
         
         # log in to SMTP server
-        smtp.login(AUTO_MAIL, 'kwwgipbddkuuutjy')
+        smtp.login(AUTO_MAIL, APP_PASSWORD)
 
         
         # create email message
