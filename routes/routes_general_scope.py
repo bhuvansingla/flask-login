@@ -97,7 +97,8 @@ def new_trip(user_id,team_id=None):
             send_email_utility('Richiesta approvazione giro',f"{user.username} ha richiesto di registrare il giro: {trip.tripname} per il team {trip.get_team().name}, controlla la tua pagina 'Gestisci giri'!",AUTO_MAIL,emails_leaders)
         else:
             other_members_emails = [user.email for user in team.users if trip.get_user()!=user]
-            send_email_utility("Registrazione nuovo giro",f"Il giro: {trip.tripname} di {trip.get_user().username} e' stato registrato per il team {trip.get_team().name}",AUTO_MAIL,other_members_emails)
+            if other_members_emails:
+                send_email_utility("Registrazione nuovo giro",f"Il giro: {trip.tripname} di {trip.get_user().username} e' stato registrato per il team {trip.get_team().name}",AUTO_MAIL,other_members_emails)
 
 
         if user == current_user:
