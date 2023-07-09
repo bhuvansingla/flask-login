@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import db
 import os
+import shutil
 
 class TeamUserAssociation(db.Model):
     __tablename__ = 'team_user_association'
@@ -37,7 +38,7 @@ class User(db.Model,UserMixin,AdminMixin):
     profile_picture = Column(String(140))
     profile_background = Column(String(140))
     profile_banner = Column(String(140))
-    
+
     _is_admin = Column(Boolean,nullable=True)
 
     def set_password(self,password):
@@ -70,6 +71,11 @@ class User(db.Model,UserMixin,AdminMixin):
         pics_folder_path = f"images/users/{self.username}"
         os.mkdir(pics_folder_path)
     
+    def delete_pictures_folder(self):
+        pics_folder_path = f"images/users/{self.username}"
+        if os.path.exists(pics_folder_path):
+            shutil.rmtree(pics_folder_path)
+
     def __repr__(self):
         return '<User {}>'.format(self.username)
   
@@ -151,7 +157,12 @@ class Team(db.Model):
     def create_pictures_folder(self):
         pics_folder_path = f"images/teams/{self.name}"
         os.mkdir(pics_folder_path)
-    
+        
+    def delete_pictures_folder(self):
+        pics_folder_path = f"images/teams/{self.name}"
+        if os.path.exists(pics_folder_path):
+            shutil.rmtree(pics_folder_path)
+
 class RequestsToJoinTeam(db.Model):
     __tablename__ = 'requests_to_join_team'
 

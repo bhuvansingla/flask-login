@@ -95,6 +95,7 @@ def view_user_profile_by_admin(user_id):
 @login_required
 def delete_team(team_id):
     team = Team.query.filter_by(id=team_id).first()
+    team.delete_pictures_folder()
     db.session.delete(team)
     db.session.commit()
     if current_user._is_admin:
@@ -111,7 +112,7 @@ def new_team():
     form = NewTeamForm()
     if form.validate_on_submit():
         team = Team(name=form.name.data,description=form.description.data)
-       
+        team.create_pictures_folder()
         db.session.add(team)
         db.session.commit()
         flash('Nuovo team registrato!')
@@ -124,11 +125,8 @@ def new_team():
 @login_required
 def delete_user(user_id):
     user = User.query.filter_by(id=user_id).first()
+    user.delete_pictures_folder()
     db.session.delete(user)
-    """
-    if os.path.exists(user.pictures_folder):
-        shutil.rmtree(user.pictures_folder)
-    """
     db.session.commit()
 
 
