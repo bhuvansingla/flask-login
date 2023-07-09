@@ -115,6 +115,7 @@ def user_profile():
 
 
 @app.route('/trips_overview/<int:user_id>',methods=['GET', 'POST'])
+@login_required
 def trips_overview(user_id):
     
     user = User.query.filter_by(id=user_id).first()
