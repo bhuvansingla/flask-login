@@ -1,85 +1,112 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="login-table">
-    <table>
-        <caption>
+<style>
+    .center-column-box {
+        background-image: url("../images/defaults/wallpaper_landing_page.jpg");
+        /* Additional CSS properties for background image */
+    }
+</style>
+<div class="table-box" style="left:30%;width:40%;">
+    <form action="" method="post" class="form-container">
+        <table class="table table-striped">
+
             <h1 style="color:red">Registrazione</h1>
-        </caption>
-        <tbody>
 
-            <tr>
-                <td colspan="2">
-                    <form action="" method="post" class="form-container">
-                        {{ form.hidden_tag() }}
-            <tr>
-                <td>
-                    {{ form.username.label }}
-                </td>
-                <td>
-                    {{ form.username(size=32) }}<br>
-                    {% for error in form.username.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    {{ form.email.label }}
-                </td>
-                <td>
-                    {{ form.email(size=32) }}<br>
-                    {% for error in form.email.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    {{ form.password.label }}
-                </td>
-                <td>
-                    {{ form.password(size=32) }}<br>
-                    {% for error in form.password.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    {{ form.password2.label }}
-                </td>
-                <td>
-                    {{ form.password2(size=32) }}<br>
-                    {% for error in form.password2.errors %}
-                    <span style="color: red;">[{{ error }}]</span>
-                    {% endfor %}
-                </td>
-            </tr>
-            <tr style="text-align: center;">
-                <td colspan="2">
-                    {{ form.submit() }}
-                </td>
-            </tr>
-            </form>
+            <tbody>
+                <style>
+                    .shorter-input {
+                        width: 200px;
+                    }
+                </style>
 
-        </tbody>
-        <tfoot>
+                {{ form.hidden_tag() }}
+                <tr>
+                    <td>
+                        {{ form.username.label }}
+                    </td>
+                    <td>
 
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <div class="flash-messages">
-                <ul>
-                    {% for message in messages %}
-                    <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
-            {% endwith %}
-            </td>
-            </tr>
-        </tfoot>
-    </table>
+                        {{ form.username(size=32,class_="shorter-input") }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        {% for error in form.username.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ form.email.label }}
+                    </td>
+                    <td>
+                        {{ form.email(size=32,class_="shorter-input") }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        {% for error in form.email.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ form.password.label }}
+                    </td>
+                    <td>
+                        {{ form.password(size=32,class_="shorter-input") }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        {% for error in form.password.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ form.password2.label }}
+                    </td>
+                    <td>
+                        {{ form.password2(size=32,class_="shorter-input") }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        {% for error in form.password2.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr style="text-align: center;">
+                    <td colspan="2">
+                        {{ form.submit() }}
+                    </td>
+                </tr>
+
+            </tbody>
+            <tfoot>
+
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="flash-messages">
+                    <ul>
+                        {% for message in messages %}
+                        <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                {% endwith %}
+                </td>
+                </tr>
+            </tfoot>
+        </table>
+    </form>
+
 </div>
 {% endblock %}

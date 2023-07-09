@@ -1,97 +1,128 @@
-{% extends "base.html" %}
+{% extends "base_bootstrap.html" %}
 
-{% block content %}
+{%block columnCenter%}
 
-{%if not user.profile_banner%}
-<div class="left-sidebar" style="background-image: url('../../images/default_vertical_banner.png');">
-    {%else%}
-    <div class="left-sidebar"
-        style="background-image: url('data:image/png;base64,{{ user.profile_banner|b64encode }}');">
+{%if user.profile_background%}
+<style>
+    .center-column-box {
+        background-image: url("{{ url_for('serve_image', filepath=user.profile_background) }}");
+
+    }
+</style>
+{%endif%}
+
+<div class=" table-box" style="text-align: center;left:25%;width:50%">
+    <table class="table table-striped; ">
+        <tr>
+            <h1 style="color:red">Profilo utente</h1>
+
+        </tr>
+        <tr>
+            <td>Username</td>
+            <td>{{user.username}}</td>
+        </tr>
+        <tr>
+            <td>Nome</td>
+            <td>{{user.name}}</td>
+        </tr>
+        <tr>
+            <td>Cognome</td>
+
+            <td>{{user.surname}}</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>{{user.email}}</td>
+        </tr>
+        <tr>
+            <td>Account di strava</td>
+            <td>{{ user.strava_account }}</td>
+        </tr>
+        <tr>
+            <td>Numero di telefono</td>
+
+            <td>{{ user.phone_number }}</td>
+        </tr>
+
+    </table>
+</div>
+
+{%endblock%}
+
+
+{%block columnLeft%}
+
+{%if user.profile_banner%}
+<style>
+    .left-column {
+        background-image: url("{{ url_for('serve_image', filepath=user.profile_banner) }}");
+
+    }
+</style>
+{%endif%}
+
+
+<div class="p-2 mx-auto my-auto" style="text-align: center;">
+
+    <div class="round-container">
+
+        {%if not current_user.profile_picture%}
+        <img src="{{ url_for('serve_image', filepath='defaults/app_icon.jpg') }}" class="img-fluid" alt="Popup Image">
+        {%else%}
+        <img src="{{ url_for('serve_image', filepath=current_user.profile_picture) }}" class="img-fluid"
+            alt="Popup Image">
         {%endif%}
-
-        <div class="popup-btn-container">
-            {%if not user.profile_picture%}
-            <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
-            {%else%}
-            <img src="data:image/png;base64,{{ user.profile_picture|b64encode }}" class="popup-btn" alt="Popup Image">
-            {%endif%}
-            <i class="fas fa-bars menu-symbol"></i><span class="menu-text">Menu</span>
-        </div>
-        <div class="popup" id="popup">
-            <ul>
-                <li><a href="{{url_for('member_view',user_id=user.id, team_id=team.id)}}">Home</a></li>
-                <li><a href="{{url_for('member_profile',user_id=user.id,team_id=team.id)}}">Profilo<a></li>
-
-
-            </ul>
-        </div>
-        <script>
-            var popup = document.querySelector(".popup");
-            var popupBtn = document.querySelector(".menu-symbol");
-            popupBtn.addEventListener("click", function () {
-                if (popup.style.display === "block") {
-                    popup.style.display = "none";
-                } else {
-                    popup.style.display = "block";
-                }
-            });
-        </script>
-
-
     </div>
 
-    {%if not user.profile_background%}
-    <div class="main" style="background-image: url('../../images/wallpaper_user_home.jpg');">
-        {%else%}
-        <div class="main"
-            style="background-image: url('data:image/png;base64,{{ user.profile_background|b64encode }}');">
-            {%endif%}
-            <center>
-                <div class="box">
-                    <table>
-                        <caption>
-                            <h1 style="color:red">Profilo utente</h1>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Menu
+        </button>
+        <ul class="dropdown-menu centered" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="{{url_for('member_home',user_id=user.id, team_id=team.id)}}">Home</a>
+            </li>
+            <li><a class="dropdown-item"
+                    href="{{url_for('member_profile',user_id=user.id,team_id=team.id)}}">Profilo</a></li>
+        </ul>
+    </div>
 
-                        </caption>
-                        <tr>
-                            <td>Username</td>
-                            <td>{{user.username}}</td>
-                        </tr>
-                        <tr>
-                            <td>Nome</td>
-                            <td>{{user.name}}</td>
-                        </tr>
-                        <tr>
-                            <td>Cognome</td>
+</div>
 
-                            <td>{{user.surname}}</td>
-                        </tr>
-                        <tr>
-                            <td>Email</td>
-                            <td>{{user.email}}</td>
-                        </tr>
-                        <tr>
-                            <td>Account di strava</td>
-                            <td>{{ user.strava_account }}</td>
-                        </tr>
-                        <tr>
-                            <td>Numero di telefono</td>
+<script>
+    var dropdownButton = document.querySelector("#dropdownMenuButton");
+    var dropdownMenu = document.querySelector(".dropdown-menu");
 
-                            <td>{{ user.phone_number }}</td>
-                        </tr>
+    dropdownButton.addEventListener("click", function () {
+        var isExpanded = dropdownButton.getAttribute("aria-expanded") === "true";
+        dropdownButton.setAttribute("aria-expanded", !isExpanded);
+        dropdownMenu.classList.toggle("show", !isExpanded);
+    });
+</script>
 
-                    </table>
-                </div>
 
-            </center>
-        </div>
+<script>
+    var squadreMenuItem = document.querySelector("#squadreMenu");
+    var squadreSubMenu = document.querySelector("#squadreMenu + .dropdown-menu");
 
-        {%if not user.profile_banner%}
-        <div class="right-sidebar" style="background-image: url('../../images/default_vertical_banner.png');">
-            {%else%}
-            <div class="right-sidebar"
-                style="background-image: url('data:image/png;base64,{{ user.profile_banner|b64encode }}');">
-                {%endif%}
-            </div>
+    squadreMenuItem.addEventListener("click", function (event) {
+        event.preventDefault();
+        squadreSubMenu.classList.toggle("show");
+    });
+</script>
 
-            {% endblock %}
+
+{%endblock%}
+
+{%block columnRight%}
+
+{%if user.profile_banner%}
+<style>
+    .left-column {
+        background-image: url("{{ url_for('serve_image', filepath=user.profile_banner) }}");
+
+    }
+</style>
+{%endif%}
+
+{%endblock%}

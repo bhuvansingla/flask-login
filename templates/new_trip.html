@@ -1,195 +1,236 @@
-{% extends "base.html" %}
+{% extends "base_bootstrap.html" %}
 
-{% block content %}
+{%block columnCenter%}
 
-{%if not current_user.profile_background%}
-<div class="main" style="background-image: url_for('../images/wallpaper_user_home.jpg');">
-    {%else%}
-    <div class="main"
-        style="background-image: url('data:image/png;base64,{{ current_user.profile_background|b64encode }}');">
-        {%endif%}
-        <center>
-            <form class="form-container" method="post">
-                {{ form.hidden_tag()}}
-                <div class="box">
-                    <table>
-                        <caption>
-                            <h1 style="color: red;">Aggiungi un giro</h1>
-                        </caption>
+{%if current_user.profile_background%}
+<style>
+    .center-column-box {
+        background-image: url("{{ url_for('serve_image', filepath=current_user.profile_background) }}");
 
-                        <tr>
-                            <td>{{ form.tripname.label }}</td>
-                            <td>{{ form.tripname() }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ form.speed.label }}</td>
-                            <td>{{ form.speed() }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ form.distance.label }}</td>
-                            <td>{{ form.distance() }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ form.elevation.label }}</td>
-                            <td>{{ form.elevation() }}</td>
-                        </tr>
-                        <tr>
-                        <tr>
-                            <td>{{ form.recorded_on.label }}</td>
-                            <td>{{ form.recorded_on() }}</td>
-                        </tr>
-                        </tr>
-                        <tr>
-                            <td>{{ form.team.label }}</td>
-                            <td>{{ form.team(class_="form-control") }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ form.n_of_partecipants.label }}</td>
-                            <td>{{ form.n_of_partecipants() }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ form.prestige.label }}</td>
-                            <td>
-                                <div class="prestige-label-container">
-                                    {% for subfield in form.prestige %}
-                                    <label class="prestige-label">
-                                        {{ subfield }}
-                                        <span>{{ subfield.label() }}</span>
-                                    </label><br>
-                                    {% endfor %}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>{{ form.description.label }}</td>
-                            <td>{{ form.description(size=20, rows=5) }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ form.n_of_placements.label }}</td>
-                            <td>
-                                <div id="placement-entries">
+    }
+</style>
+{%endif%}
+<form class="form-container" method="post">
+    {{ form.hidden_tag()}}
+    <style>
+        .table-striped td {
+            padding: 2px;
+            font-size: 12px;
+            /* Adjust width and height as desired */
+            width: 90px;
+            height: 30px;
+        }
+    </style>
+    <div class="table-box" style="display: inline-block; width:70%; margin-left: 15%;">
+        <table class="table table-striped">
+            <h1 style="color: red;">Aggiungi un giro</h1>
 
-                                </div>
-                                <button id="add-placement-button">Aggiungi piazzamento</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" style="text-align: center;">{{ form.submit_save }}</td>
-                        </tr>
-                    </table>
-
-                </div>
-                {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                <div class="flash-messages">
-                    <ul>
-                        {% for message in messages %}
-                        <li>{{ message }}</li>
+            <tr>
+                <td>{{ form.tripname.label }}</td>
+                <td>{{ form.tripname() }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.speed.label }}</td>
+                <td>{{ form.speed() }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.distance.label }}</td>
+                <td>{{ form.distance() }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.elevation.label }}</td>
+                <td>{{ form.elevation() }}</td>
+            </tr>
+            <tr>
+            <tr>
+                <td>{{ form.recorded_on.label }}</td>
+                <td>{{ form.recorded_on() }}</td>
+            </tr>
+            </tr>
+            <tr>
+                <td>{{ form.team.label }}</td>
+                <td>{{ form.team() }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.n_of_partecipants.label }}</td>
+                <td>{{ form.n_of_partecipants() }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.prestige.label }}</td>
+                <td>
+                    <div class="prestige-label-container">
+                        {% for subfield in form.prestige %}
+                        <label class="prestige-label">
+                            {{ subfield }}
+                            <span>{{ subfield.label() }}</span>
+                        </label><br>
                         {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
-                {% endwith %}
-            </form>
-        </center>
-        {%if not current_user.profile_banner%}
-        <div class="left-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
-            {%else%}
-            <div class="left-sidebar"
-                style="background-image: url('data:image/png;base64,{{ current_user.profile_banner|b64encode }}');">
-                {%endif%}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form.description.label }}</td>
+                <td>{{ form.description(size=20, rows=5) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.n_of_placements.label }}</td>
+                <td>
+                    <div id="placement-entries">
 
-                <div class="popup-btn-container">
-                    {%if not current_user.profile_picture%}
-                    <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn"
-                        alt="Popup Image">
-                    {%else%}
-                    <img src="data:image/png;base64,{{ current_user.profile_picture|b64encode }}" class="popup-btn"
-                        alt="Popup Image">
-                    {%endif%}
-                    <i class="fas fa-bars menu-symbol"></i><span class="menu-text">Menu</span>
-                </div>
-                <div class="popup" id="popup">
-                    <ul>
-                        <li><a href="{{url_for('user_home',username=current_user.username)}}">Home</a></li>
-                        <li><a href="{{url_for('user_profile')}}">Profilo<a></li>
-                        <li class="subitem">Squadre
-                            <ul class="sublist">
-                                {%for team in teams%}
+                    </div>
+                    <button id="add-placement-button">Aggiungi piazzamento</button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center;">{{ form.submit_save }}</td>
+            </tr>
+        </table>
 
-                                <li> <a href="{{url_for('team_home',team_id=team.id)}}">{{team.name}}</a></li>
-                                {%endfor%}
-                            </ul>
-                        </li>
-                        <li><a href="{{url_for('trips_overview',user_id=current_user.id)}}">Panoramica giri</a></li>
-                        <li><a href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo giro</a></li>
+    </div>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="flash-messages">
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
+</form>
 
-                    </ul>
-                </div>
-                <script>
-                    var popup = document.querySelector(".popup");
-                    var popupBtn = document.querySelector(".menu-symbol");
-                    popupBtn.addEventListener("click", function () {
-                        if (popup.style.display === "block") {
-                            popup.style.display = "none";
-                        } else {
-                            popup.style.display = "block";
-                        }
-                    });
-                </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var placementEntriesContainer = document.getElementById("placement-entries");
+        var placementCount = 0;
 
-            </div>
+        // Add event listener to "Add Placement" button
+        document.getElementById("add-placement-button").addEventListener("click", function (event) {
+            event.preventDefault(); // Prevent the button from triggering a form submission
+            placementCount++;
 
-            {%if not current_user.profile_banner%}
-            <div class="right-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
-                {%else%}
-                <div class="right-sidebar"
-                    style="background-image: url('data:image/png;base64,{{ current_user.profile_banner|b64encode }}');">
-                    {%endif%}
-                </div>
+            var label = document.createElement("label");
+            label.textContent = "Piazzamento " + placementCount + ": ";
 
-                <script>
-                    document.addEventListener("DOMContentLoaded", function () {
-                        var placementEntriesContainer = document.getElementById("placement-entries");
-                        var placementCount = 0;
+            var select = document.createElement("select");
+            select.name = "placement[]";
 
-                        // Add event listener to "Add Placement" button
-                        document.getElementById("add-placement-button").addEventListener("click", function (event) {
-                            event.preventDefault(); // Prevent the button from triggering a form submission
-                            placementCount++;
+            // Add options with values 1 to 10
+            for (var j = 1; j <= 10; j++) {
+                var option = document.createElement("option");
+                option.value = j;
+                option.text = j + "\u00BA";
+                select.appendChild(option);
+            }
 
-                            var label = document.createElement("label");
-                            label.textContent = "Piazzamento " + placementCount + ": ";
+            var deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.className = "delete-button";
 
-                            var select = document.createElement("select");
-                            select.name = "placement[]";
+            deleteButton.addEventListener("click", function () {
+                this.parentNode.remove(); // Remove the parent div when delete button is clicked
+            });
 
-                            // Add options with values 1 to 10
-                            for (var j = 1; j <= 10; j++) {
-                                var option = document.createElement("option");
-                                option.value = j;
-                                option.text = j + "\u00BA";
-                                select.appendChild(option);
-                            }
+            var div = document.createElement("div");
+            div.appendChild(label);
+            div.appendChild(select);
+            div.appendChild(deleteButton);
 
-                            var deleteButton = document.createElement("button");
-                            deleteButton.textContent = "Delete";
-                            deleteButton.className = "delete-button";
-
-                            deleteButton.addEventListener("click", function () {
-                                this.parentNode.remove(); // Remove the parent div when delete button is clicked
-                            });
-
-                            var div = document.createElement("div");
-                            div.appendChild(label);
-                            div.appendChild(select);
-                            div.appendChild(deleteButton);
-
-                            placementEntriesContainer.appendChild(div);
-                        });
-                    });
-                </script>
+            placementEntriesContainer.appendChild(div);
+        });
+    });
+</script>
 
 
+{%endblock%}
 
-                {% endblock %}
+
+{%block columnLeft%}
+
+
+{%if current_user.profile_banner%}
+<style>
+    .left-column {
+        background-image: url("{{ url_for('serve_image', filepath=current_user.profile_banner) }}");
+
+    }
+</style>
+{%endif%}
+
+<div class="p-2 mx-auto my-auto" style="text-align: center;">
+
+    <div class="round-container">
+
+        {%if not current_user.profile_picture%}
+        <img src="{{ url_for('serve_image', filepath='defaults/app_icon.jpg') }}" class="img-fluid" alt="Popup Image">
+        {%else%}
+        <img src="{{ url_for('serve_image', filepath=current_user.profile_picture) }}" class="img-fluid"
+            alt="Popup Image">
+        {%endif%}
+    </div>
+
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Menu
+        </button>
+        <ul class="dropdown-menu centered" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="{{url_for('user_home',username=current_user.username)}}">Home</a></li>
+            <li><a class="dropdown-item" href="{{url_for('user_profile')}}">Profilo</a></li>
+            <li class="dropdown subitem">
+                <a class="dropdown-item dropdown-toggle" href="#" role="button" id="squadreMenu">Squadre</a>
+                <ul class="dropdown-menu" aria-labelledby="squadreMenu">
+                    {% for team in teams %}
+                    <li><a class="dropdown-item" href="{{url_for('team_home',team_id=team.id)}}">{{team.name}}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li><a class="dropdown-item" href="{{url_for('trips_overview',user_id=current_user.id)}}">Panoramica
+                    giri</a></li>
+            {% if current_user.teams %}
+            <li><a class="dropdown-item" href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo
+                    giro</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <script>
+        var dropdownButton = document.querySelector("#dropdownMenuButton");
+        var dropdownMenu = document.querySelector(".dropdown-menu");
+
+        dropdownButton.addEventListener("click", function () {
+            var isExpanded = dropdownButton.getAttribute("aria-expanded") === "true";
+            dropdownButton.setAttribute("aria-expanded", !isExpanded);
+            dropdownMenu.classList.toggle("show", !isExpanded);
+        });
+    </script>
+
+
+    <script>
+        var squadreMenuItem = document.querySelector("#squadreMenu");
+        var squadreSubMenu = document.querySelector("#squadreMenu + .dropdown-menu");
+
+        squadreMenuItem.addEventListener("click", function (event) {
+            event.preventDefault();
+            squadreSubMenu.classList.toggle("show");
+        });
+    </script>
+
+</div>
+
+{%endblock%}
+
+{%block columnRight%}
+
+
+{%if current_user.profile_banner%}
+<style>
+    .right-column {
+        background-image: url("{{ url_for('serve_image', filepath=current_user.profile_banner) }}");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+</style>
+{%endif%}
+{%endblock%}

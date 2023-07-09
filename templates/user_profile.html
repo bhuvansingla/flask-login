@@ -1,154 +1,229 @@
-{% extends "base.html" %}
+{% extends "base_bootstrap.html" %}
 
-{% block content %}
+{%block columnLeft%}
 
-{%if not current_user.profile_banner%}
-<div class="left-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
-    {%else%}
-    <div class="left-sidebar"
-        style="background-image: url('data:image/png;base64,{{ current_user.profile_banner|b64encode }}');">
+
+{%if current_user.profile_banner%}
+<style>
+    .left-column {
+        background-image: url("{{ url_for('serve_image', filepath=current_user.profile_banner) }}");
+
+    }
+</style>
+{%endif%}
+
+<div class="p-2 mx-auto my-auto" style="text-align: center;">
+
+    <div class="round-container">
+
+        {%if not current_user.profile_picture%}
+        <img src="{{ url_for('serve_image', filepath='defaults/app_icon.jpg') }}" class="img-fluid" alt="Popup Image">
+        {%else%}
+        <img src="{{ url_for('serve_image', filepath=current_user.profile_picture) }}" class="img-fluid"
+            alt="Popup Image">
         {%endif%}
-
-        <div class="popup-btn-container">
-            {%if not current_user.profile_picture%}
-            <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
-            {%else%}
-            <img src="data:image/png;base64,{{ current_user.profile_picture|b64encode }}" class="popup-btn"
-                alt="Popup Image">
-            {%endif%}
-            <i class="fas fa-bars menu-symbol"></i><span class="menu-text">Menu</span>
-        </div>
-        <div class="popup" id="popup">
-            <ul>
-                <li><a href="{{url_for('user_home',username=current_user.username)}}">Home</a></li>
-                <li><a href="{{url_for('user_profile')}}">Profilo<a></li>
-                <li class="subitem">Squadre
-                    <ul class="sublist">
-                        {%for team in teams%}
-
-                        <li> <a href="{{url_for('team_home',team_id=team.id)}}">{{team.name}}</a></li>
-                        {%endfor%}
-                    </ul>
-                </li>
-                <li><a href="{{url_for('trips_overview',user_id=current_user.id)}}">Panoramica giri</a></li>
-                {%if current_user.teams %}
-                <li><a href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo giro</a></li>
-                {%endif%}
-            </ul>
-        </div>
-        <script>
-            var popup = document.querySelector(".popup");
-            var popupBtn = document.querySelector(".menu-symbol");
-            popupBtn.addEventListener("click", function () {
-                if (popup.style.display === "block") {
-                    popup.style.display = "none";
-                } else {
-                    popup.style.display = "block";
-                }
-            });
-        </script>
-
     </div>
 
-    {%if not current_user.profile_background%}
-    <div class="main" style="background-image: url('../images/wallpaper_user_home.jpg');">
-        {%else%}
-        <div class="main"
-            style="background-image: url('data:image/png;base64,{{ current_user.profile_background|b64encode }}');">
-            {%endif%}
-            <center>
-                <div class="box">
-                    <form method="POST" enctype="multipart/form-data">
-                        {{ form.hidden_tag() }}
-                        <table>
-                            <caption>
-                                <h1 style="color:red">Le tue impostazioni di profilo</h1>
-                            </caption>
-                            <tr>
-                                <td>{{ form.username.label }}</td>
-                                <td>{{ form.username() }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ form.name.label }}</td>
-                                <td>{{ form.name() }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ form.surname.label }}</td>
-                                <td>{{ form.surname() }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ form.email.label }}</td>
-                                <td>{{ form.email() }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ form.strava_account.label }}</td>
-                                <td>{{ form.strava_account() }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ form.phone_number.label }}</td>
-                                <td>{{ form.phone_number() }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{form.profile_picture.label}}</td>
-                                <td>{{ form.profile_picture() }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{form.profile_background.label}}</td>
-                                <td>{{ form.profile_background() }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ form.profile_banner.label }}</td>
-                                <td>{{ form.profile_banner() }}</td>
-                            </tr>
-                            <tr>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Menu
+        </button>
+        <ul class="dropdown-menu centered" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="{{url_for('user_home',username=current_user.username)}}">Home</a></li>
+            <li><a class="dropdown-item" href="{{url_for('user_profile')}}">Profilo</a></li>
+            <li class="dropdown subitem">
+                <a class="dropdown-item dropdown-toggle" href="#" role="button" id="squadreMenu">Squadre</a>
+                <ul class="dropdown-menu" aria-labelledby="squadreMenu">
+                    {% for team in teams %}
+                    <li><a class="dropdown-item" href="{{url_for('team_home',team_id=team.id)}}">{{team.name}}</a></li>
+                    {% endfor %}
+                </ul>
+            </li>
+            <li><a class="dropdown-item" href="{{url_for('trips_overview',user_id=current_user.id)}}">Panoramica
+                    giri</a></li>
+            {% if current_user.teams %}
+            <li><a class="dropdown-item" href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo
+                    giro</a></li>
+            {% endif %}
+        </ul>
+    </div>
 
-                                <td colspan="2" style="text-align: center;">{{ form.submit }}</td>
+</div>
 
-                            </tr>
-                            {% if not current_user._is_admin %}
-                            <tr>
+<script>
+    var dropdownButton = document.querySelector("#dropdownMenuButton");
+    var dropdownMenu = document.querySelector(".dropdown-menu");
 
-                                <td colspan="2" style="text-align: center;">
-                                    <button>
-                                        <a href="{{ url_for('delete_user', user_id=current_user.id) }}"
-                                            onclick="return confirmLinkClick();"
-                                            style="align-content:center; color:black;">
-                                            Elimina account
-                                        </a>
+    dropdownButton.addEventListener("click", function () {
+        var isExpanded = dropdownButton.getAttribute("aria-expanded") === "true";
+        dropdownButton.setAttribute("aria-expanded", !isExpanded);
+        dropdownMenu.classList.toggle("show", !isExpanded);
+    });
+</script>
 
-                                        <script>
-                                            function confirmLinkClick() {
-                                                return confirm("Sei sicuro di voler eliminare l'account?");
-                                            }
-                                        </script>
-                                    </button>
 
-                                </td>
-                            </tr>
-                            {% endif %}
-                        </table>
-                    </form>
-                </div>
-                {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                <div class="flash-messages">
-                    <ul>
-                        {% for message in messages %}
-                        <li>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
-                {% endwith %}
-            </center>
-        </div>
-        {%if not current_user.profile_banner%}
-        <div class="right-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
-            {%else%}
-            <div class="right-sidebar"
-                style="background-image: url('data:image/png;base64,{{ current_user.profile_banner|b64encode }}');">
-                {%endif%}
+<script>
+    var squadreMenuItem = document.querySelector("#squadreMenu");
+    var squadreSubMenu = document.querySelector("#squadreMenu + .dropdown-menu");
 
-            </div>
+    squadreMenuItem.addEventListener("click", function (event) {
+        event.preventDefault();
+        squadreSubMenu.classList.toggle("show");
+    });
+</script>
 
-            {% endblock %}
+{%endblock%}
+
+{%block columnCenter%}
+
+{%if current_user.profile_background%}
+<style>
+    .center-column-box {
+        background-image: url("{{ url_for('serve_image', filepath=current_user.profile_background) }}");
+
+    }
+</style>
+{%endif%}
+
+
+<div class="table-box" style="display: inline-block; width:70%; margin-left: 15%;">
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <style>
+            .table-striped td {
+                padding: 2px;
+                font-size: 12px;
+                /* Adjust width and height as desired */
+                width: 90px;
+                height: 30px;
+            }
+        </style>
+        <table class="table table-striped">
+            <h1 style=" color:red; font-size: 25px">Le tue impostazioni di profilo</h1>
+
+
+            <tr>
+                <td>{{ form.username.label }}</td>
+                <td>{{ form.username() }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.name.label }}</td>
+                <td>{{ form.name() }}</td>
+
+            </tr>
+            <tr>
+                <td>{{ form.surname.label }}</td>
+                <td>{{ form.surname() }}</td>
+
+            </tr>
+            <tr>
+                <td>{{ form.email.label }}</td>
+                <td>{{ form.email() }}</td>
+
+            </tr>
+            <tr>
+                <td>{{ form.strava_account.label }}</td>
+                <td>{{ form.strava_account() }}</td>
+
+            </tr>
+            <tr>
+                <td>{{ form.phone_number.label }}</td>
+                <td>{{ form.phone_number() }}</td>
+
+            </tr>
+            <tr>
+                <td>{{form.profile_picture.label}}</td>
+                <td>{{ form.profile_picture() }}
+
+                    {% if form.profile_picture.data %}
+                    <button>
+                        <a style="color:black"
+                            href="{{url_for('delete_file',target='users',file_db_column='profile_picture',filepath=form.profile_picture.data)}}">Elimina</a>
+
+                    </button>
+                    {% endif %}
+                </td>
+
+            </tr>
+            <tr>
+                <td>{{form.profile_background.label}}</td>
+                <td>{{ form.profile_background() }}
+                    {% if form.profile_background.data %}
+                    <button>
+                        <a style="color:black"
+                            href="{{url_for('delete_file',target='users',file_db_column='profile_background',filepath=form.profile_background.data)}}">Elimina</a>
+                    </button>
+
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form.profile_banner.label }}</td>
+                <td>{{ form.profile_banner() }}
+                    {% if form.profile_banner.data %}
+
+                    <button>
+                        <a style="color:black"
+                            href="{{url_for('delete_file',target='users',file_db_column='profile_banner',filepath=form.profile_banner.data)}}">Elimina</a>
+                    </button>
+                    {% endif %}
+                </td>
+
+            </tr>
+            <tr>
+
+                <td colspan="2" style="text-align: center;">{{ form.submit }}</td>
+
+            </tr>
+            {% if not current_user._is_admin %}
+            <tr>
+
+                <td colspan="2" style="text-align: center;">
+                    <button>
+                        <a href="{{ url_for('delete_user', user_id=current_user.id) }}"
+                            onclick="return confirmLinkClick();" style="align-content:center; color:black;">
+                            Elimina account
+                        </a>
+
+                        <script>
+                            function confirmLinkClick() {
+                                return confirm("Sei sicuro di voler eliminare l'account?");
+                            }
+                        </script>
+                    </button>
+
+                </td>
+            </tr>
+            {% endif %}
+        </table>
+    </form>
+</div>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="flash-messages">
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endwith %}
+
+
+{%endblock%}
+{%block columnRight%}
+
+
+{%if current_user.profile_banner%}
+<style>
+    .right-column {
+        background-image: url(" {{ url_for('serve_image', filepath=current_user.profile_banner) }}");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+</style>
+{%endif%}
+
+{%endblock%}

@@ -1,76 +1,61 @@
-{% extends "base.html" %}
+{% extends "base_bootstrap.html" %}
 
-{% block content %}
+{%block columnCenter%}
+<div class="table-box" style="width:50%; left:25%">
+    <table class="table table-striped">
 
-<div class="left-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
 
-</div>
-<div class="right-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
 
-</div>
-<div class="main">
-    <div class="login-table">
-        <table>
-            <caption>
+        <tbody>
+            <tr>
                 <h1 style="color:red">Registra un nuovo utente</h1>
-            </caption>
-            <tbody>
+            </tr>
+            <form action="" method="post" class="form-container">
+                {{ form.hidden_tag() }}
+                <tr>
+                    <td>{{ form.username.label }}</td>
+                    <td>{{ form.username(size=32) }}</td>
+                </tr>
 
-                <form action="" method="post" class="form-container">
-                    {{ form.hidden_tag() }}
-                    <tr>
-                        <td>{{ form.username.label }}</td>
-                        <td>{{ form.username(size=32) }}</td>
-                    </tr>
-                    <tr>
-                        <td>{% for error in form.username.errors %}<span style="color: red;">[{{ error }}]</span>{%
-                            endfor %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.email.label }}</td>
-                        <td>{{ form.email(size=32) }}</td>
-                    </tr>
-                    <tr>
-                        <td>{% for error in form.email.errors %}<span style="color: red;">[{{ error }}]</span>{% endfor
-                            %}</td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.password.label }}</td>
-                        <td>{{ form.password(size=32) }}</td>
-                    </tr>
-                    <tr>
-                        <td>{% for error in form.password.errors %}<span style="color: red;">[{{ error }}]</span>{%
-                            endfor %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.password2.label }}</td>
-                        <td>{{ form.password2(size=32) }}</td>
-                    </tr>
-                    <tr>
-                        <td>{% for error in form.password2.errors %}<span style="color: red;">[{{ error }}]</span>{%
-                            endfor %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="text-align: center;">{{ form.submit() }}</td>
-                    </tr>
-                </form>
-                {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                <div class="flash-messages">
-                    <ul>
-                        {% for message in messages %}
-                        <li>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
-                {% endwith %}
+                <tr>
+                    <td>{{ form.email.label }}</td>
+                    <td>{{ form.email(size=32) }}</td>
+                </tr>
 
-            </tbody>
-        </table>
-    </div>
+                <tr>
+                    <td>{{ form.password.label }}</td>
+                    <td>{{ form.password(size=32) }}</td>
+                </tr>
+
+                <tr>
+                    <td>{{ form.password2.label }}</td>
+                    <td>{{ form.password2(size=32) }}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="2" style="text-align: center;">{{ form.submit() }}</td>
+                </tr>
+            </form>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="flash-messages">
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            {% endwith %}
+
+        </tbody>
+    </table>
 </div>
-{% endblock %}
+{%endblock%}
+
+
+{%block columnLeft%}
+{%endblock%}
+
+{%block columnRight%}
+{%endblock%}

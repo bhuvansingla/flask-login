@@ -5,10 +5,10 @@ from sqlalchemy import or_, and_, desc, func
 from models import User, Trip, Team, TeamUserAssociation, RequestsToJoinTeam
 from forms import *
 from werkzeug.urls import url_parse
-import secrets
 from datetime import datetime, timedelta
-import smtplib
 from tools import AUTO_MAIL, send_email_utility
+import shutil
+import os
 
 #%% ADMIN SECTION
 @app.route('/admin_home',methods=['GET', 'POST'])
@@ -42,6 +42,7 @@ def new_user():
         
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
+        user.create_pictures_folder()
         db.session.add(user)
         db.session.commit()
         flash('Congratulazioni, registrazione andata a buon fine!')
@@ -90,14 +91,16 @@ def view_user_profile_by_admin(user_id):
     return render_template("view_user_profile_by_admin.html",user=user,team_roles=team_roles)
  
 
-@app.route("/delete_team/<int:team_id>")
+@app.route("/delete_team/<int:team_id>",methods=['GET','POST'])
 @login_required
 def delete_team(team_id):
     team = Team.query.filter_by(id=team_id).first()
     db.session.delete(team)
     db.session.commit()
-    return redirect(url_for("admin_home",username=current_user.username))
-
+    if current_user._is_admin:
+        return redirect(url_for("admin_home",username=current_user.username))
+    else:
+        return redirect(url_for("index"))
 
 @app.route('/new_team',methods=['GET', 'POST'])
 @login_required
@@ -122,7 +125,13 @@ def new_team():
 def delete_user(user_id):
     user = User.query.filter_by(id=user_id).first()
     db.session.delete(user)
+    """
+    if os.path.exists(user.pictures_folder):
+        shutil.rmtree(user.pictures_folder)
+    """
     db.session.commit()
+
+
     if current_user._is_admin:
         return redirect(url_for("admin_home",username=current_user.username))
     else:

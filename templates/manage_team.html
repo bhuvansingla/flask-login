@@ -1,195 +1,210 @@
-{% extends "base.html" %}
+{% extends "base_bootstrap.html" %}
 
-{% block content %}
-{%if not team.team_banner%}
-<div class="left-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
-    {%else%}
-    <div class="left-sidebar" style="background-image: url('data:image/png;base64,{{ team.team_banner|b64encode }}');">
-        {%endif%}
-        <div class="popup-btn-container">
-            {%if not team.team_picture%}
-            <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
-            {%else%}
-            <img src="data:image/png;base64,{{ team.team_picture|b64encode }}" class="popup-btn" alt="Popup Image">
-            {%endif%}
-            <i class="fas fa-bars menu-symbol"></i><span class="menu-text">Menu</span>
-        </div>
-        <div class="popup" id="popup">
-            <ul>
-                <li><a href="{{url_for('team_home',team_id=team.id)}}">Home</a></li>
-                <li><a href="{{url_for('team_profile',team_id=team.id)}}">Profilo</a></li>
-                <li><a href="{{url_for('manage_team',team_id=team.id)}}">Gestisci squadra</a></li>
-                <li><a href="{{url_for('manage_trips',team_id=team.id)}}">Gestisci giri</a></li>
-            </ul>
-        </div>
-        <script>
-            var popup = document.querySelector(".popup");
-            var popupBtn = document.querySelector(".menu-symbol");
-            popupBtn.addEventListener("click", function () {
-                if (popup.style.display === "block") {
-                    popup.style.display = "none";
-                } else {
-                    popup.style.display = "block";
-                }
-            });
-        </script>
-    </div>
-    {%if not team.team_background%}
-    <div class="main" style="background-image: url('../images/wallpaper_team_home.jpg');">
+{%block columnLeft%}
+
+{%if team.team_banner%}
+<style>
+    .left-column {
+        background-image: url("{{ url_for('serve_image', filepath=team.team_banner) }}");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+</style>
+{%endif%}
+
+<div class="p-2 mx-auto my-auto" style="text-align: center;">
+    <div class="round-container">
+
+        {%if not team.team_picture%}
+        <img src="{{ url_for('serve_image', filepath='defaults/app_icon.jpg') }}" class="img-fluid" alt="Popup Image">
         {%else%}
-        <div class="main" style="background-image: url('data:image/png;base64,{{ team.team_background|b64encode }}');">
+        <img src="{{ url_for('serve_image', filepath=team.team_picture) }}" class="img-fluid" alt="Popup Image">
+        {%endif%}
+    </div>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Menu
+        </button>
+        <ul class="dropdown-menu centered" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="{{url_for('team_home',team_id=team.id)}}">Home</a></li>
+            <li><a class="dropdown-item" href="{{url_for('team_profile',team_id=team.id)}}">Profilo</a></li>
+            {%if role=="team_leader"%}
+            <li><a class="dropdown-item" href="{{url_for('manage_team',team_id=team.id)}}">Gestisci squadra</a></li>
+            <li><a class="dropdown-item" href="{{url_for('manage_trips',team_id=team.id)}}">Gestisci giri</a></li>
             {%endif%}
+        </ul>
+    </div>
+    <script>
+        var dropdownButton = document.querySelector("#dropdownMenuButton");
+        var dropdownMenu = document.querySelector(".dropdown-menu");
 
-            <center>
-                <div class="box">
-                    <table>
-                        <caption>
-                            <h1 style="color:red">Lista dei membri</h1>
-                        </caption>
-                        <thead>
-                            <tr>
-                                <th>Membro</th>
-                                <th>Ruolo</th>
-                                <th>Azioni</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for team_member in team_members %}
-                            <tr>
-                                <td><a
-                                        href="{{url_for('member_view',user_id = team_member['user'].id, team_id= team_member['team_id'])}}">{{
-                                        team_member['user'].username }}
-                                        {%if team_member['user'].username == current_user.username%} (tu){%endif%}</a>
-                                </td>
-                                <td style="text-align: center;">
-                                    <form method="POST"
-                                        action="{{ url_for('change_role',team_id=team.id,user_id=team_member['user'].id) }}">
-                                        <input type="hidden" name="user_id" value="{{team_member['user'].id }}">
-                                        <select name="role" onchange="this.form.submit()">
-                                            {% if team_member['role'] =='user'%}
-                                            <option value="user" selected>Membro</option>
-                                            <option value="team_leader">Leader</option>
-                                            {%elif team_member['role'] == 'team_leader'%}
-                                            <option value="team_leader" selected>Leader</option>
-                                            <option value="user">Membro</option>
-                                            {% endif %}
-                                        </select>
-                                    </form>
-                                </td>
-                                <td>
-                                    {%set member_to_deregister = team_member['user'].username %}
-                                    <form method="POST"
-                                        action="{{ url_for('unenroll_from_team', team_id=team.id, user_id=team_member['user'].id) }}"
-                                        onsubmit="return confirmFormSubmission('{{member_to_deregister}}')">
-                                        <input type="hidden" name="user_id" value="{{ team_member['user'].id }}">
-                                        <input type="submit" value="Deregistra">
-                                        <script>
-                                            function confirmFormSubmission(userName) {
-
-                                                return confirm("Sei sicuro di voler deregistrare l'utente " + userName + " dal team?");
-                                            }
-                                        </script>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+        dropdownButton.addEventListener("click", function () {
+            var isExpanded = dropdownButton.getAttribute("aria-expanded") === "true";
+            dropdownButton.setAttribute("aria-expanded", !isExpanded);
+            dropdownMenu.classList.toggle("show", !isExpanded);
+        });
+    </script>
 
 
-            </center>
+    <script>
+        var squadreMenuItem = document.querySelector("#squadreMenu");
+        var squadreSubMenu = document.querySelector("#squadreMenu + .dropdown-menu");
 
-            <center>
-                {% if requests_to_join %}
-                <div class="box">
-                    <table>
-                        <caption>
-                            <h1 style="color:red">Richieste di registrazione alla squadra: </h1>
-                        </caption>
-                        <thead>
-                            <tr>
-                                <th>Utente</th>
-                                <th>Azioni</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for request in requests_to_join %}
-                            <tr>
-                                <td>
-                                    <a href="{{ url_for('non_member_view', user_id=request['user'].id) }}">{{
-                                        request['user'].username }}</a>
-                                </td>
-                                <td style="display: flex; justify-content: center; align-items: center;">
-                                    <div style="display: inline;">
-                                        <form
-                                            action="{{ url_for('decide_on_enrollment', request_id=request['id'], accept='Yes') }}"
-                                            method="POST">
-                                            <button class="enroll-button" type="submit">Approva</button>
-                                        </form>
-                                    </div>
-                                    <div style="display: inline; margin-left: 10px;">
-                                        <form
-                                            action="{{ url_for('decide_on_enrollment', request_id=request['id'], accept='No') }}"
-                                            method="POST">
-                                            <button class="unenroll-button" type="submit">Rifiuta</button>
-                                        </form>
-                                    </div>
-                                </td>
+        squadreMenuItem.addEventListener("click", function (event) {
+            event.preventDefault();
+            squadreSubMenu.classList.toggle("show");
+        });
+    </script>
+</div>
+{%endblock%}
 
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                {% else %}
-                <div class="box">
-                    <h1 style="color:red">Non ci sono richieste di registrazione alla squadra!</h1>
+{%block columnCenter%}
 
-                </div>
-                {%endif%}
+{%if team.team_background%}
+<style>
+    .center-column-box {
+        background-image: url("{{ url_for('serve_image', filepath=team.team_background) }}");
 
-            </center>
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <div class="flash-messages">
-                <ul>
-                    {% for message in messages %}
-                    <li>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            {% endif %}
-            {% endwith %}
-        </div>
+    }
+</style>
+{%else%}
+<style>
+    .center-column-box {
+        background-image: url('../images/defaults/wallpaper_team_home.jpg');
 
-        {%if not team.team_banner%}
-        <div class="right-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
-            {%else%}
-            <div class="right-sidebar"
-                style="background-image: url('data:image/png;base64,{{ team.team_banner|b64encode }}');">
-                {%endif%}
+    }
+</style>
+{%endif%}
+<div class="table-box" style="display: inline-block; width:70%;margin-left: 15%;">
+    <table class="table table-striped">
+        <tr>
+            <h1 style="color:red">Lista dei membri</h1>
+        </tr>
+        <thead>
+            <tr>
+                <th>Membro</th>
+                <th>Ruolo</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for team_member in team_members %}
+            <tr>
+                <td><a
+                        href="{{url_for('member_home',user_id = team_member['user'].id, team_id= team_member['team_id'])}}">{{
+                        team_member['user'].username }}
+                        {%if team_member['user'].username == current_user.username%} (tu){%endif%}</a>
+                </td>
+                <td style="text-align: center;">
+                    <form method="POST"
+                        action="{{ url_for('change_role',team_id=team.id,user_id=team_member['user'].id) }}">
+                        <input type="hidden" name="user_id" value="{{team_member['user'].id }}">
+                        <select name="role" onchange="this.form.submit()">
+                            {% if team_member['role'] =='user'%}
+                            <option value="user" selected>Membro</option>
+                            <option value="team_leader">Leader</option>
+                            {%elif team_member['role'] == 'team_leader'%}
+                            <option value="team_leader" selected>Leader</option>
+                            <option value="user">Membro</option>
+                            {% endif %}
+                        </select>
+                    </form>
+                </td>
+                <td>
+                    {%set member_to_deregister = team_member['user'].username %}
+                    <form method="POST"
+                        action="{{ url_for('unenroll_from_team', team_id=team.id, user_id=team_member['user'].id) }}"
+                        onsubmit="return confirmFormSubmission('{{member_to_deregister}}')">
+                        <input type="hidden" name="user_id" value="{{ team_member['user'].id }}">
+                        <input type="submit" value="Deregistra">
+                        <script>
+                            function confirmFormSubmission(userName) {
 
-                {%if team.team_motto%}
-                <img src="data:image/png;base64,{{ team.team_motto|b64encode }}" alt="motto" class="centered-image">
+                                return confirm("Sei sicuro di voler deregistrare l'utente " + userName + " dal team?");
+                            }
+                        </script>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
-                <style>
-                    .right-sidebar {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                    }
+{% if requests_to_join %}
+<div class="table-box" style="display: inline-block; width:70%;margin-left: 15%;">
+    <table class="table table-striped">
+        <tr>
+            <h1 style="color:red">Richieste di registrazione alla squadra: </h1>
+        </tr>
+        <thead>
+            <tr>
+                <th>Utente</th>
+                <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for request in requests_to_join %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('non_member_home', user_id=request['user'].id) }}">{{
+                        request['user'].username }}</a>
+                </td>
+                <td style="display: flex; justify-content: center; align-items: center;">
+                    <div style="display: inline;">
+                        <form action="{{ url_for('decide_on_enrollment', request_id=request['id'], accept='Yes') }}"
+                            method="POST">
+                            <button class="enroll-button" type="submit">Approva</button>
+                        </form>
+                    </div>
+                    <div style="display: inline; margin-left: 10px;">
+                        <form action="{{ url_for('decide_on_enrollment', request_id=request['id'], accept='No') }}"
+                            method="POST">
+                            <button class="unenroll-button" type="submit">Rifiuta</button>
+                        </form>
+                    </div>
+                </td>
 
-                    .centered-image-container {
-                        text-align: center;
-                    }
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="table-box" style="display: inline-block; width:60%;margin-left: 20%;">
+    <h3 style="color:red">Non ci sono richieste di registrazione alla squadra!</h3>
 
-                    .centered-image {
-                        background-color: transparent;
-                    }
-                </style>
-                {%endif%}
+</div>
+{%endif%}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="flash-messages">
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endwith %}
+{%endblock%}
 
+{%block columnRight%}
+{%if team.team_banner%}
+<style>
+    .right-column {
+        background-image: url("{{ url_for('serve_image', filepath=team.team_banner) }}");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+</style>
+{%endif%}
 
-            </div>
-            {% endblock %}
+{%if team.team_motto%}
+<div class="p-2 mx-auto my-auto">
+
+    <img src="{{ url_for('serve_image', filepath=team.team_motto) }}" alt="motto" class="img-fluid ">
+</div>
+{%endif%}
+{%endblock%}

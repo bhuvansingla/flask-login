@@ -1,46 +1,38 @@
-{% extends "base.html" %}
+{% extends "base_bootstrap.html" %}
 
-{% block content %}
 
-<div class="left-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
 
-</div>
-<div class="right-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
-
-</div>
-<div class="main">
-    <div class="login-table">
-        <table>
-            <caption>
+{%block columnCenter%}
+<div class="table-box" style="width:50%; left:25%">
+    <table class="table table-striped">
+        <tbody>
+            <tr>
                 <h1 style="color:red">Registra una nuova squadra</h1>
-            </caption>
-            <tbody>
+            </tr>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <tr>
+                    <td>{{ form.name.label }}</td>
+                    <td>{{ form.name(size=32) }}</td>
+                </tr>
 
-                <form action="" method="post">
-                    {{ form.hidden_tag() }}
-                    <tr>
-                        <td>{{ form.name.label }}</td>
-                        <td>{{ form.name(size=32) }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            {% for error in form.name.errors %}
-                            <span style="color: red;">[{{ error }}]</span>
-                            {% endfor %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>{{ form.description.label }}</td>
-                        <td>{{ form.description(size=20, rows=5) }}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" style="text-align: center;">{{ form.submit() }}</td>
-                    </tr>
-                </form>
+                <tr>
+                    <td>{{ form.description.label }}</td>
+                    <td>{{ form.description(size=20, rows=5) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="text-align: center;">{{ form.submit() }}</td>
+                </tr>
+            </form>
 
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
 </div>
 
 {% endblock %}
+
+{%block columnLeft%}
+{%endblock%}
+
+{%block columnRight%}
+{%endblock%}

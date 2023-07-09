@@ -4,6 +4,7 @@ from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import db
+import os
 
 class TeamUserAssociation(db.Model):
     __tablename__ = 'team_user_association'
@@ -33,9 +34,9 @@ class User(db.Model,UserMixin,AdminMixin):
     trips = relationship('Trip',backref='user',lazy='dynamic',cascade="all, delete-orphan")
     teams = relationship('Team', secondary="team_user_association", back_populates='users')
     join_requests = relationship("RequestsToJoinTeam", back_populates="user", cascade="all, delete-orphan")
-    profile_picture = Column(BLOB)
-    profile_background = Column(BLOB)
-    profile_banner = Column(BLOB)
+    profile_picture = Column(String(140))
+    profile_background = Column(String(140))
+    profile_banner = Column(String(140))
     
     _is_admin = Column(Boolean,nullable=True)
 
@@ -65,7 +66,10 @@ class User(db.Model,UserMixin,AdminMixin):
             result.append({"team_name": team.name,"team_id":team.id, "trips_by_team": trips_in_team})
         return result
 
-
+    def create_pictures_folder(self):
+        pics_folder_path = f"images/users/{self.username}"
+        os.mkdir(pics_folder_path)
+    
     def __repr__(self):
         return '<User {}>'.format(self.username)
   
@@ -127,10 +131,10 @@ class Team(db.Model):
     users = relationship('User', secondary="team_user_association", back_populates='teams')
     join_requests = relationship("RequestsToJoinTeam", back_populates="team", cascade="all, delete-orphan")
     description = Column(String(140))
-    team_picture = Column(BLOB)
-    team_background = Column(BLOB)
-    team_banner = Column(BLOB)
-    team_motto = Column(BLOB)
+    team_picture = Column(String(140))
+    team_background = Column(String(140))
+    team_banner = Column(String(140))
+    team_motto = Column(String(140))
 
     def __repr__(self):
         return '<Team {}>'.format(self.description)
@@ -143,6 +147,10 @@ class Team(db.Model):
     def get_leaders(self):
         leaders = User.query.join(TeamUserAssociation).filter(TeamUserAssociation.team_id == self.id, TeamUserAssociation.role == "team_leader").all()
         return leaders
+    
+    def create_pictures_folder(self):
+        pics_folder_path = f"images/teams/{self.name}"
+        os.mkdir(pics_folder_path)
     
 class RequestsToJoinTeam(db.Model):
     __tablename__ = 'requests_to_join_team'

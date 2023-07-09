@@ -1,68 +1,91 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="login-table">
-    <center>
-        <h1 style="color: red">Sign In</h1>
-        <p>Nuovo utente? <a href="{{ url_for('register') }}">Clicca per registrarti!</a></p>
-        <form action="" method="post" novalidate class="form-container">
-            {{ form.hidden_tag() }}
-            <table>
-                <tr>
-                    <td>{{ form.username.label }}</td>
-                    <td>{{ form.username(size=32) }}</td>
-                    <td>
-                        {% for error in form.username.errors %}
-                        <span style="color: red;">[{{ error }}]</span>
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr>
-                    <td>{{ form.password.label }}</td>
-                    <td>{{ form.password(size=32) }}</td>
-                    <td>
-                        {% for error in form.password.errors %}
-                        <span style="color: red;">[{{ error }}]</span>
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <div class="form-check">
-                            {{ form.remember_me(class="form-check-input") }}
-                            <label class="form-check-label">{{ form.remember_me.label }}</label>
-                        </div>
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
+{% block styles %}
+<style>
+    .center-column-box {
 
-                    <td colspan="3" style="text-align: center">{{ form.submit() }}</td>
+        background-image: url("../images/defaults/wallpaper_landing_page.jpg");
+        /* Additional CSS properties for background image */
+    }
 
-                </tr>
-                <tr>
+    td {
+        max-width: 25px;
+        /* Adjust the max width as needed */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+{% endblock %}
+<div class="table-box" style="left:30%;width:40%;">
+    <h1 style=" color: red; text-align: center;">Sign In</h1>
+    <h5 style="text-align: center;">Nuovo utente? <a href=" {{ url_for('register') }}">Clicca per registrarti!</a></h5>
+    <form action="" method="post" novalidate class="form-container">
+        {{ form.hidden_tag() }}
+        <table class="table table-striped">
+            <tr>
+                <td>{{ form.username.label }}</td>
+                <td>{{ form.username(size=32) }}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    {% for error in form.username.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form.password.label }}</td>
+                <td>{{ form.password(size=32) }}</td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    {% for error in form.password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
 
-                    <td colspan="3" style="text-align: center"><a href="#" onclick="sendUsername()">Password
-                            dimenticata?</a>
-                    </td>
+                <td colspan="2" style="text-align: center;">
+                    <div class="form-check">
+                        {{ form.remember_me(class="form-check-input") }}
+                        <label class="form-check-label">{{ form.remember_me.label }}</label>
+                    </div>
+                </td>
 
-                </tr>
-            </table>
-        </form>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul class="flashes">
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-    </center>
+            </tr>
+            <tr>
+
+                <td colspan="3" style="text-align: center">{{ form.submit() }}</td>
+
+            </tr>
+            <tr>
+
+                <td colspan="3" style="text-align: center"><a href="#" onclick="sendUsername()">Password
+                        dimenticata?</a>
+                </td>
+
+            </tr>
+        </table>
+    </form>
+
+</div>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="table-box flash-messages" style="left:1%;width:40%;">
+
+
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
 </div>
 
-
+{% endif %}
+{% endwith %}
 <script>
     function sendUsername() {
         var username = document.getElementsByName('username')[0].value;

@@ -1,123 +1,128 @@
-{% extends "base.html" %}
+{% extends "base_bootstrap.html" %}
 
-{% block content %}
+{%block columnLeft%}
 
-<div class="left-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
+<style>
+    .left-column {
+        background-image: url('../images/defaults/default_vertical_banner.png');
+
+    }
+</style>
+
+
+{% endblock %}
+
+{%block columnRight%}
+
+<style>
+    .left-column {
+        background-image: url('../images/defaults/default_vertical_banner.png');
+
+    }
+</style>
+
+
+{% endblock %}
+
+{% block columnCenter%}
+<div class="table-box" style="display: inline-block; width:70%; margin-left: 15%;">
+    <table class=" table table-striped">
+        <h1 style="color:red">Dettagli dell'utente {{user.username}}</h1>
+
+
+        <tbody>
+
+            <tr>
+                <td>Username</td>
+                <td>{{ user.username}}</td>
+            </tr>
+            <tr>
+                <td>Nome</td>
+                <td>{{ user.name}}</td>
+            </tr>
+            <tr>
+                <td>Cognome</td>
+
+                <td>{{ user.surname}}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <td>Account di strava</td>
+                <td>{{ user.strava_account }}</td>
+            </tr>
+            <tr>
+                <td>Numero di telefono</td>
+
+                <td>{{ user.phone_number }}</td>
+            </tr>
+
+        </tbody>
+    </table>
 
 </div>
-<div class="right-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
 
+
+
+
+{% if current_user._is_admin %}
+
+<div class="table-box" style="display: inline-block; width:70%; margin-left: 15%;">
+    <table class="table table-striped">
+        <h1 style="color:red">Lista delle squadre disponibili</h1>
+        <thead>
+            <tr>
+                <th style="width:20%;">Nome</th>
+                <th style="width:20%;">Registrazione</th>
+                <th style="width:60%;">Ruolo</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for team_role in team_roles %}
+            <tr>
+                <td style="width: 200px;">
+                    <a href="{{url_for('team_home',team_id=team_role['team'].id)}}">{{team_role["team"].name}}</a>
+                </td>
+                {% if user not in team_role["team"].users %}
+                <td>
+                    <a href="{{url_for('enroll_directly',team_id=team_role['team'].id,user_id=user.id)}}">Registra</a>
+
+
+                </td>
+                {% else %}
+                <td>
+                    <a
+                        href="{{url_for('unenroll_from_team',team_id=team_role['team'].id,user_id=user.id)}}">Deregistra</a>
+
+                </td>
+                <td>
+
+                    <form method="POST"
+                        action="{{ url_for('change_role',team_id=team_role['team'].id,user_id=user.id) }}"
+                        style="margin-top: 10px;">
+                        <input type="hidden" name="user_id" value="{{ user.id }}">
+                        <select name="role" onchange="this.form.submit()">
+                            {% if team_role["team_role"] == "user" %}
+                            <option value="user" selected>Membro</option>
+                            <option value="team_leader">Team Leader</option>
+                            {% elif team_role["team_role"] == "team_leader" %}
+                            <option value="user">Membro</option>
+
+                            <option value="team_leader" selected>Team Leader</option>
+                            {% endif %}
+                        </select>
+                    </form>
+                </td>
+
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
-<div class="main">
-    <center>
-        <div class="box">
-            <table class="styled-table">
-                <caption>
-                    <h1 style="color:red">Details dell'utente {{user.username}}</h1>
-                </caption>
+{% endif %}
 
-
-                <tbody>
-
-                    <tr>
-                        <td>Username</td>
-                        <td>{{ user.username}}</td>
-                    </tr>
-                    <tr>
-                        <td>Nome</td>
-                        <td>{{ user.name}}</td>
-                    </tr>
-                    <tr>
-                        <td>Cognome</td>
-
-                        <td>{{ user.surname}}</td>
-                    </tr>
-                    <tr>
-                        <td>Email</td>
-                        <td>{{ user.email }}</td>
-                    </tr>
-                    <tr>
-                        <td>Account di strava</td>
-                        <td>{{ user.strava_account }}</td>
-                    </tr>
-                    <tr>
-                        <td>Numero di telefono</td>
-
-                        <td>{{ user.phone_number }}</td>
-                    </tr>
-
-                </tbody>
-            </table>
-
-        </div>
-
-
-    </center>
-
-    <center>
-
-        {% if current_user._is_admin %}
-
-        <div class="box">
-            <table>
-                <caption>
-                    <h1 style="color:red">Lista delle squadre disponibili</h1>
-                </caption>
-                <thead>
-                    <tr>
-                        <th style="width:20%;">Nome</th>
-                        <th style="width:20%;">Registrazione</th>
-                        <th style="width:60%;">Ruolo</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for team_role in team_roles %}
-                    <tr>
-                        <td style="vertical-align: middle;">
-                            <a
-                                href="{{url_for('team_home',team_id=team_role['team'].id)}}">{{team_role["team"].name}}</a>
-                        </td>
-                        {% if user not in team_role["team"].users %}
-                        <td>
-                            <a
-                                href="{{url_for('enroll_directly',team_id=team_role['team'].id,user_id=user.id)}}">Registra</a>
-
-
-                        </td>
-                        {% else %}
-                        <td>
-                            <a
-                                href="{{url_for('unenroll_from_team',team_id=team_role['team'].id,user_id=user.id)}}">Deregistra</a>
-
-                        </td>
-                        <td>
-
-                            <form method="POST"
-                                action="{{ url_for('change_role',team_id=team_role['team'].id,user_id=user.id) }}"
-                                style="margin-top: 10px;">
-                                <input type="hidden" name="user_id" value="{{ user.id }}">
-                                <select name="role" onchange="this.form.submit()">
-                                    {% if team_role["team_role"] == "user" %}
-                                    <option value="user" selected>Membro</option>
-                                    <option value="team_leader">Team Leader</option>
-                                    {% elif team_role["team_role"] == "team_leader" %}
-                                    <option value="user">Membro</option>
-
-                                    <option value="team_leader" selected>Team Leader</option>
-                                    {% endif %}
-                                </select>
-                            </form>
-                        </td>
-
-                        {% endif %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endif %}
-
-    </center>
-</div>
 {% endblock %}

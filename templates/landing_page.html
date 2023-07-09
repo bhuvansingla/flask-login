@@ -1,19 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
-<center>
-    <div class="container mt-5" style="margin-top: 200px;">
-        <h1 style="color:red">Benvenuto su TeamUp!</h1>
-        <h2 style="color:red">
-            Effettua il
-            <a href="{{ url_for('login') }}">Login</a> o
-            <a href="{{ url_for('register') }}">Registrati</a> per iniziare la tua avventura!
-        </h2>
-    </div>
-</center>
+
+<style>
+    .center-column-box {
+        background-image: url("../images/defaults/wallpaper_landing_page.jpg");
+        /* Additional CSS properties for background image */
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 50vh;
+    }
+</style>
+
+
+<div class="container mt-5" style="margin-top: 200px;">
+    <h1 style="color:red">Benvenuto su TeamUp!</h1>
+    <h2 style="color:red">
+        Effettua il
+        <a href="{{ url_for('login') }}">Login</a> o
+        <a href="{{ url_for('register') }}">Registrati</a> per iniziare la tua avventura!
+    </h2>
+</div>
+
 {% with messages = get_flashed_messages() %}
 {% if messages %}
-<ul class="flashes">
+<ul class="flash-messages">
     {% for message in messages %}
     <li>{{ message }}</li>
     {% endfor %}

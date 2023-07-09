@@ -1,135 +1,193 @@
-{% extends "base.html" %}
+{% extends "base_bootstrap.html" %}
 
-{% block content %}
 
-{%if not team.team_banner%}
-<div class="left-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
-    {%else%}
-    <div class="left-sidebar" style="background-image: url('data:image/png;base64,{{ team.team_banner|b64encode }}');">
-        {%endif%}
-        <div class="popup-btn-container">
-            {%if not team.team_picture%}
-            <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
-            {%else%}
-            <img src="data:image/png;base64,{{ team.team_picture|b64encode }}" class="popup-btn" alt="Popup Image">
-            {%endif%}
-            <i class="fas fa-bars menu-symbol"></i><span class="menu-text">Menu</span>
-        </div>
-        <div class="popup" id="popup">
-            <ul>
-                <li><a href="{{url_for('team_home',team_id=team.id)}}">Home</a></li>
-                <li><a href="{{url_for('team_profile',team_id=team.id)}}">Profilo</a></li>
-                {%if role=="team_leader"%}
-                <li><a href="{{url_for('manage_team',team_id=team.id)}}">Gestisci squadra</a></li>
-                <li><a href="{{url_for('manage_trips',team_id=team.id)}}">Gestisci giri</a></li>
-                {%endif%}
-            </ul>
-        </div>
-        <script>
-            var popup = document.querySelector(".popup");
-            var popupBtn = document.querySelector(".menu-symbol");
-            popupBtn.addEventListener("click", function () {
-                if (popup.style.display === "block") {
-                    popup.style.display = "none";
-                } else {
-                    popup.style.display = "block";
-                }
-            });
-        </script>
+{%block columnLeft%}
 
-    </div>
-    {%if not team.team_background%}
-    <div class="main" style="background-image: url('../images/wallpaper_team_home.jpg');">
+
+{%if team.team_banner%}
+<style>
+    .left-column {
+        background-image: url("{{ url_for('serve_image', filepath=team.team_banner) }}");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+</style>
+{%endif%}
+
+<div class="p-2 mx-auto my-auto" style="text-align: center;">
+    <div class="round-container">
+
+        {%if not team.team_picture%}
+        <img src="{{ url_for('serve_image', filepath='defaults/app_icon.jpg') }}" class="img-fluid" alt="Popup Image">
         {%else%}
-        <div class="main" style="background-image: url('data:image/png;base64,{{ team.team_background|b64encode }}');">
+        <img src="{{ url_for('serve_image', filepath=team.team_picture) }}" class="img-fluid" alt="Popup Image">
+        {%endif%}
+    </div>
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Menu
+        </button>
+        <ul class="dropdown-menu centered" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="{{url_for('team_home',team_id=team.id)}}">Home</a></li>
+            <li><a class="dropdown-item" href="{{url_for('team_profile',team_id=team.id)}}">Profilo</a></li>
+            {%if role=="team_leader"%}
+            <li><a class="dropdown-item" href="{{url_for('manage_team',team_id=team.id)}}">Gestisci squadra</a></li>
+            <li><a class="dropdown-item" href="{{url_for('manage_trips',team_id=team.id)}}">Gestisci giri</a></li>
             {%endif%}
-            <center>
+        </ul>
+    </div>
+    <script>
+        var dropdownButton = document.querySelector("#dropdownMenuButton");
+        var dropdownMenu = document.querySelector(".dropdown-menu");
 
-                <div class="box">
-                    <form class="form-container" method="POST" enctype="multipart/form-data">
-                        {{ form.hidden_tag() }}
+        dropdownButton.addEventListener("click", function () {
+            var isExpanded = dropdownButton.getAttribute("aria-expanded") === "true";
+            dropdownButton.setAttribute("aria-expanded", !isExpanded);
+            dropdownMenu.classList.toggle("show", !isExpanded);
+        });
+    </script>
 
-                        <table class="profile-table">
-                            <caption>
-                                <h1 style="color:red">Profilo di squadra</h1>
-                            </caption>
-                            <tr>
-                                <td>{{ form.name.label }}</td>
-                                <td>{{ form.name() }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ form.description.label }}</td>
-                                <td>{{ form.description() }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ form.team_picture.label }}</td>
-                                <td>{{ form.team_picture() }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ form.team_background.label }}</td>
-                                <td>{{ form.team_background() }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ form.team_banner.label }}</td>
-                                <td>{{ form.team_banner() }}</td>
-                            </tr>
-                            <tr>
-                                <td>{{ form.team_motto.label }}</td>
-                                <td>{{ form.team_motto() }}</td>
-                            </tr>
-                            <tr>
 
-                                <td colspan="2" style="text-align: center;">{{ form.submit }}</td>
+    <script>
+        var squadreMenuItem = document.querySelector("#squadreMenu");
+        var squadreSubMenu = document.querySelector("#squadreMenu + .dropdown-menu");
 
-                            </tr>
-                        </table>
-                    </form>
-                </div>
-                {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                <div class="flash-messages">
-                    <ul>
-                        {% for message in messages %}
-                        <li>{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
-                {% endwith %}
-            </center>
-
-        </div>
+        squadreMenuItem.addEventListener("click", function (event) {
+            event.preventDefault();
+            squadreSubMenu.classList.toggle("show");
+        });
+    </script>
+</div>
+{%endblock%}
 
 
 
-        {%if not team.team_banner%}
-        <div class="right-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
-            {%else%}
-            <div class="right-sidebar"
-                style="background-image: url('data:image/png;base64,{{ team.team_banner|b64encode }}');">
-                {%endif%}
+{%block columnCenter%}
 
-                {%if team.team_motto%}
-                <img src="data:image/png;base64,{{ team.team_motto|b64encode }}" alt="motto" class="centered-image">
+{%if team.team_background%}
+<style>
+    .center-column-box {
+        background-image: url("{{ url_for('serve_image', filepath=team.team_background) }}");
 
-                <style>
-                    .right-sidebar {
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                    }
+    }
+</style>
+{%else%}
+<style>
+    .center-column-box {
+        background-image: url('../images/defaults/wallpaper_team_home.jpg');
 
-                    .centered-image-container {
-                        text-align: center;
+    }
+</style>
+{%endif%}
+<div class="table-box" style="display: inline-block; width:70%;margin-left: 15%;">
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
 
-                    }
+        <table class="table table-striped">
+            <tr>
+                <h1 style="color:red">Profilo di squadra</h1>
+            </tr>
+            <tr>
+                <td>{{ form.name.label }}</td>
+                <td>{{ form.name() }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.description.label }}</td>
+                <td>{{ form.description() }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.team_picture.label }}</td>
+                <td>{{ form.team_picture() }}
 
-                    .centered-image {
-                        background-color: transparent;
-                    }
-                </style>
-                {%endif%}
+
+                    {% if form.team_picture.data %}
+                    <button>
+                        <a style="color:black"
+                            href="{{url_for('delete_file',target='teams',file_db_column='team_picture',filepath=form.team_picture.data,team_id=team.id)}}">Elimina</a>
+
+                    </button>
+                    {% endif %}
+
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form.team_background.label }}</td>
+                <td>{{ form.team_background() }}
+
+                    {% if form.team_background.data %}
+                    <button>
+                        <a style="color:black"
+                            href="{{url_for('delete_file',target='teams',file_db_column='team_background',filepath=form.team_background.data,team_id=team.id)}}">Elimina</a>
+
+                    </button>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form.team_banner.label }}</td>
+                <td>{{ form.team_banner() }}
+                    {% if form.team_banner.data %}
+                    <button>
+                        <a style="color:black"
+                            href="{{url_for('delete_file',target='teams',file_db_column='team_banner',filepath=form.team_banner.data,team_id=team.id)}}">Elimina</a>
+
+                    </button>
+                    {% endif %}
+
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form.team_motto.label }}</td>
+                <td>{{ form.team_motto() }}
+
+                    {% if form.team_motto.data %}
+                    <button>
+                        <a style="color:black"
+                            href="{{url_for('delete_file',target='teams',file_db_column='team_motto',filepath=form.team_motto.data,team_id=team.id)}}">Elimina</a>
+
+                    </button>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+
+                <td colspan="2" style="text-align: center;">{{ form.submit }}</td>
+
+            </tr>
+        </table>
+    </form>
+</div>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="flash-messages">
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endwith %}
 
 
-            </div>
-            {% endblock %}
+{%endblock%}
+
+{%block columnRight%}
+{%if team.team_banner%}
+<style>
+    .right-column {
+        background-image: url("{{ url_for('serve_image', filepath=team.team_banner) }}");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+</style>
+{%endif%}
+
+{%if team.team_motto%}
+<div class="p-2 mx-auto my-auto">
+
+    <img src="{{ url_for('serve_image', filepath=team.team_motto) }}" alt="motto" class="img-fluid ">
+</div>
+{%endif%}
+{%endblock%}

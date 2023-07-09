@@ -6,7 +6,9 @@ from models import User, Trip, Team, TeamUserAssociation, RequestsToJoinTeam
 from forms import *
 from werkzeug.urls import url_parse
 from datetime import datetime
-from tools import send_email_utility,AUTO_MAIL
+from tools import send_email_utility,AUTO_MAIL, PictureUploader
+import os
+from pathlib import Path
 
 @app.route('/user_home/<username>',methods=['GET', 'POST'])
 @login_required
@@ -40,12 +42,44 @@ def user_home(username):
 
     return render_template('user_home.html', user=user,teams=teams,new_enrollments=message, last_trips=last_trips,stat=stat)
 
+@app.route('/delete_file/<target>/<file_db_column>/<path:filepath>', methods=['GET', 'POST'])
+@app.route('/delete_file/<target>/<file_db_column>/<path:filepath>/<int:team_id>', methods=['GET', 'POST'])
+@login_required
+def delete_file(target,file_db_column,filepath,team_id=None):
+
+    picture_uploader = None
+
+    if not team_id:
+        picture_uploader = PictureUploader(target,current_user.username)
+        picture_uploader.delete_file(filepath)
+        if hasattr(current_user, file_db_column):
+            setattr(current_user, file_db_column, None)
+            db.session.commit() 
+        return redirect(url_for('user_profile'))
+
+    else:
+        team = Team.query.get(team_id)
+        picture_uploader = PictureUploader(target,team.name)
+        picture_uploader.delete_file(filepath)
+        if hasattr(team, file_db_column):
+            setattr(team, file_db_column, None)
+            db.session.commit() 
+        return redirect(url_for('team_profile',team_id=team_id))
+
+
+
+
+
+
 @app.route('/user_profile', methods=['GET', 'POST'])
 @login_required
 def user_profile():
     user = User.query.get(current_user.id)
     form = ProfileForm(obj=user)
     teams = Team.query.all()
+    picture_uploader = PictureUploader("users",current_user.username)
+
+
     if form.validate_on_submit():
         # Handle profile picture upload
         user.username = form.username.data
@@ -56,13 +90,22 @@ def user_profile():
         user.phone_number = form.phone_number.data
      
         if form.profile_picture.data:
-            user.profile_picture = form.profile_picture.data.read()
-            
+            file = form.profile_picture.data
+            picture_uploader.delete_file(user.profile_picture)
+            filename = picture_uploader.load_file(file)
+            user.profile_picture = f'users/{current_user.username}/{filename}'
+
         if form.profile_background.data:
-            user.profile_background = form.profile_background.data.read()
+            file = form.profile_background.data
+            picture_uploader.delete_file(user.profile_background)
+            filename = picture_uploader.load_file(file)
+            user.profile_background = f'users/{current_user.username}/{filename}'
 
         if form.profile_banner.data:
-            user.profile_banner = form.profile_banner.data.read()
+            file = form.profile_banner.data
+            picture_uploader.delete_file(user.profile_banner)
+            filename = picture_uploader.load_file(file)
+            user.profile_banner = f'users/{current_user.username}/{filename}'
 
 
         db.session.commit()

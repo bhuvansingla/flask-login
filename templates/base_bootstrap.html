@@ -50,7 +50,7 @@
                 <a class="home-button" href="{{url_for('new_trip',user_id=current_user.id)}}">Nuovo
                     giro</a>
                 {%endif%}
-                <a class="home-button logout-button" href="{{ url_for('logout') }}">Logout</a>
+                <a class="home-button" href="{{ url_for('logout') }}">Logout</a>
 
             </div>
 
@@ -59,10 +59,26 @@
         </header>
         <div class="row  justify-content-center">
 
-            <div class="col-12 center-column-box">
-                {% block content %}
+            <!--left column-->
+            <div class="col-md-3 col-lg-2 left-column">
+                {% block columnLeft %}
                 {% endblock %}
             </div>
+
+            <!--center column-->
+            <div class="col-md-6 col-lg-8">
+                <div class="center-column-box">
+                    {% block columnCenter %}
+                    {% endblock %}
+                </div>
+            </div>
+
+            <!--right-column-->
+            <div class="col-md-3 col-lg-2 right-column">
+                {% block columnRight %}
+                {% endblock %}
+            </div>
+
 
         </div>
         <footer class="bg-dark py-3 fill-gap">

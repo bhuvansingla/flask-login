@@ -1,127 +1,145 @@
-{% extends "base.html" %}
+{% extends "base_bootstrap.html" %}
 
-{% block content %}
+{%block columnCenter%}
 
+<style>
+    .center-column-box {
+        background-image: url('../images/defaults/wallpaper_team_home.jpg');
 
-
-<div class="main">
-
-
-    <!-- admin section-->
-    <div class="box">
-        <table>
-            <caption>
-                <h1 style="color:red; text-align: center;">Lista delle squadre</h1>
-            </caption>
-            <thead>
-                <tr>
-                    <th>Squadra</th>
-                    <th>Azioni</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                {% for team in teams %}
-                <tr>
-                    <td style="text-align: center;">
-                        <a href="{{url_for('team_home',team_id=team.id)}}">{{team.name}}</a>
-                    </td>
-                    <td style="text-align: center;">
-
-                        <form method="POST" action="{{ url_for('delete_user', user_id=current_user.id) }}"
-                            onsubmit="return confirmFormSubmission();">
-                            <input type="submit" value="Elimina">
-                            <script>
-                                function confirmFormSubmission() {
-                                    return confirm("Sei sicuro di voler eliminare l'account?");
-                                }
-                            </script>
-                        </form>
-
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-            <tfoot>
-                <tr>
-                    <td colspan="2" style="text-align: center;">
-                        <button>
-                            <a href="{{url_for('new_team')}}" style="align-content:center; color:black;">Aggiungi una
-                                nuova squadra
-
-                            </a>
-                        </button>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
+    }
+</style>
 
 
+<!-- admin section-->
+<div class="table-box" style="display: inline-block;">
+    <table class="table table-striped">
+        <h1 style="color:red; text-align: center;">Lista delle squadre</h1>
+        <thead>
+            <tr>
+                <th>Squadra</th>
+                <th>Azioni</th>
 
-    <center>
-        <div class="box">
-            <table>
-                <caption>
-                    <h1 style="color:red">Lista degli utenti</h1>
-                </caption>
-                <thead>
-                    <tr>
-                        <th>Utente</th>
-                        <th>Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for team in teams %}
+            <tr>
+                <td style="text-align: center;">
+                    <a href="{{url_for('team_home',team_id=team.id)}}">{{team.name}}</a>
+                </td>
+                <td style="text-align: center;">
 
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for user in users %}
-                    <tr>
-                        <td style="text-align: center;">
-                            <a href="/view_user_profile_by_admin/{{user.id}}">{{ user.username }}</a>
-                        </td>
-                        <td style="text-align: center;">
-                            <button>
-                                <a href="/delete_user/{{user.id}}"
-                                    style="align-content:center; color:black;">Elimina</a>
-                            </button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="2" style="text-align: center;">
-                            <button>
-                                <a href="{{url_for('new_user')}}" style="align-content:center; color:black;">Aggiungi un
-                                    nuovo utente
+                    <form method="POST" action="{{ url_for('delete_team', team_id=team.id) }}"
+                        onsubmit="return confirmFormSubmissionTeam();">
+                        <input type="submit" value="Elimina">
+                        <script>
+                            function confirmFormSubmissionTeam() {
+                                return confirm("Sei sicuro di voler eliminare il team?");
+                            }
+                        </script>
+                    </form>
 
-                                </a>
-                            </button>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="flash-messages">
-            <ul>
-                {% for message in messages %}
-                <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-        {% endwith %}
-    </center>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <button>
+                        <a href="{{url_for('new_team')}}" style="align-content:center; color:black;">Aggiungi una
+                            nuova squadra
 
-
+                        </a>
+                    </button>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
 </div>
 
-<div class="left-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
 
-</div>
-<div class="right-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
 
+<div class="table-box" style="display: inline-block;">
+    <table class="table table-striped">
+        <h1 style="color:red">Lista degli utenti</h1>
+
+        <thead>
+            <tr>
+                <th>Utente</th>
+                <th>Azioni</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td style="text-align: center;">
+                    <a href="/view_user_profile_by_admin/{{user.id}}">{{ user.username }}</a>
+                </td>
+                <td style="text-align: center;">
+                    <form method="POST" action="{{ url_for('delete_user', user_id=user.id) }}"
+                        onsubmit="return confirmFormSubmissionUser();">
+                        <input type="submit" value="Elimina">
+                        <script>
+                            function confirmFormSubmissionUser() {
+                                return confirm("Sei sicuro di voler eliminare l'utente?");
+                            }
+                        </script>
+                    </form>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <button>
+                        <a href="{{url_for('new_user')}}" style="align-content:center; color:black;">Aggiungi un
+                            nuovo utente
+
+                        </a>
+                    </button>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
 </div>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="flash-messages">
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endwith %}
+{%endblock%}
+
+
+{%block columnLeft%}
+
+<style>
+    .left-column {
+        background-image: url('../images/defaults/default_vertical_banner.png');
+
+    }
+</style>
+
+
+{% endblock %}
+
+{%block columnRight%}
+
+<style>
+    .left-column {
+        background-image: url('../images/defaults/default_vertical_banner.png');
+
+    }
+</style>
+
 
 {% endblock %}

@@ -1,145 +1,180 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base_bootstrap.html" %}
 
 
 
-{%if not current_user.profile_background%}
-<div class="main" style="background-image: url('../images/wallpaper_user_home.jpg');">
-    {%else%}
-    <div class="main"
-        style="background-image: url('data:image/png;base64,{{ current_user.profile_background|b64encode }}');">
-        {%endif%}
-        <div class="box">
-            <h1 style="color:red; text-align: center;">Panoramica giri per {{current_user.username}}!</h1>
+{%block columnCenter%}
 
-        </div>
-        {% for trips_group in trips_groups %}
-        <div class="box">
-            <table>
-                <caption>
-                    <h1>{{trips_group['team_name']}}
-                    </h1>
-                </caption>
-                <thead>
-                    <th><strong>Nome del giro</strong></th>
-                    <th><strong>Velocità (km/h)</strong></th>
-                    <th><strong>Distanza (km)</strong></th>
-                    <th><strong>Dislivello (m)</strong></th>
-                    <th><strong>Numero di partecipanti</strong></th>
-                    <th><strong>Data</strong></th>
-                    <th><strong>Prestigio</strong></th>
-                    <th><strong>Punteggio</strong></th>
-                    <th><strong>Azioni</strong></th>
-                </thead>
+{%if current_user.profile_background%}
+<style>
+    .center-column-box {
+        background-image: url("{{ url_for('serve_image', filepath=current_user.profile_background) }}");
 
-                <tbody>
-                    {%for trip in trips_group['trips_by_team']%}
-                    <tr class="{{ 'green-bg' if trip.is_approved else 'yellow-bg' }}">
-                        <td>{{ trip.tripname}}</td>
-                        <td>{{ trip.speed }}</td>
-                        <td>{{ trip.distance }}</td>
-                        <td>{{ trip.elevation }}</td>
-                        <td>{{ trip.n_of_partecipants }}</td>
-                        <td>{{ trip.recorded_on.strftime("%d/%m/%Y") }}</td>
-                        <td>{{ trip.prestige }}</td>
-                        <td><strong>{{ trip.score }}</strong></td>
-                        <td><a href="{{url_for('edit_trip',trip_id=trip.id,user_id=current_user.id)}}"><i
-                                    class="fas fa-edit"></i></a>
-                            <a href="{{ url_for('delete_trip', trip_id=trip.id, user_id=current_user.id) }}"><i
-                                    class="fas fa-times"></i></a>
-                        </td>
+    }
+</style>
+{%endif%}
 
-                    </tr>
-                    {%endfor%}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="9" style="text-align: center;">
-                            <button>
-                                <a href="{{url_for('new_trip',user_id=current_user.id,team_id=trips_group['team_id'])}}"
-                                    style="align-items:center; color:black;">Aggiungi un nuovo giro
-                                </a>
-                            </button>
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
+<div class="table-box">
+    <h1 style="color:red; text-align: center;">Panoramica giri per {{current_user.username}}!</h1>
+
+</div>
+{% for trips_group in trips_groups %}
+<div class="table-box">
+    <table class="table table-striped">
+
+        <h1>{{trips_group['team_name']}}
+        </h1>
+        <thead>
+            <th><strong>Nome del giro</strong></th>
+            <th><strong>Velocità (km/h)</strong></th>
+            <th><strong>Distanza (km)</strong></th>
+            <th><strong>Dislivello (m)</strong></th>
+            <th><strong>Numero di partecipanti</strong></th>
+            <th><strong>Data</strong></th>
+            <th><strong>Prestigio</strong></th>
+            <th><strong>Punteggio</strong></th>
+            <th><strong>Azioni</strong></th>
+        </thead>
+
+        <tbody>
+            {%for trip in trips_group['trips_by_team']%}
+            {%if trip.is_approved%}
+            <tr style="background-color: green;">
+                {%else%}
+            <tr style="background-color: yellow;">
+                {%endif%}
+
+                <td>{{ trip.tripname}}</td>
+                <td>{{ trip.speed }}</td>
+                <td>{{ trip.distance }}</td>
+                <td>{{ trip.elevation }}</td>
+                <td>{{ trip.n_of_partecipants }}</td>
+                <td>{{ trip.recorded_on.strftime("%d/%m/%Y") }}</td>
+                <td>{{ trip.prestige }}</td>
+                <td><strong>{{ trip.score }}</strong></td>
+                <td><a href="{{url_for('edit_trip',trip_id=trip.id,user_id=current_user.id)}}"><i
+                            class="fas fa-edit"></i></a>
+                    <a href="{{ url_for('delete_trip', trip_id=trip.id, user_id=current_user.id) }}"><i
+                            class="fas fa-times"></i></a>
+                </td>
+
+            </tr>
+            {%endfor%}
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="9" style="text-align: center;">
+                    <button>
+                        <a href="{{url_for('new_trip',user_id=current_user.id,team_id=trips_group['team_id'])}}"
+                            style="align-items:center; color:black;">Aggiungi un nuovo giro
+                        </a>
+                    </button>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+{% endfor %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="flash-messages">
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
         {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endwith %}
 
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <div class="flash-messages">
-            <ul>
-                {% for message in messages %}
-                <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-        {% endwith %}
+{%endblock%}
+
+{%block columnLeft%}
+
+{%if current_user.profile_banner%}
+<style>
+    .left-column {
+        background-image: url("{{ url_for('serve_image', filepath=current_user.profile_banner) }}");
+
+    }
+</style>
+{%endif%}
+
+<div class="p-2 mx-auto my-auto" style="text-align: center;">
+
+    <div class="round-container">
+
+        {%if not current_user.profile_picture%}
+        <img src="{{ url_for('serve_image', filepath='defaults/app_icon.jpg') }}" class="img-fluid" alt="Popup Image">
+        {%else%}
+        <img src="{{ url_for('serve_image', filepath=current_user.profile_picture) }}" class="img-fluid"
+            alt="Popup Image">
+        {%endif%}
     </div>
 
-
-    {%if not current_user.profile_banner%}
-    <div class="left-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
-        {%else%}
-        <div class="left-sidebar"
-            style="background-image: url('data:image/png;base64,{{ current_user.profile_banner|b64encode }}');">
-            {%endif%}
-
-
-            <div class="popup-btn-container">
-                {%if not current_user.profile_picture%}
-                <img src="{{ url_for('serve_image', filename='app_icon.jpg') }}" class="popup-btn" alt="Popup Image">
-                {%else%}
-                <img src="data:image/png;base64,{{ user.profile_picture|b64encode }}" class="popup-btn"
-                    alt="Popup Image">
-                {%endif%}
-                <i class="fas fa-bars menu-symbol"></i><span class="menu-text">Menu</span>
-            </div>
-
-            <div class="popup" id="popup">
-                <ul>
-                    <li><a href="{{url_for('user_home',username=current_user.username)}}">Home</a></li>
-                    <li><a href="{{url_for('user_profile')}}">Profilo<a></li>
-                    <li class="subitem">Squadre
-                        <ul class="sublist">
-                            {%for team in teams%}
-                            <li> <a href="{{url_for('team_home',team_id=team.id)}}">{{team.name}}</a></li>
-                            {%endfor%}
-                        </ul>
-                    </li>
-                    <li><a href="{{url_for('trips_overview',user_id=current_user.id)}}">Panoramica giri</a></li>
-
-                    {%if current_user.teams %}
-                    <li><a href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo giro</a></li>
-                    {%endif%}
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            Menu
+        </button>
+        <ul class="dropdown-menu centered" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="{{url_for('user_home',username=current_user.username)}}">Home</a></li>
+            <li><a class="dropdown-item" href="{{url_for('user_profile')}}">Profilo</a></li>
+            <li class="dropdown subitem">
+                <a class="dropdown-item dropdown-toggle" href="#" role="button" id="squadreMenu">Squadre</a>
+                <ul class="dropdown-menu" aria-labelledby="squadreMenu">
+                    {% for team in teams %}
+                    <li><a class="dropdown-item" href="{{url_for('team_home',team_id=team.id)}}">{{team.name}}</a></li>
+                    {% endfor %}
                 </ul>
-            </div>
-            <script>
-                var popup = document.querySelector(".popup");
-                var popupBtn = document.querySelector(".menu-symbol");
-                popupBtn.addEventListener("click", function () {
-                    if (popup.style.display === "block") {
-                        popup.style.display = "none";
-                    } else {
-                        popup.style.display = "block";
-                    }
-                });
-            </script>
+            </li>
+            <li><a class="dropdown-item" href="{{url_for('trips_overview',user_id=current_user.id)}}">Panoramica
+                    giri</a></li>
+            {% if current_user.teams %}
+            <li><a class="dropdown-item" href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo
+                    giro</a></li>
+            {% endif %}
+        </ul>
+    </div>
 
-        </div>
+</div>
+
+<script>
+    var dropdownButton = document.querySelector("#dropdownMenuButton");
+    var dropdownMenu = document.querySelector(".dropdown-menu");
+
+    dropdownButton.addEventListener("click", function () {
+        var isExpanded = dropdownButton.getAttribute("aria-expanded") === "true";
+        dropdownButton.setAttribute("aria-expanded", !isExpanded);
+        dropdownMenu.classList.toggle("show", !isExpanded);
+    });
+</script>
 
 
-        {%if not current_user.profile_banner%}
-        <div class="right-sidebar" style="background-image: url('../images/default_vertical_banner.png');">
-            {%else%}
-            <div class="right-sidebar"
-                style="background-image: url('data:image/png;base64,{{ current_user.profile_banner|b64encode }}');">
-                {%endif%}
-            </div>
+<script>
+    var squadreMenuItem = document.querySelector("#squadreMenu");
+    var squadreSubMenu = document.querySelector("#squadreMenu + .dropdown-menu");
+
+    squadreMenuItem.addEventListener("click", function (event) {
+        event.preventDefault();
+        squadreSubMenu.classList.toggle("show");
+    });
+</script>
+
+{%endblock%}
 
 
-            {% endblock %}
+
+{%block columnRight%}
+
+
+{%if current_user.profile_banner%}
+<style>
+    .right-column {
+        background-image: url("{{ url_for('serve_image', filepath=current_user.profile_banner) }}");
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+    }
+</style>
+{%endif%}
+{%endblock%}

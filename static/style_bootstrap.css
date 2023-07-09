@@ -1,0 +1,185 @@
+html,
+body {
+    height: 100%;
+}
+
+.container-fluid {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    flex: 1;
+}
+
+
+
+.left-column {
+    background-color: orange;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+.left-frame {
+    position: relative;
+    top: 20%;
+    left: 50%;
+    width: 30%;
+    transform: translate(-50%, -50%);
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+    margin-left: -15px;
+}
+
+.left-frame img {
+    width: 200px;
+    height: 200px;
+}
+
+.left-column-box {
+    background-color: lightblue;
+    overflow-y: auto;
+    height: 100%;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.header-footer-stretch {
+    position: relative;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.center-column-box {
+    overflow-y: auto;
+    height: 100%;
+    border-left: 6px solid black;
+    border-right: 6px solid black;
+    padding-left: 20px;
+    padding-right: 20px;
+    display: flex;
+    flex-direction: column;
+    background-image: url('../images/defaults/wallpaper_user_home.jpg');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+
+
+}
+
+.side-columns-stretch {
+    position: relative;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.right-column {
+    background-color: orange;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    flex-direction: column;
+    /* Add this line */
+
+}
+
+
+.column-border {
+    border-right: none;
+}
+
+.column-border:last-child {
+    border-right: none;
+}
+
+.table-box {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    background-color: orange;
+    border-radius: 5px;
+    overflow-x: auto;
+    position: relative;
+    opacity: 0.7;
+    /* Change to relative */
+}
+
+.transparent-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 5%;
+    bottom: 50%;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+.no-gutters [class^="col-"] {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+
+.fill-gap {
+    margin-bottom: 0;
+    margin-left: -15px;
+    margin-right: -15px;
+    padding: 0;
+}
+
+.dropdown-menu {
+    background-color: black;
+}
+
+.dropdown-menu.centered {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.dropdown-menu a {
+    color: white;
+}
+
+.dropdown-menu li {
+    position: relative;
+}
+
+.dropdown-menu .dropdown-submenu {
+    display: none;
+    position: relative;
+    left: 100%;
+    top: -7px;
+}
+
+.dropdown-menu .dropdown-submenu-left {
+    right: 100%;
+    left: auto;
+}
+
+.dropdown-menu>li:hover>.dropdown-submenu {
+    display: block;
+}
+
+.btn-primary {
+    background-color: black;
+    border: none
+}

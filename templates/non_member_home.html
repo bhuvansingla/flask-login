@@ -10,41 +10,49 @@
     }
 </style>
 {%endif%}
-<div class="table-box">
+
+
+
+<div class="table-box" style="width:50%; left:25%">
+    <h1 style="color:red; text-align: center;">Ultimi giri di {{user.username}}!</h1>
+</div>
+
+
+{% for trip in last_trips %}
+<div class=" table-box" style="text-align: center;">
     <table class="table table-striped">
+        <thead>
+            <tr>
+                <th><strong>Nome del giro</strong></th>
+                <th><strong>Velocità (km/h)</strong></th>
+                <th><strong>Distanza (km)</strong></th>
+                <th><strong>Dislivello (m)</strong></th>
+                <th><strong>Numero di partecipanti</strong></th>
+                <th><strong>Data</strong></th>
+                <th><strong>Prestigio</strong></th>
+                <th><strong>Punteggio</strong></th>
+            </tr>
+        </thead>
 
-        <h1 style="color:red">Profilo utente</h1>
+        <tbody>
 
-        <tr>
-            <td>Username</td>
-            <td>{{user.username}}</td>
-        </tr>
-        <tr>
-            <td>Nome</td>
-            <td>{{user.name}}</td>
-        </tr>
-        <tr>
-            <td>Cognome</td>
-
-            <td>{{user.surname}}</td>
-        </tr>
-        <tr>
-            <td>Email</td>
-            <td>{{user.email}}</td>
-        </tr>
-        <tr>
-            <td>Account di strava</td>
-            <td>{{ user.strava_account }}</td>
-        </tr>
-        <tr>
-            <td>Numero di telefono</td>
-
-            <td>{{ user.phone_number }}</td>
-        </tr>
-
+            <tr>
+                <td>{{ trip.tripname }}</td>
+                <td>{{ trip.speed }}</td>
+                <td>{{ trip.distance }}</td>
+                <td>{{ trip.elevation }}</td>
+                <td>{{trip.n_of_partecipants}}</td>
+                <td>{{ trip.recorded_on.strftime("%d/%m/%Y") }}</td>
+                <td>{{trip.prestige}}</td>
+                <td>{{trip.score}}</td>
+            </tr>
+        </tbody>
     </table>
 </div>
+{% endfor %}
+
 {%endblock%}
+
 
 
 {%block columnLeft%}
@@ -57,7 +65,6 @@
     }
 </style>
 {%endif%}
-
 
 <div class="p-2 mx-auto my-auto" style="text-align: center;">
 
@@ -109,7 +116,6 @@
 
 {%endblock%}
 
-
 {%block columnRight%}
 
 {%if user.profile_banner%}
@@ -120,4 +126,28 @@
     }
 </style>
 {%endif%}
+
+<div class="table-box p-2 mx-auto my-auto" style="display: inline-block;">
+    <table class="table table-striped">
+        <tbody>
+
+            <tr>
+                <td><strong>Numero di attività</strong></td>
+                <td>{{stat["activities"]}}</td>
+            </tr>
+            <tr>
+                <td><strong>Distanza totale (km)</strong></td>
+                <td>{{stat["total_distance"]}}</td>
+            </tr>
+            <tr>
+                <td><strong>Massimo dislivello (m)</strong></td>
+                <td>{{stat["maximum_elevation"]}}</td>
+            </tr>
+            <tr>
+                <td><strong>Velocità media (km/h)</strong></td>
+                <td>{{stat["average_speed"]}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 {%endblock%}

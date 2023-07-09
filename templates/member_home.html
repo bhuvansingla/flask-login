@@ -2,38 +2,43 @@
 
 {%block columnCenter%}
 
-{%if current_user.profile_background%}
+{%if user.profile_background%}
 <style>
     .center-column-box {
-        background-image: url("{{ url_for('serve_image', filepath=current_user.profile_background) }}");
+        background-image: url("{{ url_for('serve_image', filepath=user.profile_background) }}");
 
     }
 </style>
 {%endif%}
 
-<div class="table-box" style="display: inline-block;">
-    <h1 style="color:red; text-align: center;">Bentornato {{current_user.username}}!</h1>
+
+<div class="table-box" style="width:50%; left:25%">
+    <h1 style="color:red; text-align: center;">I giri di {{user.username}} nel team: {{team.name}}</h1>
 </div>
-{% for trip in last_trips %}
-<div class="table-box" style="display: inline-block;">
+<div class=" table-box" style="text-align: center;">
     <table class="table table-striped">
         <thead>
-            <th><strong>Giro</strong></th>
-            <th><strong>Team</strong></th>
-            <th><strong>Velocità</strong></th>
-            <th><strong>Distanza</strong></th>
-            <th><strong>Dislivello</strong></th>
-            <th><strong>Partecipanti</strong></th>
-            <th><strong>Data</strong></th>
-            <th><strong>Prestigio</strong></th>
-            <th><strong>Punteggio</strong></th>
-        </thead>
-
-        <tbody>
-
             <tr>
+                <th><strong>Nome del giro</strong></th>
+                <th><strong>Velocità (km/h)</strong></th>
+                <th><strong>Distanza (km)</strong></th>
+                <th><strong>Dislivello (m)</strong></th>
+                <th><strong>Numero di partecipanti</strong></th>
+                <th><strong>Data</strong></th>
+                <th><strong>Prestigio</strong></th>
+                <th><strong>Punteggio</strong></th>
+                {%if role=='team_leader'%}
+
+                <th><strong>Azioni</strong></th>
+                {%endif%}
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for trip in trips %}
+            <tr>
+
                 <td>{{ trip.tripname}}</td>
-                <td>{{ trip.get_team().name}}</td>
                 <td>{{ trip.speed }}</td>
                 <td>{{ trip.distance }}</td>
                 <td>{{ trip.elevation }}</td>
@@ -41,38 +46,32 @@
                 <td>{{ trip.recorded_on.strftime("%d/%m/%Y") }}</td>
                 <td>{{ trip.prestige }}</td>
                 <td><strong>{{ trip.score }}</strong></td>
+                {%if role=='team_leader'%}
+                <td>
+
+                    <a href="{{url_for('edit_trip',trip_id=trip.id,user_id=current_user.id)}}"><i
+                            class="fas fa-edit"></i></a>
+                    <a href="{{ url_for('delete_trip', trip_id=trip.id, user_id=current_user.id) }}"><i
+                            class="fas fa-times"></i></a>
+                </td>
+                {%endif%}
+
             </tr>
+            {% endfor %}
         </tbody>
+
     </table>
 </div>
-{% endfor %}
-{% with messages = get_flashed_messages() %}
-{% if messages %}
-<div class="flash-messages">
-    <ul>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-</div>
-{% endif %}
-{% endwith %}
 
 {%endblock%}
 
 
-
-
-
-
-
 {%block columnLeft%}
 
-
-{%if current_user.profile_banner%}
+{%if user.profile_banner%}
 <style>
     .left-column {
-        background-image: url("{{ url_for('serve_image', filepath=current_user.profile_banner) }}");
+        background-image: url("{{ url_for('serve_image', filepath=user.profile_banner) }}");
 
     }
 </style>
@@ -96,22 +95,10 @@
             Menu
         </button>
         <ul class="dropdown-menu centered" aria-labelledby="dropdownMenuButton">
-            <li><a class="dropdown-item" href="{{url_for('user_home',username=current_user.username)}}">Home</a></li>
-            <li><a class="dropdown-item" href="{{url_for('user_profile')}}">Profilo</a></li>
-            <li class="dropdown subitem">
-                <a class="dropdown-item dropdown-toggle" href="#" role="button" id="squadreMenu">Squadre</a>
-                <ul class="dropdown-menu" aria-labelledby="squadreMenu">
-                    {% for team in teams %}
-                    <li><a class="dropdown-item" href="{{url_for('team_home',team_id=team.id)}}">{{team.name}}</a></li>
-                    {% endfor %}
-                </ul>
+            <li><a class="dropdown-item" href="{{url_for('member_home',user_id=user.id, team_id=team.id)}}">Home</a>
             </li>
-            <li><a class="dropdown-item" href="{{url_for('trips_overview',user_id=current_user.id)}}">Panoramica
-                    giri</a></li>
-            {% if current_user.teams %}
-            <li><a class="dropdown-item" href="{{url_for('new_trip',user_id=current_user.id)}}">Aggiungi un nuovo
-                    giro</a></li>
-            {% endif %}
+            <li><a class="dropdown-item"
+                    href="{{url_for('member_profile',user_id=user.id,team_id=team.id)}}">Profilo</a></li>
         </ul>
     </div>
 
@@ -139,27 +126,22 @@
     });
 </script>
 
+
 {%endblock%}
-
-
-
 
 
 {%block columnRight%}
 
-
-{%if current_user.profile_banner%}
+{%if user.profile_banner%}
 <style>
-    .right-column {
-        background-image: url("{{ url_for('serve_image', filepath=current_user.profile_banner) }}");
-        background-repeat: no-repeat;
-        background-size: 100% 100%;
+    .left-column {
+        background-image: url("{{ url_for('serve_image', filepath=user.profile_banner) }}");
+
     }
 </style>
 {%endif%}
-
-<div class="table-box p-2 mx-2.5 my-auto" style="display: inline-block;">
-    <table class=" table table-striped">
+<div class="table-box p-2 mx-auto my-auto" style="display: inline-block;">
+    <table class="table table-striped">
 
         <tbody>
             <tr>
@@ -168,7 +150,7 @@
                 </td>
             </tr>
             <tr>
-                <td><strong>Numero di attività</strong></td>
+                <td><strong>Totale attività</strong></td>
                 <td>{{stat["activities"]}}</td>
             </tr>
             <tr>
@@ -181,10 +163,11 @@
             </tr>
             <tr>
                 <td><strong>Velocità media (km/h)</strong></td>
+
                 <td>{{stat["average_speed"]}}</td>
             </tr>
         </tbody>
     </table>
-
 </div>
+
 {%endblock%}
