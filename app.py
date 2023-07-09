@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 import os
 from datetime import timedelta
-import base64
 
 app = Flask(__name__,template_folder="templates")
 
