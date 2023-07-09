@@ -68,11 +68,15 @@ class User(db.Model,UserMixin,AdminMixin):
         return result
 
     def create_pictures_folder(self):
-        pics_folder_path = f"images/users/{self.username}"
+        current_file_path = os.path.realpath(__file__)
+        parent_folder = os.path.dirname(os.path.dirname(current_file_path))
+        pics_folder_path = f"{parent_folder}/images/users/{self.username}"
         os.mkdir(pics_folder_path)
     
     def delete_pictures_folder(self):
-        pics_folder_path = f"images/users/{self.username}"
+        current_file_path = os.path.realpath(__file__)
+        parent_folder = os.path.dirname(os.path.dirname(current_file_path))
+        pics_folder_path = f"{parent_folder}/images/users/{self.username}"
         if os.path.exists(pics_folder_path):
             shutil.rmtree(pics_folder_path)
 
@@ -155,11 +159,15 @@ class Team(db.Model):
         return leaders
     
     def create_pictures_folder(self):
-        pics_folder_path = f"images/teams/{self.name}"
+        current_file_path = os.path.realpath(__file__)
+        parent_folder = os.path.dirname(os.path.dirname(current_file_path))
+        pics_folder_path = f"{parent_folder}/images/teams/{self.name}"
         os.mkdir(pics_folder_path)
         
     def delete_pictures_folder(self):
-        pics_folder_path = f"images/teams/{self.name}"
+        current_file_path = os.path.realpath(__file__)
+        parent_folder = os.path.dirname(os.path.dirname(current_file_path))
+        pics_folder_path = f"{parent_folder}/images/teams/{self.name}"
         if os.path.exists(pics_folder_path):
             shutil.rmtree(pics_folder_path)
 
