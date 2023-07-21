@@ -45,10 +45,10 @@ class ResetPasswordForm(FlaskForm):
 
 class NewTripForm(FlaskForm):
     tripname = StringField('Nome del giro',validators=[DataRequired()])
-    speed = FloatField('Velocità media [km/h]',validators=[DataRequired()])
-    distance = FloatField('Distanza [km]',validators=[DataRequired()])
+    speed = FloatField('Velocità media [km/h]',validators=[DataRequired()], render_kw={'placeholder': '1000.00'})
+    distance = FloatField('Distanza [km]',validators=[DataRequired()], render_kw={'placeholder': '1000.00'})
     team = SelectField('Team', choices=[],coerce=int)
-    elevation = FloatField('Dislivello [m]',validators=[DataRequired()])
+    elevation = FloatField('Dislivello [m]',validators=[DataRequired()],render_kw={'placeholder': '1000.00'})
     recorded_on = StringField('Seleziona la data del giro', render_kw={'placeholder': 'dd/mm/yyyy'})
     prestige = RadioField("Scegli un'opzione per il prestigio", choices=CHOICES, validators=[DataRequired()])
     n_of_partecipants = IntegerField('Numero di partecipanti del team (te incluso)', validators=[DataRequired(),NumberRange(min=1)])
