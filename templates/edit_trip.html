@@ -76,14 +76,14 @@
                         {% for placement in placements %}
                         <div>
                             <input type="hidden" name="placement_id" value="{{ placement.id }}">
-                            <label for="edit_placement">Placement {{loop.index }}:</label>
+                            <label for="edit_placement">Piazzamento {{loop.index }}:</label>
                             <select name="edit_placement">
                                 {% for position in range(1, 11) %}
                                 <option value="{{ position }}" {% if placement.place==position %}selected{% endif %}>{{
                                     position }}&#186;</option>
                                 {% endfor %}
                             </select>
-                            <button type="button" class="delete-button">Delete</button>
+                            <button type="button" class="delete-button">Elimina</button>
                         </div>
                         {% endfor %}
                     </div>
@@ -128,7 +128,7 @@
             var placementLabels = placementEntriesContainer.getElementsByTagName("label");
 
             for (var i = 0; i < placementLabels.length; i++) {
-                placementLabels[i].textContent = "Placement " + (i + 1) + ": ";
+                placementLabels[i].textContent = "Piazzamento " + (i + 1) + ": ";
             }
         }
 

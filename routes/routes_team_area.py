@@ -98,6 +98,7 @@ def approve_trip(trip_id):
     send_email_utility("Approvazione giro",f"Il tuo giro: {trip.tripname} e' stato approvato da {current_user.username}",AUTO_MAIL, approved_member.email)
     send_email_utility("Registrazione nuovo giro",f"Il giro: {trip.tripname} di {approved_member.username} e' stato registrato",AUTO_MAIL,other_members_emails)
 
+    _ = team.ranking_builder()
 
     return redirect(url_for("manage_trips",team_id=team.id))
   
@@ -125,17 +126,14 @@ def change_role(team_id,user_id):
 @login_required
 def team_home(team_id):
     team = Team.query.get(team_id)
-    members_by_team = User.query.filter(User.id.in_([member.id for member in team.users])).all()
-    ranking_list = []
-    my_role_in_team = current_user.get_role_in_team(team_id=team_id)
-    my_request_to_join_team = RequestsToJoinTeam.query.filter_by(team_id=team_id,user_id=current_user.id).first()
-    for user_by_team in members_by_team:
-        all_scores_by_user = Trip.query.filter_by(user_id=user_by_team.id,team_id=team_id,is_approved=True).all()
-        tot_score_by_user =sum([score_by_user.score for score_by_user in all_scores_by_user])
-        ranking_list.append({"user_id":user_by_team.id,"user":user_by_team.username,"total score":tot_score_by_user})
-    ranking_list = list(enumerate(sorted(ranking_list, key=lambda x: x['total score'],reverse=True)))
+    ranking_list = team.ranking_builder()
 
+    my_request_to_join_team = RequestsToJoinTeam.query.filter_by(team_id=team_id,user_id=current_user.id).first()
+    my_role_in_team = current_user.get_role_in_team(team_id=team_id)
+   
     return render_template("team_home.html",ranking_list=ranking_list,team=team,user=current_user, role=my_role_in_team,request=my_request_to_join_team)
+
+
 
 
 @app.route("/member_home/<int:user_id>/<int:team_id>")

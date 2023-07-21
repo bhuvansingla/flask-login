@@ -6,6 +6,7 @@ from flask_login import UserMixin
 from app import db
 import os
 import shutil
+from tools import send_email_utility, AUTO_MAIL
 
 class TeamUserAssociation(db.Model):
     __tablename__ = 'team_user_association'
@@ -15,6 +16,7 @@ class TeamUserAssociation(db.Model):
     team_id = Column(Integer, ForeignKey('team.id', ondelete='CASCADE'))
     role =Column(String(140))
     join_date = Column(DateTime)
+    current_ranking = Column(Integer)
 
 
 class AdminMixin:
@@ -150,9 +152,33 @@ class Team(db.Model):
         return '<Team {}>'.format(self.description)
 
     def add_member(self, member:User,role:str,join_date:datetime = None):
-        t_u_association = TeamUserAssociation(team_id=self.id,user_id=member.id,role=role,join_date=join_date)
+        t_u_association = TeamUserAssociation(team_id=self.id,user_id=member.id,role=role,join_date=join_date,current_ranking=len(self.users)+1)
         db.session.add(t_u_association)
         db.session.commit()
+
+    def set_member_ranking(self,member:User,current_ranking:int):
+        t_u_association = TeamUserAssociation.query.filter_by(user_id=member.id,team_id=self.id).first()
+        previous_ranking = t_u_association.current_ranking
+        if previous_ranking != current_ranking:
+            send_email_utility('Cambio ranking',f"Il tuo ranking è cambiato nel team {self.name}! Sei passato dal {previous_ranking}° al {current_ranking}° posto!",AUTO_MAIL,member.email)
+
+        t_u_association.current_ranking = current_ranking
+        db.session.commit()
+
+    def ranking_builder(self):
+        members_by_team = User.query.filter(User.id.in_([member.id for member in self.users])).all()
+        ranking_list = []
+        for user_by_team in members_by_team:
+            all_scores_by_user = Trip.query.filter_by(user_id=user_by_team.id,team_id=self.id,is_approved=True).all()
+            tot_score_by_user =sum([score_by_user.score for score_by_user in all_scores_by_user])
+            ranking_list.append({"user_id":user_by_team.id,"user":user_by_team.username,"total score":tot_score_by_user,"user_obj":user_by_team})
+        ranking_list = list(enumerate(sorted(ranking_list, key=lambda x: x['total score'],reverse=True)))
+
+        for place,ranking  in ranking_list:
+            self.set_member_ranking(ranking["user_obj"],place+1)
+
+
+        return ranking_list
 
     def get_leaders(self):
         leaders = User.query.join(TeamUserAssociation).filter(TeamUserAssociation.team_id == self.id, TeamUserAssociation.role == "team_leader").all()

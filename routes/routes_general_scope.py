@@ -99,6 +99,7 @@ def new_trip(user_id,team_id=None):
             other_members_emails = [user.email for user in team.users if trip.get_user()!=user]
             if other_members_emails:
                 send_email_utility("Registrazione nuovo giro",f"Il giro: {trip.tripname} di {trip.get_user().username} e' stato registrato per il team {trip.get_team().name}",AUTO_MAIL,other_members_emails)
+            _ = team.ranking_builder()
 
 
         if user == current_user:
@@ -140,7 +141,6 @@ def edit_trip(trip_id,user_id):
         trip.elevation = float(request.form["elevation"])
         trip.prestige = int(request.form["prestige"])
         trip.description = request.form["description"]
-        trip.user_id = user_id
         trip.n_of_partecipants = int(request.form["n_of_partecipants"])
         placement_values = [int(pl) for pl in request.form.getlist('placement[]')]
         edit_placements = [int(pl) for pl in request.form.getlist('edit_placement')]
@@ -170,8 +170,11 @@ def edit_trip(trip_id,user_id):
 
         if trip.get_user() != current_user and current_user in trip.get_team().get_leaders():
             send_email_utility('Modifica giro', f"Il tuo giro e' stato modificato dal team leader {current_user.username}",AUTO_MAIL,trip.get_user().email)
-       
-        if user != current_user:
+      
+        trip_team = trip.get_team()
+        _ = trip_team.ranking_builder()
+
+        if my_role_in_team == "team_leader":
             return redirect(url_for('manage_trips',team_id=trip.team_id))
         else:
             return redirect(url_for('trips_overview',user_id=user.id))
