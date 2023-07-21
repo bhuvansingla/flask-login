@@ -197,7 +197,7 @@
 </style>
 {%endif%}
 
-<div class="transparent-box" style="display: inline-block;">
+<div class="p-2 mx-auto my-auto" style="text-align: center;">
 
     <div class="round-container">
 
@@ -214,7 +214,7 @@
             aria-haspopup="true" aria-expanded="false">
             Menu
         </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <ul class="dropdown-menu centered" aria-labelledby="dropdownMenuButton">
             <li><a class="dropdown-item" href="{{url_for('user_home',username=current_user.username)}}">Home</a></li>
             <li><a class="dropdown-item" href="{{url_for('user_profile')}}">Profilo</a></li>
             <li class="dropdown subitem">
